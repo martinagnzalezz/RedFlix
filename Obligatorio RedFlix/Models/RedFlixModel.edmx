@@ -1,0 +1,1771 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="RedFlixDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Calificaciones">
+          <Key>
+            <PropertyRef Name="IdCalificacion" />
+          </Key>
+          <Property Name="IdCalificacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="IdPelicula" Type="int" />
+          <Property Name="IdSerie" Type="int" />
+          <Property Name="Puntaje" Type="int" Nullable="false" />
+          <Property Name="Comentario" Type="varchar" MaxLength="500" />
+          <Property Name="FechaCalificacion" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CarritoItems">
+          <Key>
+            <PropertyRef Name="IdCarritoItem" />
+          </Key>
+          <Property Name="IdCarritoItem" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdCarrito" Type="int" Nullable="false" />
+          <Property Name="IdPelicula" Type="int" />
+          <Property Name="IdSerie" Type="int" />
+          <Property Name="Cantidad" Type="int" Nullable="false" />
+          <Property Name="Precio" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Carritos">
+          <Key>
+            <PropertyRef Name="IdCarrito" />
+          </Key>
+          <Property Name="IdCarrito" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Clima">
+          <Key>
+            <PropertyRef Name="IdClima" />
+          </Key>
+          <Property Name="IdClima" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ciudad" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Temperatura" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="EstadoClima" Type="varchar" MaxLength="100" />
+          <Property Name="Humedad" Type="int" />
+          <Property Name="FechaConsulta" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Compras">
+          <Key>
+            <PropertyRef Name="IdCompra" />
+          </Key>
+          <Property Name="IdCompra" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="FechaCompra" Type="datetime" Nullable="false" />
+          <Property Name="Total" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Moneda" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Estado" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cotizaciones">
+          <Key>
+            <PropertyRef Name="IdCotizacion" />
+          </Key>
+          <Property Name="IdCotizacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MonedaOrigen" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="MonedaDestino" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Valor" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="FechaActualizacion" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DetalleCompra">
+          <Key>
+            <PropertyRef Name="IdDetalleCompra" />
+          </Key>
+          <Property Name="IdDetalleCompra" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdCompra" Type="int" Nullable="false" />
+          <Property Name="IdPelicula" Type="int" />
+          <Property Name="IdSerie" Type="int" />
+          <Property Name="Precio" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Favoritos">
+          <Key>
+            <PropertyRef Name="IdFavorito" />
+          </Key>
+          <Property Name="IdFavorito" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="IdPelicula" Type="int" />
+          <Property Name="IdSerie" Type="int" />
+          <Property Name="FechaAgregado" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Generos">
+          <Key>
+            <PropertyRef Name="IdGenero" />
+          </Key>
+          <Property Name="IdGenero" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HistorialBusquedas">
+          <Key>
+            <PropertyRef Name="IdBusqueda" />
+          </Key>
+          <Property Name="IdBusqueda" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TextoBuscado" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="FechaBusqueda" Type="datetime" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HistorialReproduccion">
+          <Key>
+            <PropertyRef Name="IdHistorial" />
+          </Key>
+          <Property Name="IdHistorial" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="IdPelicula" Type="int" />
+          <Property Name="IdSerie" Type="int" />
+          <Property Name="FechaReproduccion" Type="datetime" Nullable="false" />
+          <Property Name="Progreso" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ListaContenido">
+          <Key>
+            <PropertyRef Name="IdListaContenido" />
+          </Key>
+          <Property Name="IdListaContenido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdLista" Type="int" Nullable="false" />
+          <Property Name="IdPelicula" Type="int" />
+          <Property Name="IdSerie" Type="int" />
+          <Property Name="FechaAgregado" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ListasPersonalizadas">
+          <Key>
+            <PropertyRef Name="IdLista" />
+          </Key>
+          <Property Name="IdLista" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="300" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MetodosPago">
+          <Key>
+            <PropertyRef Name="IdMetodoPago" />
+          </Key>
+          <Property Name="IdMetodoPago" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreMetodo" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pagos">
+          <Key>
+            <PropertyRef Name="IdPago" />
+          </Key>
+          <Property Name="IdPago" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdCompra" Type="int" Nullable="false" />
+          <Property Name="IdMetodoPago" Type="int" Nullable="false" />
+          <Property Name="Monto" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="FechaPago" Type="datetime" Nullable="false" />
+          <Property Name="Estado" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Peliculas">
+          <Key>
+            <PropertyRef Name="IdPelicula" />
+          </Key>
+          <Property Name="IdPelicula" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdTmdb" Type="int" Nullable="false" />
+          <Property Name="Titulo" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Precio" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Permisos">
+          <Key>
+            <PropertyRef Name="IdPermiso" />
+          </Key>
+          <Property Name="IdPermiso" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombrePermiso" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Recomendaciones">
+          <Key>
+            <PropertyRef Name="IdRecomendacion" />
+          </Key>
+          <Property Name="IdRecomendacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="IdPelicula" Type="int" />
+          <Property Name="IdSerie" Type="int" />
+          <Property Name="Motivo" Type="varchar" MaxLength="300" />
+          <Property Name="FechaRecomendacion" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="IdRol" />
+          </Key>
+          <Property Name="IdRol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RolesPermisos">
+          <Key>
+            <PropertyRef Name="IdRolPermiso" />
+          </Key>
+          <Property Name="IdRolPermiso" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdRol" Type="int" Nullable="false" />
+          <Property Name="IdPermiso" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Series">
+          <Key>
+            <PropertyRef Name="IdSerie" />
+          </Key>
+          <Property Name="IdSerie" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdTmdb" Type="int" Nullable="false" />
+          <Property Name="Titulo" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Precio" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Apellido" Type="varchar" MaxLength="100" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PasswordHash" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="FechaRegistro" Type="datetime" Nullable="false" />
+          <Property Name="Estado" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IdRol" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Calificac__IdPel__6E01572D">
+          <End Role="Peliculas" Type="Self.Peliculas" Multiplicity="0..1" />
+          <End Role="Calificaciones" Type="Self.Calificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Calificac__IdSer__6EF57B66">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="Calificaciones" Type="Self.Calificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Calificac__IdUsu__6D0D32F4">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Calificaciones" Type="Self.Calificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CarritoIt__IdCar__1DB06A4F">
+          <End Role="Carritos" Type="Self.Carritos" Multiplicity="1" />
+          <End Role="CarritoItems" Type="Self.CarritoItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Carritos">
+              <PropertyRef Name="IdCarrito" />
+            </Principal>
+            <Dependent Role="CarritoItems">
+              <PropertyRef Name="IdCarrito" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CarritoIt__IdPel__1EA48E88">
+          <End Role="Peliculas" Type="Self.Peliculas" Multiplicity="0..1" />
+          <End Role="CarritoItems" Type="Self.CarritoItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="CarritoItems">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CarritoIt__IdSer__1F98B2C1">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="CarritoItems" Type="Self.CarritoItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="CarritoItems">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Carritos__IdUsua__19DFD96B">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Carritos" Type="Self.Carritos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Carritos">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Compras__IdUsuar__282DF8C2">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Compras" Type="Self.Compras" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Compras">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleCo__IdCom__2CF2ADDF">
+          <End Role="Compras" Type="Self.Compras" Multiplicity="1" />
+          <End Role="DetalleCompra" Type="Self.DetalleCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compras">
+              <PropertyRef Name="IdCompra" />
+            </Principal>
+            <Dependent Role="DetalleCompra">
+              <PropertyRef Name="IdCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleCo__IdPel__2DE6D218">
+          <End Role="Peliculas" Type="Self.Peliculas" Multiplicity="0..1" />
+          <End Role="DetalleCompra" Type="Self.DetalleCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="DetalleCompra">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleCo__IdSer__2EDAF651">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="DetalleCompra" Type="Self.DetalleCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="DetalleCompra">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Favoritos__IdPel__6754599E">
+          <End Role="Peliculas" Type="Self.Peliculas" Multiplicity="0..1" />
+          <End Role="Favoritos" Type="Self.Favoritos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="Favoritos">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Favoritos__IdSer__68487DD7">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="Favoritos" Type="Self.Favoritos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="Favoritos">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Favoritos__IdUsu__66603565">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Favoritos" Type="Self.Favoritos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Favoritos">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__IdPel__04E4BC85">
+          <End Role="Peliculas" Type="Self.Peliculas" Multiplicity="0..1" />
+          <End Role="HistorialReproduccion" Type="Self.HistorialReproduccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="HistorialReproduccion">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__IdSer__05D8E0BE">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="HistorialReproduccion" Type="Self.HistorialReproduccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="HistorialReproduccion">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__IdUsu__03F0984C">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="HistorialReproduccion" Type="Self.HistorialReproduccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="HistorialReproduccion">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__IdUsu__7F2BE32F">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="HistorialBusquedas" Type="Self.HistorialBusquedas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="HistorialBusquedas">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ListaCont__IdLis__787EE5A0">
+          <End Role="ListasPersonalizadas" Type="Self.ListasPersonalizadas" Multiplicity="1" />
+          <End Role="ListaContenido" Type="Self.ListaContenido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ListasPersonalizadas">
+              <PropertyRef Name="IdLista" />
+            </Principal>
+            <Dependent Role="ListaContenido">
+              <PropertyRef Name="IdLista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ListaCont__IdPel__797309D9">
+          <End Role="Peliculas" Type="Self.Peliculas" Multiplicity="0..1" />
+          <End Role="ListaContenido" Type="Self.ListaContenido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="ListaContenido">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ListaCont__IdSer__7A672E12">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="ListaContenido" Type="Self.ListaContenido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="ListaContenido">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ListasPer__IdUsu__74AE54BC">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="ListasPersonalizadas" Type="Self.ListasPersonalizadas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="ListasPersonalizadas">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pagos__IdCompra__3864608B">
+          <End Role="Compras" Type="Self.Compras" Multiplicity="1" />
+          <End Role="Pagos" Type="Self.Pagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compras">
+              <PropertyRef Name="IdCompra" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="IdCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pagos__IdMetodoP__395884C4">
+          <End Role="MetodosPago" Type="Self.MetodosPago" Multiplicity="1" />
+          <End Role="Pagos" Type="Self.Pagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MetodosPago">
+              <PropertyRef Name="IdMetodoPago" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="IdMetodoPago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recomenda__IdPel__14270015">
+          <End Role="Peliculas" Type="Self.Peliculas" Multiplicity="0..1" />
+          <End Role="Recomendaciones" Type="Self.Recomendaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="Recomendaciones">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recomenda__IdSer__151B244E">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="Recomendaciones" Type="Self.Recomendaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="Recomendaciones">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recomenda__IdUsu__1332DBDC">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Recomendaciones" Type="Self.Recomendaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Recomendaciones">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RolesPerm__IdPer__5165187F">
+          <End Role="Permisos" Type="Self.Permisos" Multiplicity="1" />
+          <End Role="RolesPermisos" Type="Self.RolesPermisos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Permisos">
+              <PropertyRef Name="IdPermiso" />
+            </Principal>
+            <Dependent Role="RolesPermisos">
+              <PropertyRef Name="IdPermiso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RolesPerm__IdRol__5070F446">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="RolesPermisos" Type="Self.RolesPermisos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IdRol" />
+            </Principal>
+            <Dependent Role="RolesPermisos">
+              <PropertyRef Name="IdRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuarios__IdRol__571DF1D5">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IdRol" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="IdRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RedFlixDBModelStoreContainer">
+          <EntitySet Name="Calificaciones" EntityType="Self.Calificaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CarritoItems" EntityType="Self.CarritoItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Carritos" EntityType="Self.Carritos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Clima" EntityType="Self.Clima" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Compras" EntityType="Self.Compras" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cotizaciones" EntityType="Self.Cotizaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetalleCompra" EntityType="Self.DetalleCompra" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Favoritos" EntityType="Self.Favoritos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Generos" EntityType="Self.Generos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HistorialBusquedas" EntityType="Self.HistorialBusquedas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HistorialReproduccion" EntityType="Self.HistorialReproduccion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ListaContenido" EntityType="Self.ListaContenido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ListasPersonalizadas" EntityType="Self.ListasPersonalizadas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MetodosPago" EntityType="Self.MetodosPago" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pagos" EntityType="Self.Pagos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Peliculas" EntityType="Self.Peliculas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Permisos" EntityType="Self.Permisos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Recomendaciones" EntityType="Self.Recomendaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RolesPermisos" EntityType="Self.RolesPermisos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Series" EntityType="Self.Series" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Calificac__IdPel__6E01572D" Association="Self.FK__Calificac__IdPel__6E01572D">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Calificac__IdSer__6EF57B66" Association="Self.FK__Calificac__IdSer__6EF57B66">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Calificac__IdUsu__6D0D32F4" Association="Self.FK__Calificac__IdUsu__6D0D32F4">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CarritoIt__IdCar__1DB06A4F" Association="Self.FK__CarritoIt__IdCar__1DB06A4F">
+            <End Role="Carritos" EntitySet="Carritos" />
+            <End Role="CarritoItems" EntitySet="CarritoItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CarritoIt__IdPel__1EA48E88" Association="Self.FK__CarritoIt__IdPel__1EA48E88">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="CarritoItems" EntitySet="CarritoItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CarritoIt__IdSer__1F98B2C1" Association="Self.FK__CarritoIt__IdSer__1F98B2C1">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="CarritoItems" EntitySet="CarritoItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Carritos__IdUsua__19DFD96B" Association="Self.FK__Carritos__IdUsua__19DFD96B">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Carritos" EntitySet="Carritos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Compras__IdUsuar__282DF8C2" Association="Self.FK__Compras__IdUsuar__282DF8C2">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Compras" EntitySet="Compras" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleCo__IdCom__2CF2ADDF" Association="Self.FK__DetalleCo__IdCom__2CF2ADDF">
+            <End Role="Compras" EntitySet="Compras" />
+            <End Role="DetalleCompra" EntitySet="DetalleCompra" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleCo__IdPel__2DE6D218" Association="Self.FK__DetalleCo__IdPel__2DE6D218">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="DetalleCompra" EntitySet="DetalleCompra" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleCo__IdSer__2EDAF651" Association="Self.FK__DetalleCo__IdSer__2EDAF651">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="DetalleCompra" EntitySet="DetalleCompra" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Favoritos__IdPel__6754599E" Association="Self.FK__Favoritos__IdPel__6754599E">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="Favoritos" EntitySet="Favoritos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Favoritos__IdSer__68487DD7" Association="Self.FK__Favoritos__IdSer__68487DD7">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="Favoritos" EntitySet="Favoritos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Favoritos__IdUsu__66603565" Association="Self.FK__Favoritos__IdUsu__66603565">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Favoritos" EntitySet="Favoritos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__IdPel__04E4BC85" Association="Self.FK__Historial__IdPel__04E4BC85">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="HistorialReproduccion" EntitySet="HistorialReproduccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__IdSer__05D8E0BE" Association="Self.FK__Historial__IdSer__05D8E0BE">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="HistorialReproduccion" EntitySet="HistorialReproduccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__IdUsu__03F0984C" Association="Self.FK__Historial__IdUsu__03F0984C">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="HistorialReproduccion" EntitySet="HistorialReproduccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__IdUsu__7F2BE32F" Association="Self.FK__Historial__IdUsu__7F2BE32F">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="HistorialBusquedas" EntitySet="HistorialBusquedas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ListaCont__IdLis__787EE5A0" Association="Self.FK__ListaCont__IdLis__787EE5A0">
+            <End Role="ListasPersonalizadas" EntitySet="ListasPersonalizadas" />
+            <End Role="ListaContenido" EntitySet="ListaContenido" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ListaCont__IdPel__797309D9" Association="Self.FK__ListaCont__IdPel__797309D9">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="ListaContenido" EntitySet="ListaContenido" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ListaCont__IdSer__7A672E12" Association="Self.FK__ListaCont__IdSer__7A672E12">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="ListaContenido" EntitySet="ListaContenido" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ListasPer__IdUsu__74AE54BC" Association="Self.FK__ListasPer__IdUsu__74AE54BC">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="ListasPersonalizadas" EntitySet="ListasPersonalizadas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pagos__IdCompra__3864608B" Association="Self.FK__Pagos__IdCompra__3864608B">
+            <End Role="Compras" EntitySet="Compras" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pagos__IdMetodoP__395884C4" Association="Self.FK__Pagos__IdMetodoP__395884C4">
+            <End Role="MetodosPago" EntitySet="MetodosPago" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recomenda__IdPel__14270015" Association="Self.FK__Recomenda__IdPel__14270015">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="Recomendaciones" EntitySet="Recomendaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recomenda__IdSer__151B244E" Association="Self.FK__Recomenda__IdSer__151B244E">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="Recomendaciones" EntitySet="Recomendaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recomenda__IdUsu__1332DBDC" Association="Self.FK__Recomenda__IdUsu__1332DBDC">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Recomendaciones" EntitySet="Recomendaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RolesPerm__IdPer__5165187F" Association="Self.FK__RolesPerm__IdPer__5165187F">
+            <End Role="Permisos" EntitySet="Permisos" />
+            <End Role="RolesPermisos" EntitySet="RolesPermisos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RolesPerm__IdRol__5070F446" Association="Self.FK__RolesPerm__IdRol__5070F446">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="RolesPermisos" EntitySet="RolesPermisos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Usuarios__IdRol__571DF1D5" Association="Self.FK__Usuarios__IdRol__571DF1D5">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RedFlixDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Calificacione">
+          <Key>
+            <PropertyRef Name="IdCalificacion" />
+          </Key>
+          <Property Name="IdCalificacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdPelicula" Type="Int32" />
+          <Property Name="IdSerie" Type="Int32" />
+          <Property Name="Puntaje" Type="Int32" Nullable="false" />
+          <Property Name="Comentario" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="FechaCalificacion" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Pelicula" Relationship="Self.FK__Calificac__IdPel__6E01572D" FromRole="Calificaciones" ToRole="Peliculas" />
+          <NavigationProperty Name="Series" Relationship="Self.FK__Calificac__IdSer__6EF57B66" FromRole="Calificaciones" ToRole="Series" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Calificac__IdUsu__6D0D32F4" FromRole="Calificaciones" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="CarritoItem">
+          <Key>
+            <PropertyRef Name="IdCarritoItem" />
+          </Key>
+          <Property Name="IdCarritoItem" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCarrito" Type="Int32" Nullable="false" />
+          <Property Name="IdPelicula" Type="Int32" />
+          <Property Name="IdSerie" Type="Int32" />
+          <Property Name="Cantidad" Type="Int32" Nullable="false" />
+          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Carrito" Relationship="Self.FK__CarritoIt__IdCar__1DB06A4F" FromRole="CarritoItems" ToRole="Carritos" />
+          <NavigationProperty Name="Pelicula" Relationship="Self.FK__CarritoIt__IdPel__1EA48E88" FromRole="CarritoItems" ToRole="Peliculas" />
+          <NavigationProperty Name="Series" Relationship="Self.FK__CarritoIt__IdSer__1F98B2C1" FromRole="CarritoItems" ToRole="Series" />
+        </EntityType>
+        <EntityType Name="Carrito">
+          <Key>
+            <PropertyRef Name="IdCarrito" />
+          </Key>
+          <Property Name="IdCarrito" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="CarritoItems" Relationship="Self.FK__CarritoIt__IdCar__1DB06A4F" FromRole="Carritos" ToRole="CarritoItems" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Carritos__IdUsua__19DFD96B" FromRole="Carritos" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Clima">
+          <Key>
+            <PropertyRef Name="IdClima" />
+          </Key>
+          <Property Name="IdClima" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ciudad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Temperatura" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="EstadoClima" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Humedad" Type="Int32" />
+          <Property Name="FechaConsulta" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Compra">
+          <Key>
+            <PropertyRef Name="IdCompra" />
+          </Key>
+          <Property Name="IdCompra" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="FechaCompra" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Total" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Moneda" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Compras__IdUsuar__282DF8C2" FromRole="Compras" ToRole="Usuarios" />
+          <NavigationProperty Name="DetalleCompras" Relationship="Self.FK__DetalleCo__IdCom__2CF2ADDF" FromRole="Compras" ToRole="DetalleCompra" />
+          <NavigationProperty Name="Pagos" Relationship="Self.FK__Pagos__IdCompra__3864608B" FromRole="Compras" ToRole="Pagos" />
+        </EntityType>
+        <EntityType Name="Cotizacione">
+          <Key>
+            <PropertyRef Name="IdCotizacion" />
+          </Key>
+          <Property Name="IdCotizacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MonedaOrigen" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MonedaDestino" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Valor" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="FechaActualizacion" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="DetalleCompra">
+          <Key>
+            <PropertyRef Name="IdDetalleCompra" />
+          </Key>
+          <Property Name="IdDetalleCompra" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCompra" Type="Int32" Nullable="false" />
+          <Property Name="IdPelicula" Type="Int32" />
+          <Property Name="IdSerie" Type="Int32" />
+          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Compra" Relationship="Self.FK__DetalleCo__IdCom__2CF2ADDF" FromRole="DetalleCompra" ToRole="Compras" />
+          <NavigationProperty Name="Pelicula" Relationship="Self.FK__DetalleCo__IdPel__2DE6D218" FromRole="DetalleCompra" ToRole="Peliculas" />
+          <NavigationProperty Name="Series" Relationship="Self.FK__DetalleCo__IdSer__2EDAF651" FromRole="DetalleCompra" ToRole="Series" />
+        </EntityType>
+        <EntityType Name="Favorito">
+          <Key>
+            <PropertyRef Name="IdFavorito" />
+          </Key>
+          <Property Name="IdFavorito" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdPelicula" Type="Int32" />
+          <Property Name="IdSerie" Type="Int32" />
+          <Property Name="FechaAgregado" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Pelicula" Relationship="Self.FK__Favoritos__IdPel__6754599E" FromRole="Favoritos" ToRole="Peliculas" />
+          <NavigationProperty Name="Series" Relationship="Self.FK__Favoritos__IdSer__68487DD7" FromRole="Favoritos" ToRole="Series" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Favoritos__IdUsu__66603565" FromRole="Favoritos" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Genero">
+          <Key>
+            <PropertyRef Name="IdGenero" />
+          </Key>
+          <Property Name="IdGenero" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HistorialBusqueda">
+          <Key>
+            <PropertyRef Name="IdBusqueda" />
+          </Key>
+          <Property Name="IdBusqueda" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TextoBuscado" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaBusqueda" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Historial__IdUsu__7F2BE32F" FromRole="HistorialBusquedas" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="HistorialReproduccion">
+          <Key>
+            <PropertyRef Name="IdHistorial" />
+          </Key>
+          <Property Name="IdHistorial" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdPelicula" Type="Int32" />
+          <Property Name="IdSerie" Type="Int32" />
+          <Property Name="FechaReproduccion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Progreso" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Pelicula" Relationship="Self.FK__Historial__IdPel__04E4BC85" FromRole="HistorialReproduccion" ToRole="Peliculas" />
+          <NavigationProperty Name="Series" Relationship="Self.FK__Historial__IdSer__05D8E0BE" FromRole="HistorialReproduccion" ToRole="Series" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Historial__IdUsu__03F0984C" FromRole="HistorialReproduccion" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="ListaContenido">
+          <Key>
+            <PropertyRef Name="IdListaContenido" />
+          </Key>
+          <Property Name="IdListaContenido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdLista" Type="Int32" Nullable="false" />
+          <Property Name="IdPelicula" Type="Int32" />
+          <Property Name="IdSerie" Type="Int32" />
+          <Property Name="FechaAgregado" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ListasPersonalizada" Relationship="Self.FK__ListaCont__IdLis__787EE5A0" FromRole="ListaContenido" ToRole="ListasPersonalizadas" />
+          <NavigationProperty Name="Pelicula" Relationship="Self.FK__ListaCont__IdPel__797309D9" FromRole="ListaContenido" ToRole="Peliculas" />
+          <NavigationProperty Name="Series" Relationship="Self.FK__ListaCont__IdSer__7A672E12" FromRole="ListaContenido" ToRole="Series" />
+        </EntityType>
+        <EntityType Name="ListasPersonalizada">
+          <Key>
+            <PropertyRef Name="IdLista" />
+          </Key>
+          <Property Name="IdLista" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ListaContenidoes" Relationship="Self.FK__ListaCont__IdLis__787EE5A0" FromRole="ListasPersonalizadas" ToRole="ListaContenido" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__ListasPer__IdUsu__74AE54BC" FromRole="ListasPersonalizadas" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="MetodosPago">
+          <Key>
+            <PropertyRef Name="IdMetodoPago" />
+          </Key>
+          <Property Name="IdMetodoPago" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreMetodo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Pagos" Relationship="Self.FK__Pagos__IdMetodoP__395884C4" FromRole="MetodosPago" ToRole="Pagos" />
+        </EntityType>
+        <EntityType Name="Pago">
+          <Key>
+            <PropertyRef Name="IdPago" />
+          </Key>
+          <Property Name="IdPago" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCompra" Type="Int32" Nullable="false" />
+          <Property Name="IdMetodoPago" Type="Int32" Nullable="false" />
+          <Property Name="Monto" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="FechaPago" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Estado" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Compra" Relationship="Self.FK__Pagos__IdCompra__3864608B" FromRole="Pagos" ToRole="Compras" />
+          <NavigationProperty Name="MetodosPago" Relationship="Self.FK__Pagos__IdMetodoP__395884C4" FromRole="Pagos" ToRole="MetodosPago" />
+        </EntityType>
+        <EntityType Name="Pelicula">
+          <Key>
+            <PropertyRef Name="IdPelicula" />
+          </Key>
+          <Property Name="IdPelicula" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdTmdb" Type="Int32" Nullable="false" />
+          <Property Name="Titulo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Calificaciones" Relationship="Self.FK__Calificac__IdPel__6E01572D" FromRole="Peliculas" ToRole="Calificaciones" />
+          <NavigationProperty Name="CarritoItems" Relationship="Self.FK__CarritoIt__IdPel__1EA48E88" FromRole="Peliculas" ToRole="CarritoItems" />
+          <NavigationProperty Name="DetalleCompras" Relationship="Self.FK__DetalleCo__IdPel__2DE6D218" FromRole="Peliculas" ToRole="DetalleCompra" />
+          <NavigationProperty Name="Favoritos" Relationship="Self.FK__Favoritos__IdPel__6754599E" FromRole="Peliculas" ToRole="Favoritos" />
+          <NavigationProperty Name="HistorialReproduccions" Relationship="Self.FK__Historial__IdPel__04E4BC85" FromRole="Peliculas" ToRole="HistorialReproduccion" />
+          <NavigationProperty Name="ListaContenidoes" Relationship="Self.FK__ListaCont__IdPel__797309D9" FromRole="Peliculas" ToRole="ListaContenido" />
+          <NavigationProperty Name="Recomendaciones" Relationship="Self.FK__Recomenda__IdPel__14270015" FromRole="Peliculas" ToRole="Recomendaciones" />
+        </EntityType>
+        <EntityType Name="Permiso">
+          <Key>
+            <PropertyRef Name="IdPermiso" />
+          </Key>
+          <Property Name="IdPermiso" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombrePermiso" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="RolesPermisos" Relationship="Self.FK__RolesPerm__IdPer__5165187F" FromRole="Permisos" ToRole="RolesPermisos" />
+        </EntityType>
+        <EntityType Name="Recomendacione">
+          <Key>
+            <PropertyRef Name="IdRecomendacion" />
+          </Key>
+          <Property Name="IdRecomendacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdPelicula" Type="Int32" />
+          <Property Name="IdSerie" Type="Int32" />
+          <Property Name="Motivo" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="FechaRecomendacion" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Pelicula" Relationship="Self.FK__Recomenda__IdPel__14270015" FromRole="Recomendaciones" ToRole="Peliculas" />
+          <NavigationProperty Name="Series" Relationship="Self.FK__Recomenda__IdSer__151B244E" FromRole="Recomendaciones" ToRole="Series" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Recomenda__IdUsu__1332DBDC" FromRole="Recomendaciones" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="IdRol" />
+          </Key>
+          <Property Name="IdRol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="RolesPermisos" Relationship="Self.FK__RolesPerm__IdRol__5070F446" FromRole="Roles" ToRole="RolesPermisos" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK__Usuarios__IdRol__571DF1D5" FromRole="Roles" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="RolesPermiso">
+          <Key>
+            <PropertyRef Name="IdRolPermiso" />
+          </Key>
+          <Property Name="IdRolPermiso" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdRol" Type="Int32" Nullable="false" />
+          <Property Name="IdPermiso" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Permiso" Relationship="Self.FK__RolesPerm__IdPer__5165187F" FromRole="RolesPermisos" ToRole="Permisos" />
+          <NavigationProperty Name="Role" Relationship="Self.FK__RolesPerm__IdRol__5070F446" FromRole="RolesPermisos" ToRole="Roles" />
+        </EntityType>
+        <EntityType Name="Series">
+          <Key>
+            <PropertyRef Name="IdSerie" />
+          </Key>
+          <Property Name="IdSerie" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdTmdb" Type="Int32" Nullable="false" />
+          <Property Name="Titulo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Calificaciones" Relationship="Self.FK__Calificac__IdSer__6EF57B66" FromRole="Series" ToRole="Calificaciones" />
+          <NavigationProperty Name="CarritoItems" Relationship="Self.FK__CarritoIt__IdSer__1F98B2C1" FromRole="Series" ToRole="CarritoItems" />
+          <NavigationProperty Name="DetalleCompras" Relationship="Self.FK__DetalleCo__IdSer__2EDAF651" FromRole="Series" ToRole="DetalleCompra" />
+          <NavigationProperty Name="Favoritos" Relationship="Self.FK__Favoritos__IdSer__68487DD7" FromRole="Series" ToRole="Favoritos" />
+          <NavigationProperty Name="HistorialReproduccions" Relationship="Self.FK__Historial__IdSer__05D8E0BE" FromRole="Series" ToRole="HistorialReproduccion" />
+          <NavigationProperty Name="ListaContenidoes" Relationship="Self.FK__ListaCont__IdSer__7A672E12" FromRole="Series" ToRole="ListaContenido" />
+          <NavigationProperty Name="Recomendaciones" Relationship="Self.FK__Recomenda__IdSer__151B244E" FromRole="Series" ToRole="Recomendaciones" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdRol" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Calificaciones" Relationship="Self.FK__Calificac__IdUsu__6D0D32F4" FromRole="Usuarios" ToRole="Calificaciones" />
+          <NavigationProperty Name="Carritos" Relationship="Self.FK__Carritos__IdUsua__19DFD96B" FromRole="Usuarios" ToRole="Carritos" />
+          <NavigationProperty Name="Compras" Relationship="Self.FK__Compras__IdUsuar__282DF8C2" FromRole="Usuarios" ToRole="Compras" />
+          <NavigationProperty Name="Favoritos" Relationship="Self.FK__Favoritos__IdUsu__66603565" FromRole="Usuarios" ToRole="Favoritos" />
+          <NavigationProperty Name="HistorialBusquedas" Relationship="Self.FK__Historial__IdUsu__7F2BE32F" FromRole="Usuarios" ToRole="HistorialBusquedas" />
+          <NavigationProperty Name="HistorialReproduccions" Relationship="Self.FK__Historial__IdUsu__03F0984C" FromRole="Usuarios" ToRole="HistorialReproduccion" />
+          <NavigationProperty Name="ListasPersonalizadas" Relationship="Self.FK__ListasPer__IdUsu__74AE54BC" FromRole="Usuarios" ToRole="ListasPersonalizadas" />
+          <NavigationProperty Name="Recomendaciones" Relationship="Self.FK__Recomenda__IdUsu__1332DBDC" FromRole="Usuarios" ToRole="Recomendaciones" />
+          <NavigationProperty Name="Role" Relationship="Self.FK__Usuarios__IdRol__571DF1D5" FromRole="Usuarios" ToRole="Roles" />
+        </EntityType>
+        <Association Name="FK__Calificac__IdPel__6E01572D">
+          <End Role="Peliculas" Type="Self.Pelicula" Multiplicity="0..1" />
+          <End Role="Calificaciones" Type="Self.Calificacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Calificac__IdSer__6EF57B66">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="Calificaciones" Type="Self.Calificacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Calificac__IdUsu__6D0D32F4">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Calificaciones" Type="Self.Calificacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CarritoIt__IdCar__1DB06A4F">
+          <End Role="Carritos" Type="Self.Carrito" Multiplicity="1" />
+          <End Role="CarritoItems" Type="Self.CarritoItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Carritos">
+              <PropertyRef Name="IdCarrito" />
+            </Principal>
+            <Dependent Role="CarritoItems">
+              <PropertyRef Name="IdCarrito" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CarritoIt__IdPel__1EA48E88">
+          <End Role="Peliculas" Type="Self.Pelicula" Multiplicity="0..1" />
+          <End Role="CarritoItems" Type="Self.CarritoItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="CarritoItems">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CarritoIt__IdSer__1F98B2C1">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="CarritoItems" Type="Self.CarritoItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="CarritoItems">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Carritos__IdUsua__19DFD96B">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Carritos" Type="Self.Carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Carritos">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Compras__IdUsuar__282DF8C2">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Compras" Type="Self.Compra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Compras">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleCo__IdCom__2CF2ADDF">
+          <End Role="Compras" Type="Self.Compra" Multiplicity="1" />
+          <End Role="DetalleCompra" Type="Self.DetalleCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compras">
+              <PropertyRef Name="IdCompra" />
+            </Principal>
+            <Dependent Role="DetalleCompra">
+              <PropertyRef Name="IdCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pagos__IdCompra__3864608B">
+          <End Role="Compras" Type="Self.Compra" Multiplicity="1" />
+          <End Role="Pagos" Type="Self.Pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compras">
+              <PropertyRef Name="IdCompra" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="IdCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleCo__IdPel__2DE6D218">
+          <End Role="Peliculas" Type="Self.Pelicula" Multiplicity="0..1" />
+          <End Role="DetalleCompra" Type="Self.DetalleCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="DetalleCompra">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleCo__IdSer__2EDAF651">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="DetalleCompra" Type="Self.DetalleCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="DetalleCompra">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Favoritos__IdPel__6754599E">
+          <End Role="Peliculas" Type="Self.Pelicula" Multiplicity="0..1" />
+          <End Role="Favoritos" Type="Self.Favorito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="Favoritos">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Favoritos__IdSer__68487DD7">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="Favoritos" Type="Self.Favorito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="Favoritos">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Favoritos__IdUsu__66603565">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Favoritos" Type="Self.Favorito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Favoritos">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__IdUsu__7F2BE32F">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="HistorialBusquedas" Type="Self.HistorialBusqueda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="HistorialBusquedas">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__IdPel__04E4BC85">
+          <End Role="Peliculas" Type="Self.Pelicula" Multiplicity="0..1" />
+          <End Role="HistorialReproduccion" Type="Self.HistorialReproduccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="HistorialReproduccion">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__IdSer__05D8E0BE">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="HistorialReproduccion" Type="Self.HistorialReproduccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="HistorialReproduccion">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__IdUsu__03F0984C">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="HistorialReproduccion" Type="Self.HistorialReproduccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="HistorialReproduccion">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ListaCont__IdLis__787EE5A0">
+          <End Role="ListasPersonalizadas" Type="Self.ListasPersonalizada" Multiplicity="1" />
+          <End Role="ListaContenido" Type="Self.ListaContenido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ListasPersonalizadas">
+              <PropertyRef Name="IdLista" />
+            </Principal>
+            <Dependent Role="ListaContenido">
+              <PropertyRef Name="IdLista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ListaCont__IdPel__797309D9">
+          <End Role="Peliculas" Type="Self.Pelicula" Multiplicity="0..1" />
+          <End Role="ListaContenido" Type="Self.ListaContenido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="ListaContenido">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ListaCont__IdSer__7A672E12">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="ListaContenido" Type="Self.ListaContenido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="ListaContenido">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ListasPer__IdUsu__74AE54BC">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="ListasPersonalizadas" Type="Self.ListasPersonalizada" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="ListasPersonalizadas">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pagos__IdMetodoP__395884C4">
+          <End Role="MetodosPago" Type="Self.MetodosPago" Multiplicity="1" />
+          <End Role="Pagos" Type="Self.Pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MetodosPago">
+              <PropertyRef Name="IdMetodoPago" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="IdMetodoPago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recomenda__IdPel__14270015">
+          <End Role="Peliculas" Type="Self.Pelicula" Multiplicity="0..1" />
+          <End Role="Recomendaciones" Type="Self.Recomendacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Peliculas">
+              <PropertyRef Name="IdPelicula" />
+            </Principal>
+            <Dependent Role="Recomendaciones">
+              <PropertyRef Name="IdPelicula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RolesPerm__IdPer__5165187F">
+          <End Role="Permisos" Type="Self.Permiso" Multiplicity="1" />
+          <End Role="RolesPermisos" Type="Self.RolesPermiso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Permisos">
+              <PropertyRef Name="IdPermiso" />
+            </Principal>
+            <Dependent Role="RolesPermisos">
+              <PropertyRef Name="IdPermiso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recomenda__IdSer__151B244E">
+          <End Role="Series" Type="Self.Series" Multiplicity="0..1" />
+          <End Role="Recomendaciones" Type="Self.Recomendacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Series">
+              <PropertyRef Name="IdSerie" />
+            </Principal>
+            <Dependent Role="Recomendaciones">
+              <PropertyRef Name="IdSerie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recomenda__IdUsu__1332DBDC">
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Recomendaciones" Type="Self.Recomendacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Recomendaciones">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RolesPerm__IdRol__5070F446">
+          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+          <End Role="RolesPermisos" Type="Self.RolesPermiso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IdRol" />
+            </Principal>
+            <Dependent Role="RolesPermisos">
+              <PropertyRef Name="IdRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuarios__IdRol__571DF1D5">
+          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IdRol" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="IdRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RedFlixDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Calificaciones" EntityType="Self.Calificacione" />
+          <EntitySet Name="CarritoItems" EntityType="Self.CarritoItem" />
+          <EntitySet Name="Carritos" EntityType="Self.Carrito" />
+          <EntitySet Name="Climas" EntityType="Self.Clima" />
+          <EntitySet Name="Compras" EntityType="Self.Compra" />
+          <EntitySet Name="Cotizaciones" EntityType="Self.Cotizacione" />
+          <EntitySet Name="DetalleCompras" EntityType="Self.DetalleCompra" />
+          <EntitySet Name="Favoritos" EntityType="Self.Favorito" />
+          <EntitySet Name="Generos" EntityType="Self.Genero" />
+          <EntitySet Name="HistorialBusquedas" EntityType="Self.HistorialBusqueda" />
+          <EntitySet Name="HistorialReproduccions" EntityType="Self.HistorialReproduccion" />
+          <EntitySet Name="ListaContenidoes" EntityType="Self.ListaContenido" />
+          <EntitySet Name="ListasPersonalizadas" EntityType="Self.ListasPersonalizada" />
+          <EntitySet Name="MetodosPagoes" EntityType="Self.MetodosPago" />
+          <EntitySet Name="Pagos" EntityType="Self.Pago" />
+          <EntitySet Name="Peliculas" EntityType="Self.Pelicula" />
+          <EntitySet Name="Permisos" EntityType="Self.Permiso" />
+          <EntitySet Name="Recomendaciones" EntityType="Self.Recomendacione" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="RolesPermisos" EntityType="Self.RolesPermiso" />
+          <EntitySet Name="Series" EntityType="Self.Series" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuario" />
+          <AssociationSet Name="FK__Calificac__IdPel__6E01572D" Association="Self.FK__Calificac__IdPel__6E01572D">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Calificac__IdSer__6EF57B66" Association="Self.FK__Calificac__IdSer__6EF57B66">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Calificac__IdUsu__6D0D32F4" Association="Self.FK__Calificac__IdUsu__6D0D32F4">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CarritoIt__IdCar__1DB06A4F" Association="Self.FK__CarritoIt__IdCar__1DB06A4F">
+            <End Role="Carritos" EntitySet="Carritos" />
+            <End Role="CarritoItems" EntitySet="CarritoItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CarritoIt__IdPel__1EA48E88" Association="Self.FK__CarritoIt__IdPel__1EA48E88">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="CarritoItems" EntitySet="CarritoItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CarritoIt__IdSer__1F98B2C1" Association="Self.FK__CarritoIt__IdSer__1F98B2C1">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="CarritoItems" EntitySet="CarritoItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Carritos__IdUsua__19DFD96B" Association="Self.FK__Carritos__IdUsua__19DFD96B">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Carritos" EntitySet="Carritos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Compras__IdUsuar__282DF8C2" Association="Self.FK__Compras__IdUsuar__282DF8C2">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Compras" EntitySet="Compras" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleCo__IdCom__2CF2ADDF" Association="Self.FK__DetalleCo__IdCom__2CF2ADDF">
+            <End Role="Compras" EntitySet="Compras" />
+            <End Role="DetalleCompra" EntitySet="DetalleCompras" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pagos__IdCompra__3864608B" Association="Self.FK__Pagos__IdCompra__3864608B">
+            <End Role="Compras" EntitySet="Compras" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleCo__IdPel__2DE6D218" Association="Self.FK__DetalleCo__IdPel__2DE6D218">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="DetalleCompra" EntitySet="DetalleCompras" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleCo__IdSer__2EDAF651" Association="Self.FK__DetalleCo__IdSer__2EDAF651">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="DetalleCompra" EntitySet="DetalleCompras" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Favoritos__IdPel__6754599E" Association="Self.FK__Favoritos__IdPel__6754599E">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="Favoritos" EntitySet="Favoritos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Favoritos__IdSer__68487DD7" Association="Self.FK__Favoritos__IdSer__68487DD7">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="Favoritos" EntitySet="Favoritos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Favoritos__IdUsu__66603565" Association="Self.FK__Favoritos__IdUsu__66603565">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Favoritos" EntitySet="Favoritos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__IdUsu__7F2BE32F" Association="Self.FK__Historial__IdUsu__7F2BE32F">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="HistorialBusquedas" EntitySet="HistorialBusquedas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__IdPel__04E4BC85" Association="Self.FK__Historial__IdPel__04E4BC85">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="HistorialReproduccion" EntitySet="HistorialReproduccions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__IdSer__05D8E0BE" Association="Self.FK__Historial__IdSer__05D8E0BE">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="HistorialReproduccion" EntitySet="HistorialReproduccions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__IdUsu__03F0984C" Association="Self.FK__Historial__IdUsu__03F0984C">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="HistorialReproduccion" EntitySet="HistorialReproduccions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ListaCont__IdLis__787EE5A0" Association="Self.FK__ListaCont__IdLis__787EE5A0">
+            <End Role="ListasPersonalizadas" EntitySet="ListasPersonalizadas" />
+            <End Role="ListaContenido" EntitySet="ListaContenidoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ListaCont__IdPel__797309D9" Association="Self.FK__ListaCont__IdPel__797309D9">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="ListaContenido" EntitySet="ListaContenidoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ListaCont__IdSer__7A672E12" Association="Self.FK__ListaCont__IdSer__7A672E12">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="ListaContenido" EntitySet="ListaContenidoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ListasPer__IdUsu__74AE54BC" Association="Self.FK__ListasPer__IdUsu__74AE54BC">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="ListasPersonalizadas" EntitySet="ListasPersonalizadas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pagos__IdMetodoP__395884C4" Association="Self.FK__Pagos__IdMetodoP__395884C4">
+            <End Role="MetodosPago" EntitySet="MetodosPagoes" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recomenda__IdPel__14270015" Association="Self.FK__Recomenda__IdPel__14270015">
+            <End Role="Peliculas" EntitySet="Peliculas" />
+            <End Role="Recomendaciones" EntitySet="Recomendaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RolesPerm__IdPer__5165187F" Association="Self.FK__RolesPerm__IdPer__5165187F">
+            <End Role="Permisos" EntitySet="Permisos" />
+            <End Role="RolesPermisos" EntitySet="RolesPermisos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recomenda__IdSer__151B244E" Association="Self.FK__Recomenda__IdSer__151B244E">
+            <End Role="Series" EntitySet="Series" />
+            <End Role="Recomendaciones" EntitySet="Recomendaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recomenda__IdUsu__1332DBDC" Association="Self.FK__Recomenda__IdUsu__1332DBDC">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Recomendaciones" EntitySet="Recomendaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RolesPerm__IdRol__5070F446" Association="Self.FK__RolesPerm__IdRol__5070F446">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="RolesPermisos" EntitySet="RolesPermisos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Usuarios__IdRol__571DF1D5" Association="Self.FK__Usuarios__IdRol__571DF1D5">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RedFlixDBModelStoreContainer" CdmEntityContainer="RedFlixDBEntities">
+          <EntitySetMapping Name="Calificaciones">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Calificacione">
+              <MappingFragment StoreEntitySet="Calificaciones">
+                <ScalarProperty Name="IdCalificacion" ColumnName="IdCalificacion" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdPelicula" ColumnName="IdPelicula" />
+                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
+                <ScalarProperty Name="Puntaje" ColumnName="Puntaje" />
+                <ScalarProperty Name="Comentario" ColumnName="Comentario" />
+                <ScalarProperty Name="FechaCalificacion" ColumnName="FechaCalificacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CarritoItems">
+            <EntityTypeMapping TypeName="RedFlixDBModel.CarritoItem">
+              <MappingFragment StoreEntitySet="CarritoItems">
+                <ScalarProperty Name="IdCarritoItem" ColumnName="IdCarritoItem" />
+                <ScalarProperty Name="IdCarrito" ColumnName="IdCarrito" />
+                <ScalarProperty Name="IdPelicula" ColumnName="IdPelicula" />
+                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carritos">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Carrito">
+              <MappingFragment StoreEntitySet="Carritos">
+                <ScalarProperty Name="IdCarrito" ColumnName="IdCarrito" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Climas">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Clima">
+              <MappingFragment StoreEntitySet="Clima">
+                <ScalarProperty Name="IdClima" ColumnName="IdClima" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="Temperatura" ColumnName="Temperatura" />
+                <ScalarProperty Name="EstadoClima" ColumnName="EstadoClima" />
+                <ScalarProperty Name="Humedad" ColumnName="Humedad" />
+                <ScalarProperty Name="FechaConsulta" ColumnName="FechaConsulta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Compras">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Compra">
+              <MappingFragment StoreEntitySet="Compras">
+                <ScalarProperty Name="IdCompra" ColumnName="IdCompra" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="FechaCompra" ColumnName="FechaCompra" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Moneda" ColumnName="Moneda" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cotizaciones">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Cotizacione">
+              <MappingFragment StoreEntitySet="Cotizaciones">
+                <ScalarProperty Name="IdCotizacion" ColumnName="IdCotizacion" />
+                <ScalarProperty Name="MonedaOrigen" ColumnName="MonedaOrigen" />
+                <ScalarProperty Name="MonedaDestino" ColumnName="MonedaDestino" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="FechaActualizacion" ColumnName="FechaActualizacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetalleCompras">
+            <EntityTypeMapping TypeName="RedFlixDBModel.DetalleCompra">
+              <MappingFragment StoreEntitySet="DetalleCompra">
+                <ScalarProperty Name="IdDetalleCompra" ColumnName="IdDetalleCompra" />
+                <ScalarProperty Name="IdCompra" ColumnName="IdCompra" />
+                <ScalarProperty Name="IdPelicula" ColumnName="IdPelicula" />
+                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Favoritos">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Favorito">
+              <MappingFragment StoreEntitySet="Favoritos">
+                <ScalarProperty Name="IdFavorito" ColumnName="IdFavorito" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdPelicula" ColumnName="IdPelicula" />
+                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
+                <ScalarProperty Name="FechaAgregado" ColumnName="FechaAgregado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Generos">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Genero">
+              <MappingFragment StoreEntitySet="Generos">
+                <ScalarProperty Name="IdGenero" ColumnName="IdGenero" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HistorialBusquedas">
+            <EntityTypeMapping TypeName="RedFlixDBModel.HistorialBusqueda">
+              <MappingFragment StoreEntitySet="HistorialBusquedas">
+                <ScalarProperty Name="IdBusqueda" ColumnName="IdBusqueda" />
+                <ScalarProperty Name="TextoBuscado" ColumnName="TextoBuscado" />
+                <ScalarProperty Name="FechaBusqueda" ColumnName="FechaBusqueda" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HistorialReproduccions">
+            <EntityTypeMapping TypeName="RedFlixDBModel.HistorialReproduccion">
+              <MappingFragment StoreEntitySet="HistorialReproduccion">
+                <ScalarProperty Name="IdHistorial" ColumnName="IdHistorial" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdPelicula" ColumnName="IdPelicula" />
+                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
+                <ScalarProperty Name="FechaReproduccion" ColumnName="FechaReproduccion" />
+                <ScalarProperty Name="Progreso" ColumnName="Progreso" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ListaContenidoes">
+            <EntityTypeMapping TypeName="RedFlixDBModel.ListaContenido">
+              <MappingFragment StoreEntitySet="ListaContenido">
+                <ScalarProperty Name="IdListaContenido" ColumnName="IdListaContenido" />
+                <ScalarProperty Name="IdLista" ColumnName="IdLista" />
+                <ScalarProperty Name="IdPelicula" ColumnName="IdPelicula" />
+                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
+                <ScalarProperty Name="FechaAgregado" ColumnName="FechaAgregado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ListasPersonalizadas">
+            <EntityTypeMapping TypeName="RedFlixDBModel.ListasPersonalizada">
+              <MappingFragment StoreEntitySet="ListasPersonalizadas">
+                <ScalarProperty Name="IdLista" ColumnName="IdLista" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MetodosPagoes">
+            <EntityTypeMapping TypeName="RedFlixDBModel.MetodosPago">
+              <MappingFragment StoreEntitySet="MetodosPago">
+                <ScalarProperty Name="IdMetodoPago" ColumnName="IdMetodoPago" />
+                <ScalarProperty Name="NombreMetodo" ColumnName="NombreMetodo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pagos">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Pago">
+              <MappingFragment StoreEntitySet="Pagos">
+                <ScalarProperty Name="IdPago" ColumnName="IdPago" />
+                <ScalarProperty Name="IdCompra" ColumnName="IdCompra" />
+                <ScalarProperty Name="IdMetodoPago" ColumnName="IdMetodoPago" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="FechaPago" ColumnName="FechaPago" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Peliculas">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Pelicula">
+              <MappingFragment StoreEntitySet="Peliculas">
+                <ScalarProperty Name="IdPelicula" ColumnName="IdPelicula" />
+                <ScalarProperty Name="IdTmdb" ColumnName="IdTmdb" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Permisos">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Permiso">
+              <MappingFragment StoreEntitySet="Permisos">
+                <ScalarProperty Name="IdPermiso" ColumnName="IdPermiso" />
+                <ScalarProperty Name="NombrePermiso" ColumnName="NombrePermiso" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Recomendaciones">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Recomendacione">
+              <MappingFragment StoreEntitySet="Recomendaciones">
+                <ScalarProperty Name="IdRecomendacion" ColumnName="IdRecomendacion" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdPelicula" ColumnName="IdPelicula" />
+                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
+                <ScalarProperty Name="Motivo" ColumnName="Motivo" />
+                <ScalarProperty Name="FechaRecomendacion" ColumnName="FechaRecomendacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RolesPermisos">
+            <EntityTypeMapping TypeName="RedFlixDBModel.RolesPermiso">
+              <MappingFragment StoreEntitySet="RolesPermisos">
+                <ScalarProperty Name="IdRolPermiso" ColumnName="IdRolPermiso" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="IdPermiso" ColumnName="IdPermiso" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Series">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Series">
+              <MappingFragment StoreEntitySet="Series">
+                <ScalarProperty Name="IdSerie" ColumnName="IdSerie" />
+                <ScalarProperty Name="IdTmdb" ColumnName="IdTmdb" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="RedFlixDBModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

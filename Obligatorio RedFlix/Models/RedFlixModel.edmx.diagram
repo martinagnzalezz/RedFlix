@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="09b58a35d104493b9b8b7a8ea9921120" Name="Diagram1">
+        <EntityTypeShape EntityType="RedFlixDBModel.Calificacione" Width="1.5" PointX="8.25" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.CarritoItem" Width="1.5" PointX="7.5" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Carrito" Width="1.5" PointX="5.25" PointY="19.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Clima" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Compra" Width="1.5" PointX="5.25" PointY="22" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Cotizacione" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.DetalleCompra" Width="1.5" PointX="7.5" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Favorito" Width="1.5" PointX="5.25" PointY="16" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Genero" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.HistorialBusqueda" Width="1.5" PointX="5.25" PointY="28.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.HistorialReproduccion" Width="1.5" PointX="10.25" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.ListaContenido" Width="1.5" PointX="7.5" PointY="34.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.ListasPersonalizada" Width="1.5" PointX="5.25" PointY="35" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.MetodosPago" Width="1.5" PointX="8.25" PointY="29.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Pago" Width="1.5" PointX="10.5" PointY="22.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Pelicula" Width="1.5" PointX="3" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Permiso" Width="1.5" PointX="0.75" PointY="14.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Recomendacione" Width="1.5" PointX="10.25" PointY="25.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Role" Width="1.5" PointX="0.75" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.RolesPermiso" Width="1.5" PointX="3" PointY="15.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Series" Width="1.5" PointX="3" PointY="24.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RedFlixDBModel.Usuario" Width="1.5" PointX="3" PointY="19.125" IsExpanded="true" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Calificac__IdPel__6E01572D" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Calificac__IdSer__6EF57B66" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Calificac__IdUsu__6D0D32F4" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__CarritoIt__IdCar__1DB06A4F" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__CarritoIt__IdPel__1EA48E88" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__CarritoIt__IdSer__1F98B2C1" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Carritos__IdUsua__19DFD96B" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Compras__IdUsuar__282DF8C2" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__DetalleCo__IdCom__2CF2ADDF" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Pagos__IdCompra__3864608B" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__DetalleCo__IdPel__2DE6D218" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__DetalleCo__IdSer__2EDAF651" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Favoritos__IdPel__6754599E" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Favoritos__IdSer__68487DD7" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Favoritos__IdUsu__66603565" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Historial__IdUsu__7F2BE32F" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Historial__IdPel__04E4BC85" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Historial__IdSer__05D8E0BE" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Historial__IdUsu__03F0984C" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__ListaCont__IdLis__787EE5A0" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__ListaCont__IdPel__797309D9" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__ListaCont__IdSer__7A672E12" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__ListasPer__IdUsu__74AE54BC" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Pagos__IdMetodoP__395884C4" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Recomenda__IdPel__14270015" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__RolesPerm__IdPer__5165187F" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Recomenda__IdSer__151B244E" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Recomenda__IdUsu__1332DBDC" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__RolesPerm__IdRol__5070F446" ManuallyRouted="false" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Usuarios__IdRol__571DF1D5" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
