@@ -1,0 +1,367 @@
+﻿@{
+    ViewBag.Title = "Crear cuenta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <style>
+        .rf-sidebar {
+            display: none !important;
+        }
+
+        .rf-main {
+            margin-left: 0 !important;
+        }
+
+        .rf-footer {
+            margin-left: 0 !important;
+            display: none !important;
+        }
+
+        .registrar-page {
+            min-height: calc(100vh - 64px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75));
+            padding: 40px 20px;
+        }
+
+        .registrar-box {
+            background: rgba(10,10,10,0.95);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 48px 52px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
+
+        .registrar-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 28px;
+            justify-content: center;
+        }
+
+            .registrar-logo i {
+                color: #D4A017;
+                font-size: 24px;
+            }
+
+            .registrar-logo span {
+                color: #D4A017;
+                font-size: 26px;
+                font-weight: 900;
+                letter-spacing: 1px;
+            }
+
+        .registrar-box h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #F0F0F0;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .registrar-box p.subtitle {
+            color: #888;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .rf-input-group {
+            margin-bottom: 14px;
+        }
+
+            .rf-input-group label {
+                display: block;
+                font-size: 12px;
+                color: #888;
+                margin-bottom: 6px;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .rf-input-group .input-wrap {
+                position: relative;
+            }
+
+                .rf-input-group .input-wrap i {
+                    position: absolute;
+                    left: 14px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: #555;
+                    font-size: 14px;
+                }
+
+            .rf-input-group input {
+                width: 100%;
+                background: #1a1a1a;
+                border: 1px solid #2a2a2a;
+                border-radius: 8px;
+                padding: 13px 14px 13px 40px;
+                color: #F0F0F0;
+                font-size: 15px;
+                outline: none;
+                transition: border 0.2s;
+            }
+
+                .rf-input-group input:focus {
+                    border-color: #D4A017;
+                }
+
+                .rf-input-group input::placeholder {
+                    color: #555;
+                }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .password-strength {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .strength-bar {
+            flex: 1;
+            height: 3px;
+            border-radius: 2px;
+            background: #2a2a2a;
+            transition: background 0.3s;
+        }
+
+            .strength-bar.weak {
+                background: #e50914;
+            }
+
+            .strength-bar.medium {
+                background: #ffaa00;
+            }
+
+            .strength-bar.strong {
+                background: #46d369;
+            }
+
+        .strength-label {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .btn-registrar {
+            width: 100%;
+            background: #D4A017;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+            letter-spacing: 0.5px;
+        }
+
+            .btn-registrar:hover {
+                background: #F0C040;
+            }
+
+        .registrar-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 14px;
+        }
+
+            .registrar-footer a {
+                color: #D4A017;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+                .registrar-footer a:hover {
+                    color: #F0C040;
+                    text-decoration: underline;
+                }
+
+        .error-box {
+            background: rgba(229,9,20,0.1);
+            border: 1px solid rgba(229,9,20,0.3);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: #e50914;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .beneficio {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 24px;
+            padding: 14px;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+        }
+
+        .beneficio-item {
+            text-align: center;
+        }
+
+            .beneficio-item i {
+                color: #D4A017;
+                font-size: 18px;
+                display: block;
+                margin-bottom: 4px;
+            }
+
+            .beneficio-item span {
+                font-size: 11px;
+                color: #888;
+            }
+    </style>
+}
+
+<div class="registrar-page">
+    <div class="registrar-box">
+
+        <div class="registrar-logo">
+            <i class="fa fa-star"></i>
+            <span>REDFLIX</span>
+        </div>
+
+        <h2>Crear cuenta gratis</h2>
+        <p class="subtitle">Empezá a disfrutar el mejor contenido</p>
+
+       
+        <div class="beneficios">
+            <div class="beneficios-item">
+                <i class="fa fa-film"></i>
+                <span>Miles de títulos</span>
+            </div>
+            <div class="beneficios-item">
+                <i class="fa fa-tag"></i>
+                <span>Pagás por título</span>
+            </div>
+            <div class="beneficios-item">
+                <i class="fa fa-shield-alt"></i>
+                <span>Compra segura</span>
+            </div>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="error-box">
+                <i class="fa fa-exclamation-circle"></i>
+                @ViewBag.Error
+            </div>
+        }
+
+        @using (Html.BeginForm("Registrar", "Account", FormMethod.Post))
+        {
+            <div class="input-row">
+                <div class="rf-input-group">
+                    <label>Nombre *</label>
+                    <div class="input-wrap">
+                        <i class="fa fa-user"></i>
+                        <input type="text" name="nombre" placeholder="Juan" required />
+                    </div>
+                </div>
+                <div class="rf-input-group">
+                    <label>Apellido</label>
+                    <div class="input-wrap">
+                        <i class="fa fa-user"></i>
+                        <input type="text" name="apellido" placeholder="Pérez" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="rf-input-group">
+                <label>Email *</label>
+                <div class="input-wrap">
+                    <i class="fa fa-envelope"></i>
+                    <input type="email" name="email" placeholder="tu@email.com" required />
+                </div>
+            </div>
+
+            <div class="rf-input-group">
+                <label>Contraseña *</label>
+                <div class="input-wrap">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" name="password" id="passwordInput"
+                           placeholder="Mínimo 6 caracteres" required />
+                </div>
+                <div class="password-strength">
+                    <div class="strength-bar" id="bar1"></div>
+                    <div class="strength-bar" id="bar2"></div>
+                    <div class="strength-bar" id="bar3"></div>
+                </div>
+                <div class="strength-label" id="strengthLabel"></div>
+            </div>
+
+            <div class="rf-input-group">
+                <label>Confirmar contraseña *</label>
+                <div class="input-wrap">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" name="confirmarPassword" placeholder="Repetí tu contraseña" required />
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register">
+                <i class="fa fa-user-plus"></i> Crear mi cuenta
+            </button>
+        }
+
+        <div class="registrar-footer">
+            ¿Ya tenés cuenta?
+            <a href="@Url.Action("Login", "Account")">Iniciá sesión</a>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+    document.getElementById('passwordInput').addEventListener('input', function () {
+        var val = this.value;
+        var bar1 = document.getElementById('bar1');
+        var bar2 = document.getElementById('bar2');
+        var bar3 = document.getElementById('bar3');
+        var label = document.getElementById('strengthLabel');
+
+        bar1.className = 'strength-bar';
+        bar2.className = 'strength-bar';
+        bar3.className = 'strength-bar';
+
+        if (val.length === 0) {
+            label.textContent = '';
+        } else if (val.length < 6) {
+            bar1.classList.add('weak');
+            label.textContent = 'Muy corta';
+            label.style.color = '#e50914';
+        } else if (val.length < 10) {
+            bar1.classList.add('medium');
+            bar2.classList.add('medium');
+            label.textContent = 'Contraseña media';
+            label.style.color = '#ffaa00';
+        } else {
+            bar1.classList.add('strong');
+            bar2.classList.add('strong');
+            bar3.classList.add('strong');
+            label.textContent = 'Contraseña fuerte';
+            label.style.color = '#46d369';
+        }
+    });</script>
+}

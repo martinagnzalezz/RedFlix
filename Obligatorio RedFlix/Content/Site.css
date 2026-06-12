@@ -19,7 +19,6 @@ textarea {
     max-width: 280px;
 }
 
-
 body {
     background-color: #0B0B0B;
     color: white;
@@ -69,4 +68,37 @@ body {
     .card-redflix img {
         height: 350px;
         object-fit: cover;
+    }
+
+
+.btn-login {
+    background: transparent;
+    color: white;
+    border: 1px solid #D4AF37;
+    padding: 8px 18px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: .3s;
+}
+
+    .btn-login:hover {
+        background: #D4AF37;
+        color: black;
+    }
+
+.btn-registrar {
+    background: #D4AF37;
+    color: black;
+    border: 1px solid #D4AF37;
+    padding: 8px 18px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: .3s;
+}
+
+    .btn-registrar:hover {
+        background: #c19b2f;
+        border-color: #c19b2f;
+        color: black;
     }

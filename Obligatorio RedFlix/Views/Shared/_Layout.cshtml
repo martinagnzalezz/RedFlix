@@ -1,65 +1,60 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles", required: false)
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark redflix-navbar">
         <div class="container-fluid">
-
             <a class="navbar-brand logo-redflix" href="/">
                 REDFLIX
             </a>
-
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarRedflix">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarRedflix">
-
                 <ul class="navbar-nav me-auto">
-
                     <li class="nav-item">
                         <a class="nav-link" href="/">Inicio</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="#">Películas</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="#">Series</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="#">Favoritos</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="#">Biblioteca</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="#">Carrito</a>
                     </li>
-
                 </ul>
-
-                <input class="form-control w-25 me-3"
-                       placeholder="Buscar..." />
-
-                <span class="text-light">
-                    Hola Martina
-                </span>
-
+                <div class="d-flex align-items-center">
+                    @if (Session["UsuarioId"] != null)
+                    {
+                        <span class="text-white me-3">@Session["UsuarioNombre"]</span>
+                        <a class="btn-login" href="/Account/Logout">Cerrar sesión</a>
+                    }
+                    else
+                    {
+                        <a class="btn-login me-2" href="/Account/Login">Iniciar sesión</a>
+                        <a class="btn-registrar" href="/Account/Registrar">Registrarse</a>
+                    }
+                </div>
+                <input class="form-control w-25 me-3" placeholder="Buscar..." />
             </div>
-
         </div>
     </nav>
     <div class="container body-content">
@@ -69,7 +64,6 @@
             <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
         </footer>
     </div>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
