@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Obligatorio_RedFlix.Models.Usuario>
+
+@{
+    ViewBag.Title = "Usuarios";
+}
+
+<h2>Usuarios</h2>
+
+<p>
+    @Html.ActionLink("Crear nuevo usuario", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Email</th>
+        <th>Fecha de registro</th>
+        <th>Estado</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+            <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
+            <td>@Html.DisplayFor(modelItem => item.Email)</td>
+            <td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+            <td>@Html.DisplayFor(modelItem => item.Estado)</td>
+            <td>@Html.DisplayFor(modelItem => item.Role.Nombre)</td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { id = item.IdUsuario }) |
+                @Html.ActionLink("Detalles", "Details", new { id = item.IdUsuario }) |
+                @Html.ActionLink(
+                    item.Estado == "Activo" ? "Inactivar" : "Activar",
+                    "CambiarEstado",
+                    new { id = item.IdUsuario }
+                )
+            </td>
+        </tr>
+    }
+
+</table>
