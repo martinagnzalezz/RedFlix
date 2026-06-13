@@ -151,6 +151,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PeliculaController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
@@ -192,6 +193,7 @@
     <Compile Include="Models\ListaContenido.cs">
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ListaPopulares.cs" />
     <Compile Include="Models\ListasPersonalizada.cs">
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
@@ -205,6 +207,13 @@
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Permiso.cs">
+      <DependentUpon>RedFlixModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Populares.cs" />
+    <Compile Include="Models\PrecioContenido.cs">
+      <DependentUpon>RedFlixModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PromocionesClima.cs">
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Recomendacione.cs">
@@ -237,6 +246,7 @@
     <Compile Include="Models\Usuario.cs">
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\VideoTmdb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -313,6 +323,8 @@
     <Content Include="Views\Usuarios\Index.cshtml" />
     <Content Include="Views\Usuarios\Create.cshtml" />
     <Content Include="Views\Usuarios\Edit.cshtml" />
+    <Content Include="Views\Pelicula\Detalle.cshtml" />
+    <Content Include="Views\Pelicula\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -382,8 +394,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
   <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />

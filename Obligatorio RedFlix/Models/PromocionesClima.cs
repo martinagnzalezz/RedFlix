@@ -12,18 +12,17 @@ namespace Obligatorio_RedFlix.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Genero
+    public partial class PromocionesClima
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Genero()
-        {
-            this.PromocionesClimas = new HashSet<PromocionesClima>();
-        }
-    
-        public int IdGenero { get; set; }
+        public int IdPromocion { get; set; }
         public string Nombre { get; set; }
+        public string Descripcion { get; set; }
+        public string CondicionClima { get; set; }
+        public Nullable<decimal> TemperaturaMax { get; set; }
+        public decimal PorcentajeDesc { get; set; }
+        public Nullable<int> IdGenero { get; set; }
+        public bool Activa { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PromocionesClima> PromocionesClimas { get; set; }
+        public virtual Genero Genero { get; set; }
     }
 }

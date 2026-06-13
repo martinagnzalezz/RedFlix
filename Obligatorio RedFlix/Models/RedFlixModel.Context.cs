@@ -47,5 +47,7 @@ namespace Obligatorio_RedFlix.Models
         public virtual DbSet<RolesPermiso> RolesPermisos { get; set; }
         public virtual DbSet<Series> Series { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
+        public virtual DbSet<PrecioContenido> PrecioContenidoes { get; set; }
+        public virtual DbSet<PromocionesClima> PromocionesClimas { get; set; }
     }
 }

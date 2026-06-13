@@ -1,8 +1,8 @@
 ﻿using Obligatorio_RedFlix.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.Mvc;
 
 namespace Obligatorio_RedFlix.Controllers
@@ -20,19 +20,24 @@ namespace Obligatorio_RedFlix.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Login(string email, string password)
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
                 ViewBag.Error = "Por favor completá todos los campos.";
                 return View();
             }
 
+            string passwordHash = GenerarHash(password);
+
             var usuario = db.Usuarios
-                            .Include("Role")
-                            .FirstOrDefault(u => u.Email == email
-                                              && u.PasswordHash == password
-                                              && u.Estado == "Activo");
+                .Include("Role")
+                .FirstOrDefault(u =>
+                    u.Email == email &&
+                    u.PasswordHash == passwordHash &&
+                    u.Estado == "Activo"
+                );
 
             if (usuario == null)
             {
@@ -50,7 +55,6 @@ namespace Obligatorio_RedFlix.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-       
         public ActionResult Registrar()
         {
             if (Session["UsuarioId"] != null)
@@ -59,15 +63,11 @@ namespace Obligatorio_RedFlix.Controllers
             return View();
         }
 
-        
         [HttpPost]
-        public ActionResult Registrar(string nombre, string apellido,
-                                     string email, string password,
-                                     string confirmarPassword)
+        [ValidateAntiForgeryToken]
+        public ActionResult Registrar(string nombre, string apellido, string email, string password, string confirmarPassword)
         {
-            
-            if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(email) ||
-                string.IsNullOrEmpty(password))
+            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
                 ViewBag.Error = "Por favor completá todos los campos obligatorios.";
                 return View();
@@ -86,22 +86,22 @@ namespace Obligatorio_RedFlix.Controllers
             }
 
             bool emailExiste = db.Usuarios.Any(u => u.Email == email);
+
             if (emailExiste)
             {
                 ViewBag.Error = "Ya existe una cuenta con ese email.";
                 return View();
             }
 
-            
             var nuevoUsuario = new Usuario
             {
                 Nombre = nombre,
                 Apellido = apellido,
                 Email = email,
-                PasswordHash = password,   
+                PasswordHash = GenerarHash(password),
                 Estado = "Activo",
                 FechaRegistro = DateTime.Now,
-                IdRol = 2          
+                IdRol = 2
             };
 
             db.Usuarios.Add(nuevoUsuario);
@@ -118,7 +118,6 @@ namespace Obligatorio_RedFlix.Controllers
             return RedirectToAction("Login");
         }
 
-      
         [HttpGet]
         public ActionResult Perfil()
         {
@@ -135,8 +134,8 @@ namespace Obligatorio_RedFlix.Controllers
         }
 
         [HttpPost]
-        public ActionResult Perfil(string nombre, string apellido, string passwordActual,
-                                   string passwordNuevo, string confirmarNuevo)
+        [ValidateAntiForgeryToken]
+        public ActionResult Perfil(string nombre, string apellido, string passwordActual, string passwordNuevo, string confirmarNuevo)
         {
             if (Session["UsuarioId"] == null)
                 return RedirectToAction("Login");
@@ -144,38 +143,66 @@ namespace Obligatorio_RedFlix.Controllers
             int id = (int)Session["UsuarioId"];
             var usuario = db.Usuarios.Find(id);
 
-            
+            if (usuario == null)
+                return HttpNotFound();
+
             usuario.Nombre = nombre;
             usuario.Apellido = apellido;
 
-            
-            if (!string.IsNullOrEmpty(passwordNuevo))
+            if (!string.IsNullOrWhiteSpace(passwordNuevo))
             {
-                if (usuario.PasswordHash != passwordActual)
+                if (string.IsNullOrWhiteSpace(passwordActual))
+                {
+                    ViewBag.Error = "Debés ingresar la contraseña actual.";
+                    return View(usuario);
+                }
+
+                if (usuario.PasswordHash != GenerarHash(passwordActual))
                 {
                     ViewBag.Error = "La contraseña actual es incorrecta.";
                     return View(usuario);
                 }
+
                 if (passwordNuevo != confirmarNuevo)
                 {
                     ViewBag.Error = "Las contraseñas nuevas no coinciden.";
                     return View(usuario);
                 }
-                usuario.PasswordHash = passwordNuevo;
+
+                usuario.PasswordHash = GenerarHash(passwordNuevo);
             }
 
             db.SaveChanges();
 
-            
             Session["UsuarioNombre"] = usuario.Nombre;
 
             TempData["Success"] = "Perfil actualizado correctamente.";
             return RedirectToAction("Perfil");
         }
 
+        private string GenerarHash(string texto)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(texto);
+                byte[] hash = sha256.ComputeHash(bytes);
+
+                StringBuilder resultado = new StringBuilder();
+
+                foreach (byte b in hash)
+                {
+                    resultado.Append(b.ToString("x2"));
+                }
+
+                return resultado.ToString();
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
-            if (disposing) db.Dispose();
+            if (disposing)
+                db.Dispose();
+
             base.Dispose(disposing);
         }
     }

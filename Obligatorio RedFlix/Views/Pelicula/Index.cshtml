@@ -1,0 +1,47 @@
+﻿@model List<Obligatorio_RedFlix.Models.Populares>
+
+@{
+    ViewBag.Title = "Películas populares";
+}
+
+<h2 class="mb-4" style="color:#D4AF37;">Películas populares</h2>
+
+<div class="row">
+
+    @foreach (var pelicula in Model)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card card-redflix">
+
+                <img src="@pelicula.ImagenUrl"
+                     class="card-img-top" />
+
+                <div class="card-body">
+
+                    <h5>@pelicula.Title</h5>
+
+                    <p style="color:#ccc;">
+                        ⭐ @pelicula.VoteAverage
+                    </p>
+
+                    <p style="font-size:13px; color:#aaa;">
+                        @(pelicula.Overview != null && pelicula.Overview.Length > 100
+                            ? pelicula.Overview.Substring(0, 100) + "..."
+                            : pelicula.Overview)
+                    </p>
+
+                    @Html.ActionLink(
+                        "Ver detalle",
+                        "Detalle",
+                        "Pelicula",
+                        new { id = pelicula.Id },
+                        new { @class = "btn btn-gold w-100" }
+                    )
+
+                </div>
+
+            </div>
+        </div>
+    }
+
+</div>

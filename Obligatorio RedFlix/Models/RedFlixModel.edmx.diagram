@@ -57,6 +57,9 @@
         <AssociationConnector Association="RedFlixDBModel.FK__Recomenda__IdUsu__1332DBDC" ManuallyRouted="false" />
         <AssociationConnector Association="RedFlixDBModel.FK__RolesPerm__IdRol__5070F446" ManuallyRouted="false" />
         <AssociationConnector Association="RedFlixDBModel.FK__Usuarios__IdRol__571DF1D5" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="RedFlixDBModel.PrecioContenido" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="RedFlixDBModel.PromocionesClima" Width="1.5" PointX="3" PointY="4.125" />
+        <AssociationConnector Association="RedFlixDBModel.FK__Promocion__IdGen__55F4C372" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

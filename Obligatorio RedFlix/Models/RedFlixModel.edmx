@@ -170,6 +170,32 @@
           <Property Name="NombrePermiso" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Descripcion" Type="varchar" MaxLength="150" Nullable="false" />
         </EntityType>
+        <EntityType Name="PrecioContenido">
+          <Key>
+            <PropertyRef Name="IdPrecio" />
+          </Key>
+          <Property Name="IdPrecio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TmdbId" Type="int" Nullable="false" />
+          <Property Name="Titulo" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="TipoContenido" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="PrecioCompra" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="PrecioAlquier" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="DiasAlquiler" Type="int" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PromocionesClima">
+          <Key>
+            <PropertyRef Name="IdPromocion" />
+          </Key>
+          <Property Name="IdPromocion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="300" />
+          <Property Name="CondicionClima" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="TemperaturaMax" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PorcentajeDesc" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="IdGenero" Type="int" />
+          <Property Name="Activa" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Recomendaciones">
           <Key>
             <PropertyRef Name="IdRecomendacion" />
@@ -506,6 +532,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Promocion__IdGen__55F4C372">
+          <End Role="Generos" Type="Self.Generos" Multiplicity="0..1" />
+          <End Role="PromocionesClima" Type="Self.PromocionesClima" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Generos">
+              <PropertyRef Name="IdGenero" />
+            </Principal>
+            <Dependent Role="PromocionesClima">
+              <PropertyRef Name="IdGenero" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Recomenda__IdPel__14270015">
           <End Role="Peliculas" Type="Self.Peliculas" Multiplicity="0..1" />
           <End Role="Recomendaciones" Type="Self.Recomendaciones" Multiplicity="*" />
@@ -596,6 +634,8 @@
           <EntitySet Name="Pagos" EntityType="Self.Pagos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Peliculas" EntityType="Self.Peliculas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Permisos" EntityType="Self.Permisos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrecioContenido" EntityType="Self.PrecioContenido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PromocionesClima" EntityType="Self.PromocionesClima" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Recomendaciones" EntityType="Self.Recomendaciones" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RolesPermisos" EntityType="Self.RolesPermisos" Schema="dbo" store:Type="Tables" />
@@ -696,6 +736,10 @@
           <AssociationSet Name="FK__Pagos__IdMetodoP__395884C4" Association="Self.FK__Pagos__IdMetodoP__395884C4">
             <End Role="MetodosPago" EntitySet="MetodosPago" />
             <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Promocion__IdGen__55F4C372" Association="Self.FK__Promocion__IdGen__55F4C372">
+            <End Role="Generos" EntitySet="Generos" />
+            <End Role="PromocionesClima" EntitySet="PromocionesClima" />
           </AssociationSet>
           <AssociationSet Name="FK__Recomenda__IdPel__14270015" Association="Self.FK__Recomenda__IdPel__14270015">
             <End Role="Peliculas" EntitySet="Peliculas" />
@@ -832,6 +876,7 @@
           </Key>
           <Property Name="IdGenero" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="PromocionesClimas" Relationship="RedFlixDBModel.FK__Promocion__IdGen__55F4C372" FromRole="Genero" ToRole="PromocionesClima" />
         </EntityType>
         <EntityType Name="HistorialBusqueda">
           <Key>
@@ -1502,7 +1547,52 @@
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Usuarios" EntitySet="Usuarios" />
           </AssociationSet>
+          <EntitySet Name="PrecioContenidoes" EntityType="RedFlixDBModel.PrecioContenido" />
+          <EntitySet Name="PromocionesClimas" EntityType="RedFlixDBModel.PromocionesClima" />
+          <AssociationSet Name="FK__Promocion__IdGen__55F4C372" Association="RedFlixDBModel.FK__Promocion__IdGen__55F4C372">
+            <End Role="Genero" EntitySet="Generos" />
+            <End Role="PromocionesClima" EntitySet="PromocionesClimas" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="PrecioContenido">
+          <Key>
+            <PropertyRef Name="IdPrecio" />
+          </Key>
+          <Property Name="IdPrecio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TmdbId" Type="Int32" Nullable="false" />
+          <Property Name="Titulo" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="TipoContenido" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PrecioCompra" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="PrecioAlquier" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="DiasAlquiler" Type="Int32" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PromocionesClima">
+          <Key>
+            <PropertyRef Name="IdPromocion" />
+          </Key>
+          <Property Name="IdPromocion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="CondicionClima" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="TemperaturaMax" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PorcentajeDesc" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <Property Name="IdGenero" Type="Int32" />
+          <Property Name="Activa" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Genero" Relationship="RedFlixDBModel.FK__Promocion__IdGen__55F4C372" FromRole="PromocionesClima" ToRole="Genero" />
+        </EntityType>
+        <Association Name="FK__Promocion__IdGen__55F4C372">
+          <End Type="RedFlixDBModel.Genero" Role="Genero" Multiplicity="0..1" />
+          <End Type="RedFlixDBModel.PromocionesClima" Role="PromocionesClima" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genero">
+              <PropertyRef Name="IdGenero" />
+            </Principal>
+            <Dependent Role="PromocionesClima">
+              <PropertyRef Name="IdGenero" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1741,6 +1831,34 @@
                 <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrecioContenidoes">
+            <EntityTypeMapping TypeName="RedFlixDBModel.PrecioContenido">
+              <MappingFragment StoreEntitySet="PrecioContenido">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="DiasAlquiler" ColumnName="DiasAlquiler" />
+                <ScalarProperty Name="PrecioAlquier" ColumnName="PrecioAlquier" />
+                <ScalarProperty Name="PrecioCompra" ColumnName="PrecioCompra" />
+                <ScalarProperty Name="TipoContenido" ColumnName="TipoContenido" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="TmdbId" ColumnName="TmdbId" />
+                <ScalarProperty Name="IdPrecio" ColumnName="IdPrecio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PromocionesClimas">
+            <EntityTypeMapping TypeName="RedFlixDBModel.PromocionesClima">
+              <MappingFragment StoreEntitySet="PromocionesClima">
+                <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="IdGenero" ColumnName="IdGenero" />
+                <ScalarProperty Name="PorcentajeDesc" ColumnName="PorcentajeDesc" />
+                <ScalarProperty Name="TemperaturaMax" ColumnName="TemperaturaMax" />
+                <ScalarProperty Name="CondicionClima" ColumnName="CondicionClima" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdPromocion" ColumnName="IdPromocion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
