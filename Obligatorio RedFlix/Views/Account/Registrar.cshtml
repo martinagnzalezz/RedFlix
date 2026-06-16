@@ -246,7 +246,7 @@
         <h2>Crear cuenta gratis</h2>
         <p class="subtitle">Empezá a disfrutar el mejor contenido</p>
 
-       
+
         <div class="beneficios">
             <div class="beneficios-item">
                 <i class="fa fa-film"></i>
@@ -272,58 +272,60 @@
 
         @using (Html.BeginForm("Registrar", "Account", FormMethod.Post))
         {
-            <div class="input-row">
-                <div class="rf-input-group">
-                    <label>Nombre *</label>
-                    <div class="input-wrap">
-                        <i class="fa fa-user"></i>
-                        <input type="text" name="nombre" placeholder="Juan" required />
-                    </div>
-                </div>
-                <div class="rf-input-group">
-                    <label>Apellido</label>
-                    <div class="input-wrap">
-                        <i class="fa fa-user"></i>
-                        <input type="text" name="apellido" placeholder="Pérez" />
-                    </div>
-                </div>
-            </div>
+            @Html.AntiForgeryToken()  
 
-            <div class="rf-input-group">
-                <label>Email *</label>
-                <div class="input-wrap">
-                    <i class="fa fa-envelope"></i>
-                    <input type="email" name="email" placeholder="tu@email.com" required />
-                </div>
-            </div>
+                        <div class="input-row">
+                            <div class="rf-input-group">
+                                <label>Nombre*</label>
+                                <div class="input-wrap">
+                                    <i class="fa fa-user"></i>
+                                    <input type = "text" name="nombre" placeholder="Juan" required />
+                                </div>
+                            </div>
+                            <div class="rf-input-group">
+                                <label>Apellido</label>
+                                <div class="input-wrap">
+                                    <i class="fa fa-user"></i>
+                                    <input type = "text" name="apellido" placeholder="Pérez" />
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="rf-input-group">
-                <label>Contraseña *</label>
-                <div class="input-wrap">
-                    <i class="fa fa-lock"></i>
-                    <input type="password" name="password" id="passwordInput"
-                           placeholder="Mínimo 6 caracteres" required />
-                </div>
-                <div class="password-strength">
-                    <div class="strength-bar" id="bar1"></div>
-                    <div class="strength-bar" id="bar2"></div>
-                    <div class="strength-bar" id="bar3"></div>
-                </div>
-                <div class="strength-label" id="strengthLabel"></div>
-            </div>
+                        <div class="rf-input-group">
+                            <label>Email*</label>
+                            <div class="input-wrap">
+                                <i class="fa fa-envelope"></i>
+                                <input type = "email" name="email" placeholder="tu@email.com" required />
+                            </div>
+                        </div>
 
-            <div class="rf-input-group">
-                <label>Confirmar contraseña *</label>
-                <div class="input-wrap">
-                    <i class="fa fa-lock"></i>
-                    <input type="password" name="confirmarPassword" placeholder="Repetí tu contraseña" required />
-                </div>
-            </div>
+                        <div class="rf-input-group">
+                            <label>Contraseña*</label>
+                            <div class="input-wrap">
+                                <i class="fa fa-lock"></i>
+                                <input type = "password" name="password" id="passwordInput"
+                                       placeholder="Mínimo 6 caracteres" required />
+                            </div>
+                            <div class="password-strength">
+                                <div class="strength-bar" id="bar1"></div>
+                                <div class="strength-bar" id="bar2"></div>
+                                <div class="strength-bar" id="bar3"></div>
+                            </div>
+                            <div class="strength-label" id="strengthLabel"></div>
+                        </div>
 
-            <button type="submit" class="btn-register">
-                <i class="fa fa-user-plus"></i> Crear mi cuenta
-            </button>
-        }
+                        <div class="rf-input-group">
+                            <label>Confirmar contraseña *</label>
+                            <div class="input-wrap">
+                                <i class="fa fa-lock"></i>
+                                <input type = "password" name="confirmarPassword" placeholder="Repetí tu contraseña" required />
+                            </div>
+                        </div>
+
+                        <button type = "submit" class="btn-registrar">
+                            <i class="fa fa-user-plus"></i> Crear mi cuenta
+                        </button>
+                }
 
         <div class="registrar-footer">
             ¿Ya tenés cuenta?

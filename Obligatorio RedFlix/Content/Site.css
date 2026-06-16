@@ -5,18 +5,14 @@
     padding-right: 15px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
 .dl-horizontal dt {
     white-space: normal;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
+input:not(.input-comenzar),
 select,
 textarea {
-    max-width: 280px;
+    max-width: none;
 }
 
 body {
@@ -24,6 +20,7 @@ body {
     color: white;
 }
 
+/* ── Navbar ── */
 .redflix-navbar {
     background-color: #111111;
     border-bottom: 1px solid #D4AF37;
@@ -33,6 +30,8 @@ body {
     color: #D4AF37 !important;
     font-size: 28px;
     font-weight: bold;
+    text-shadow: 0 0 12px rgba(212,175,55,0.6), 0 0 25px rgba(212,175,55,0.3);
+    letter-spacing: 3px;
 }
 
 .nav-link {
@@ -43,62 +42,127 @@ body {
         color: #D4AF37 !important;
     }
 
-.btn-gold {
-    background-color: #D4AF37;
-    color: black;
-    border: none;
-}
-
+/* ── Cards ── */
 .card-redflix {
     background-color: #171717;
     border: 1px solid #2a2a2a;
-}
-
-.card-redflix {
-    background-color: #171717;
-    border: 1px solid #2a2a2a;
-    transition: .3s;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform .3s, border-color .3s, box-shadow .3s;
 }
 
     .card-redflix:hover {
-        transform: scale(1.03);
+        transform: scale(1.04);
         border-color: #D4AF37;
+        box-shadow: 0 8px 25px rgba(212,175,55,0.25);
     }
 
     .card-redflix img {
         height: 350px;
         object-fit: cover;
+        display: block;
+        width: 100%;
     }
 
+    .card-redflix .card-body {
+        padding: 12px;
+    }
 
-.btn-login {
-    background: transparent;
-    color: white;
-    border: 1px solid #D4AF37;
-    padding: 8px 18px;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: .3s;
+    .card-redflix h5 {
+        color: white;
+        font-size: 0.95rem;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* títulos largos no rompen el layout */
+    }
+
+/* ── Hero ── */
+.hero-redflix {
+    min-height: 100vh;
+    background-image: linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.65)), url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: -16px;
 }
 
-    .btn-login:hover {
-        background: #D4AF37;
-        color: black;
-    }
-
-.btn-registrar {
-    background: #D4AF37;
-    color: black;
-    border: 1px solid #D4AF37;
-    padding: 8px 18px;
-    border-radius: 5px;
-    text-decoration: none;
+.hero-content h1 {
+    font-size: 4rem;
     font-weight: bold;
-    transition: .3s;
+    color: white;
 }
 
-    .btn-registrar:hover {
-        background: #c19b2f;
-        border-color: #c19b2f;
-        color: black;
+.hero-subtitle {
+    font-size: 1.7rem;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+/* ── Botón gold (navbar) ── */
+.btn-gold {
+    background-color: #D4AF37;
+    color: black;
+    font-weight: bold;
+}
+
+/* ── Comenzar box ── */
+.comenzar-box {
+    text-align: center;
+    margin-top: 40px;
+}
+
+    .comenzar-box p {
+        font-size: 1.3rem;
+        color: #f5f5f5;
+        margin-bottom: 20px;
     }
+
+.comenzar-form {
+    display: flex;
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+    .comenzar-form input.input-comenzar {
+        flex: 1;
+        padding: 12px 16px;
+        font-size: 1rem;
+        background-color: #111111 !important;
+        color: white !important;
+        border: 2px solid #D4AF37 !important;
+        border-right: none !important;
+        border-radius: 4px 0 0 4px;
+    }
+
+.input-comenzar::placeholder {
+    color: #999;
+}
+
+.input-comenzar:focus {
+    box-shadow: 0 0 10px rgba(212,175,55,.4);
+    outline: none;
+}
+
+.comenzar-form button.btn-comenzar {
+    padding: 12px 24px;
+    font-size: 1rem;
+    background-color: #D4AF37 !important;
+    color: black !important;
+    font-weight: bold;
+    border: 2px solid #D4AF37 !important;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color .2s, transform .2s;
+}
+
+.btn-comenzar:hover {
+    background-color: #e6c04b !important;
+    transform: translateY(-2px);
+}
