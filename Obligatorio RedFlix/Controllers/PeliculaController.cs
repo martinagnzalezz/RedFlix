@@ -23,19 +23,60 @@ namespace Obligatorio_RedFlix.Controllers
         }
 
         // GET: Pelicula
-        public ActionResult Index()
+        public ActionResult Index(int pagina = 1)
         {
-            RestResponse response = HacerRequest("/3/movie/popular?language=es-ES&page=1");
+            if (pagina < 1)
+            {
+                pagina = 1;
+            }
 
-            ListaPopulares populares = JsonConvert.DeserializeObject<ListaPopulares>(response.Content);
+            RestResponse response = HacerRequest("/3/discover/movie?language=es-ES&page=" + pagina + "&sort_by=popularity.desc");
 
-            List<Populares> peliculas = populares.Results
-                .Where(pelicula => !string.IsNullOrEmpty(pelicula.Title))
-                .ToList();
+            ListaPopulares resultado = JsonConvert.DeserializeObject<ListaPopulares>(response.Content);
+
+            List<Populares> peliculas = new List<Populares>();
+
+            if (resultado != null && resultado.Results != null)
+            {
+                peliculas = resultado.Results
+                    .Where(pelicula => !string.IsNullOrEmpty(pelicula.Title))
+                    .ToList();
+            }
+
+            ViewBag.PaginaActual = pagina;
+            ViewBag.TotalPaginas = resultado != null && resultado.TotalPages.HasValue
+                ? resultado.TotalPages.Value
+                : 1;
 
             return View(peliculas);
         }
+        public ActionResult Series(int pagina = 1)
+        {
+            if (pagina < 1)
+            {
+                pagina = 1;
+            }
 
+            RestResponse response = HacerRequest("/3/discover/tv?language=es-ES&page=" + pagina + "&sort_by=popularity.desc");
+
+            ListaPopulares resultado = JsonConvert.DeserializeObject<ListaPopulares>(response.Content);
+
+            List<Populares> series = new List<Populares>();
+
+            if (resultado != null && resultado.Results != null)
+            {
+                series = resultado.Results
+                    .Where(serie => !string.IsNullOrEmpty(serie.Name))
+                    .ToList();
+            }
+
+            ViewBag.PaginaActual = pagina;
+            ViewBag.TotalPaginas = resultado != null && resultado.TotalPages.HasValue
+                ? resultado.TotalPages.Value
+                : 1;
+
+            return View(series);
+        }
         // GET: Pelicula/Detalle/ID
         public ActionResult Detalle(long id)
         {

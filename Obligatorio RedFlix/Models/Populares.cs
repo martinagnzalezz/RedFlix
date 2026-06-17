@@ -53,7 +53,45 @@ namespace Obligatorio_RedFlix.Models
 
         [JsonProperty("vote_count", NullValueHandling = NullValueHandling.Ignore)]
         public long? VoteCount { get; set; }
+        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+        public string Name { get; set; }
 
+        [JsonProperty("original_name", NullValueHandling = NullValueHandling.Ignore)]
+        public string OriginalName { get; set; }
+
+        [JsonProperty("first_air_date", NullValueHandling = NullValueHandling.Ignore)]
+        public DateTimeOffset? FirstAirDate { get; set; }
+
+        public string TituloMostrar
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Title))
+                {
+                    return Title;
+                }
+
+                return Name;
+            }
+        }
+
+        public string FechaMostrar
+        {
+            get
+            {
+                if (ReleaseDate.HasValue)
+                {
+                    return ReleaseDate.Value.ToString("dd/MM/yyyy");
+                }
+
+                if (FirstAirDate.HasValue)
+                {
+                    return FirstAirDate.Value.ToString("dd/MM/yyyy");
+                }
+
+                return "Sin fecha";
+            }
+        }
         public string ImagenUrl
         {
             get

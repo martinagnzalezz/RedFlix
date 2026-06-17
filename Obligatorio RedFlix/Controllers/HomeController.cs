@@ -25,16 +25,23 @@ namespace Obligatorio_RedFlix.Controllers
         }
         public ActionResult Index()
         {
-            RestResponse response =
-                HacerRequest("/3/movie/popular?language=es-ES&page=1");
+            RestResponse response = HacerRequest("/3/discover/movie?language=es-ES&page=1&sort_by=popularity.desc");
 
-            ListaPopulares populares =
-                JsonConvert.DeserializeObject<ListaPopulares>(response.Content);
+            List<Populares> peliculas = new List<Populares>();
 
-            List<Populares> peliculas = populares.Results
-                .Where(p => !string.IsNullOrEmpty(p.Title))
-                .Take(8) // opcional, para mostrar solo 8
-                .ToList();
+            if (response != null && !string.IsNullOrEmpty(response.Content))
+            {
+                ListaPopulares populares =
+                    JsonConvert.DeserializeObject<ListaPopulares>(response.Content);
+
+                if (populares != null && populares.Results != null)
+                {
+                    peliculas = populares.Results
+                        .Where(p => !string.IsNullOrEmpty(p.Title))
+                        .Take(8)
+                        .ToList();
+                }
+            }
 
             return View(peliculas);
         }

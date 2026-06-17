@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>@ViewBag.Title - RedFlix</title>
 
     @Styles.Render("~/Content/css")
@@ -11,13 +12,13 @@
     @RenderSection("styles", required: false)
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     <nav class="navbar navbar-expand-lg navbar-dark redflix-navbar">
 
         <div class="container-fluid">
 
-            <a class="navbar-brand logo-redflix" href="/">
+            <a class="navbar-brand logo-redflix" href="@Url.Action("Index", "Home")">
                 REDFLIX
             </a>
 
@@ -30,25 +31,24 @@
 
             <div class="collapse navbar-collapse" id="navbarRedflix">
 
-
                 <ul class="navbar-nav me-auto">
 
                     @if (Session["UsuarioId"] != null)
                     {
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index","Home")">
+                            <a class="nav-link" href="@Url.Action("Index", "Home")">
                                 Inicio
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index","Pelicula")">
+                            <a class="nav-link" href="@Url.Action("Index", "Pelicula")">
                                 Películas
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="@Url.Action("Series", "Pelicula")">
                                 Series
                             </a>
                         </li>
@@ -73,18 +73,17 @@
                     }
 
                 </ul>
-                
-                <!-- Zona derecha -->
+
                 <div class="d-flex align-items-center">
 
                     @if (Session["UsuarioId"] == null)
                     {
-                        <a href="@Url.Action("Login","Account")"
+                        <a href="@Url.Action("Login", "Account")"
                            class="btn btn-outline-light me-2">
                             Iniciar sesión
                         </a>
 
-                        <a href="@Url.Action("Registrar","Account")"
+                        <a href="@Url.Action("Registrar", "Account")"
                            class="btn btn-gold">
                             Registrarse
                         </a>
@@ -99,7 +98,7 @@
                             Hola @Session["UsuarioNombre"]
                         </span>
 
-                        <a href="@Url.Action("Logout","Account")"
+                        <a href="@Url.Action("Logout", "Account")"
                            class="btn btn-outline-danger">
                             Salir
                         </a>
@@ -113,17 +112,14 @@
 
     </nav>
 
-    @RenderBody()
+    <main class="container-fluid px-5 body-content flex-grow-1">
+        @RenderBody()
+    </main>
 
-    <div class="container body-content">
-
-        <hr />
-
-        <footer>
-            <p>&copy; @DateTime.Now.Year - RedFlix</p>
-        </footer>
-
-    </div>
+    <footer class="container-fluid px-5 mt-5 pt-4 pb-4"
+            style="border-top:1px solid #333;">
+        <p class="mb-0">&copy; @DateTime.Now.Year - RedFlix</p>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

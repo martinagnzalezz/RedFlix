@@ -1,7 +1,7 @@
 ﻿@model List<Obligatorio_RedFlix.Models.Populares>
 
 @{
-    ViewBag.Title = "Películas";
+    ViewBag.Title = "Series";
 
     int paginaActual = ViewBag.PaginaActual != null ? Convert.ToInt32(ViewBag.PaginaActual) : 1;
     int totalPaginas = ViewBag.TotalPaginas != null ? Convert.ToInt32(ViewBag.TotalPaginas) : 1;
@@ -15,38 +15,40 @@
 
 <div class="container-fluid px-5 py-4" style="max-width:1600px;">
 
-    <h2 class="mb-4" style="color:#D4AF37;">Películas</h2>
+    <h2 class="mb-4" style="color:#D4AF37;">Series</h2>
 
     <div class="row">
 
-        @foreach (var pelicula in Model)
+        @foreach (var serie in Model)
         {
             <div class="col-md-3 mb-4">
                 <div class="card card-redflix" style="height:100%;">
 
-                    <img src="@pelicula.ImagenUrl"
+                    <img src="@serie.ImagenUrl"
                          class="card-img-top"
                          style="height:300px; object-fit:cover;" />
 
                     <div class="card-body">
 
-                        <h5 style="min-height:45px;">@pelicula.Title</h5>
+                        <h5 style="min-height:45px;">
+                            @serie.TituloMostrar
+                        </h5>
 
                         <p style="color:#ccc;">
-                            ⭐ @pelicula.VoteAverage
+                            ⭐ @serie.VoteAverage
                         </p>
 
                         <p style="font-size:13px; color:#aaa; min-height:60px;">
-                            @(pelicula.Overview != null && pelicula.Overview.Length > 100
-                                ? pelicula.Overview.Substring(0, 100) + "..."
-                                : pelicula.Overview)
+                            @(serie.Overview != null && serie.Overview.Length > 100
+                                ? serie.Overview.Substring(0, 100) + "..."
+                                : serie.Overview)
                         </p>
 
                         @Html.ActionLink(
                             "Ver detalle",
-                            "Detalle",
+                            "DetalleSerie",
                             "Pelicula",
-                            new { id = pelicula.Id },
+                            new { id = serie.Id },
                             new { @class = "btn btn-gold w-100" }
                         )
 
@@ -62,7 +64,7 @@
 
         @Html.ActionLink(
             "Inicio",
-            "Index",
+            "Series",
             "Pelicula",
             new { pagina = 1 },
             new { @class = "btn btn-secondary", style = "margin:4px;" }
@@ -72,7 +74,7 @@
         {
             @Html.ActionLink(
                 "Anterior",
-                "Index",
+                "Series",
                 "Pelicula",
                 new { pagina = paginaActual - 1 },
                 new { @class = "btn btn-secondary", style = "margin:4px;" }
@@ -83,7 +85,7 @@
         {
             @Html.ActionLink(
                 "-10",
-                "Index",
+                "Series",
                 "Pelicula",
                 new { pagina = paginaMenosDiez },
                 new { @class = "btn btn-secondary", style = "margin:4px;" }
@@ -100,7 +102,7 @@
             {
                 @Html.ActionLink(
                     i.ToString(),
-                    "Index",
+                    "Series",
                     "Pelicula",
                     new { pagina = i },
                     new { @class = "btn btn-outline-light", style = "margin:4px;" }
@@ -112,7 +114,7 @@
         {
             @Html.ActionLink(
                 "+10",
-                "Index",
+                "Series",
                 "Pelicula",
                 new { pagina = paginaMasDiez },
                 new { @class = "btn btn-secondary", style = "margin:4px;" }
@@ -123,7 +125,7 @@
         {
             @Html.ActionLink(
                 "Siguiente",
-                "Index",
+                "Series",
                 "Pelicula",
                 new { pagina = paginaActual + 1 },
                 new { @class = "btn btn-gold", style = "margin:4px;" }
@@ -138,7 +140,7 @@
             Página @paginaActual de @totalPaginas
         </span>
 
-        @using (Html.BeginForm("Index", "Pelicula", FormMethod.Get))
+        @using (Html.BeginForm("Series", "Pelicula", FormMethod.Get))
         {
             <input type="number"
                    name="pagina"

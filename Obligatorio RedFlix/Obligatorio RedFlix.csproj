@@ -152,7 +152,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PeliculaController.cs" />
-    <Compile Include="Controllers\RolesController.cs" />
+    <Compile Include="Models\RolesController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -325,6 +325,7 @@
     <Content Include="Views\Usuarios\Edit.cshtml" />
     <Content Include="Views\Pelicula\Detalle.cshtml" />
     <Content Include="Views\Pelicula\Index.cshtml" />
+    <Content Include="Views\Pelicula\Series.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
