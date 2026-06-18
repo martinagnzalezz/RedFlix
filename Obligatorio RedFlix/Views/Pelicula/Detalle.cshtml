@@ -22,7 +22,20 @@
             </p>
         </div>
     </div>
-
+    @if (Session["UsuarioId"] != null && Model.Pelicula != null)
+    {
+        @Html.ActionLink(
+            "Agregar a favoritos",
+            "AgregarPelicula",
+            "Favoritos",
+            new
+            {
+                idTmdb = Model.Pelicula.Id,
+                titulo = Model.Pelicula.Title
+            },
+            new { @class = "btn btn-gold mt-3" }
+        )
+    }
     <hr />
 
     <h3 class="redflix-title">Tráiler</h3>

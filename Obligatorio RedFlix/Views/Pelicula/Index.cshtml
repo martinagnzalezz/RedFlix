@@ -24,13 +24,20 @@
             <div class="col-md-3 mb-4">
                 <div class="card card-redflix" style="height:100%;">
 
-                    <img src="@pelicula.ImagenUrl"
-                         class="card-img-top"
-                         style="height:300px; object-fit:cover;" />
+                    <a href="@Url.Action("Detalle", "Pelicula", new { id = pelicula.Id })">
+                        <img src="@pelicula.ImagenUrl"
+                             class="card-img-top"
+                             style="height:300px; object-fit:cover;" />
+                    </a>
 
                     <div class="card-body">
 
-                        <h5 style="min-height:45px;">@pelicula.Title</h5>
+                        <a href="@Url.Action("Detalle", "Pelicula", new { id = pelicula.Id })"
+                           style="text-decoration:none; color:inherit;">
+                            <h5 style="min-height:45px;">
+                                @pelicula.Title
+                            </h5>
+                        </a>
 
                         <p style="color:#ccc;">
                             ⭐ @pelicula.VoteAverage
@@ -42,13 +49,7 @@
                                 : pelicula.Overview)
                         </p>
 
-                        @Html.ActionLink(
-                            "Ver detalle",
-                            "Detalle",
-                            "Pelicula",
-                            new { id = pelicula.Id },
-                            new { @class = "btn btn-gold w-100" }
-                        )
+                      
 
                     </div>
 

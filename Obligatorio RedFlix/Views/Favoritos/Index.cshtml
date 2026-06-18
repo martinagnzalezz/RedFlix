@@ -1,0 +1,100 @@
+﻿@model List<Obligatorio_RedFlix.Models.FavoritoVistaViewModel>
+@using System.Linq
+
+@{
+    ViewBag.Title = "Mis favoritos";
+}
+
+<div class="container-fluid px-5 py-4" style="max-width:1600px;">
+
+    <h2 class="mb-4" style="color:#D4AF37;">Mis favoritos</h2>
+
+    @if (Model == null || !Model.Any())
+    {
+        <p style="color:#ccc;">Todavía no agregaste favoritos.</p>
+    }
+    else
+    {
+        <div class="row">
+
+            @foreach (var favorito in Model)
+            {
+                <div class="col-md-3 mb-4">
+                    <div class="card card-redflix" style="height:100%;">
+
+                        @if (favorito.Tipo == "Película")
+                        {
+                            <a href="@Url.Action("Detalle", "Pelicula", new { id = favorito.IdTmdb })">
+                                <img src="@favorito.ImagenUrl"
+                                     class="card-img-top"
+                                     style="height:300px; object-fit:cover;" />
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("DetalleSerie", "Pelicula", new { id = favorito.IdTmdb })">
+                                <img src="@favorito.ImagenUrl"
+                                     class="card-img-top"
+                                     style="height:300px; object-fit:cover;" />
+                            </a>
+                        }
+
+                        <div class="card-body">
+
+                            @if (favorito.Tipo == "Película")
+                            {
+                                <a href="@Url.Action("Detalle", "Pelicula", new { id = favorito.IdTmdb })"
+                                   style="text-decoration:none; color:inherit;">
+                                    <h5 style="min-height:45px;">
+                                        @favorito.Titulo
+                                    </h5>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("DetalleSerie", "Pelicula", new { id = favorito.IdTmdb })"
+                                   style="text-decoration:none; color:inherit;">
+                                    <h5 style="min-height:45px;">
+                                        @favorito.Titulo
+                                    </h5>
+                                </a>
+                            }
+
+                            <p style="color:#ccc;">
+                                Tipo: @favorito.Tipo
+                            </p>
+
+                            <p style="color:#ccc;">
+                                ⭐ @favorito.VoteAverage
+                            </p>
+
+                            <p style="font-size:13px; color:#aaa; min-height:60px;">
+                                @(favorito.Overview != null && favorito.Overview.Length > 100
+                                    ? favorito.Overview.Substring(0, 100) + "..."
+                                    : favorito.Overview)
+                            </p>
+
+                            <p style="font-size:12px; color:#777;">
+                                Agregado: @favorito.FechaAgregado.ToString("dd/MM/yyyy")
+                            </p>
+
+                          
+
+                            @Html.ActionLink(
+                                "Eliminar",
+                                "Eliminar",
+                                "Favoritos",
+                                new { id = favorito.IdFavorito },
+                                new { @class = "btn btn-outline-danger w-100" }
+                            )
+
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
