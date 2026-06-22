@@ -18,19 +18,19 @@
                 Comprá o alquilá tus películas favoritas cuando quieras.
             </p>
 
-          <div class="comenzar-box">
-              <p>Ingresá tu email para comenzar</p>
-              @using (Html.BeginForm("Registrar", "Account", FormMethod.Get, new { @class = "comenzar-form" }))
-              {
-                  <input type="email"
-                         name="email"
-                         placeholder="Correo electrónico"
-                         class="input-comenzar" />
-                  <button type="submit" class="btn-comenzar">
-                      Comenzar
-                  </button>
-              }
-          </div>
+            <div class="comenzar-box">
+                <p>Ingresá tu email para comenzar</p>
+                @using (Html.BeginForm("Registrar", "Account", FormMethod.Get, new { @class = "comenzar-form" }))
+                {
+                    <input type="email"
+                           name="email"
+                           placeholder="Correo electrónico"
+                           class="input-comenzar" />
+                    <button type="submit" class="btn-comenzar">
+                        Comenzar
+                    </button>
+                }
+            </div>
 
         </div>
 
@@ -46,7 +46,8 @@
             {
                 <div class="col-md-3 mb-4">
                     <div class="card-redflix">
-                        <img src="https://image.tmdb.org/t/p/w500/@pelicula.PosterPath" />
+                        <img src="https://image.tmdb.org/t/p/w500/@pelicula.PosterPath"
+                             alt="@pelicula.Title" />
                         <div class="card-body">
                             <h5>@pelicula.Title</h5>
                         </div>
@@ -58,35 +59,122 @@
 
     </div>
 }
+
 else
 {
+    var destacada = Model.FirstOrDefault();
 
+    <main class="dashboard-redflix">
 
-    <div class="container mt-5">
+        @if (destacada != null)
+        {
+            <section class="dashboard-hero">
 
-        <h2>Catálogo</h2>
+                <div class="hero-info">
 
-        <div class="row">
+                    <span class="hero-badge">Destacada</span>
 
-            @foreach (var pelicula in Model)
-            {
-                <div class="col-md-3 mb-4">
+                    <h1>@destacada.Title</h1>
 
-                    <div class="card-redflix">
+                    <p>
+                        Descubrí una de las películas más vistas del momento.
+                        Comprala, alquilala o agregala a tu biblioteca.
+                    </p>
 
-                        <img src="https://image.tmdb.org/t/p/w500/@pelicula.PosterPath"
-                             class="card-img-top">
-
-                        <div class="card-body">
-                            <h5>@pelicula.Title</h5>
-                        </div>
-
+                    <div class="hero-buttons">
+                        <a href="#" class="btn-hero-primary">Ver ahora</a>
+                        <a href="#" class="btn-hero-secondary">+ Mi lista</a>
                     </div>
 
                 </div>
-            }
 
-        </div>
+                <div class="hero-poster">
+                    <img src="https://image.tmdb.org/t/p/w500/@destacada.PosterPath"
+                         alt="@destacada.Title" />
+                </div>
 
-    </div>
+            </section>
+        }
+
+        <section class="dashboard-widgets">
+
+            <div class="dashboard-card">
+                <span class="dashboard-label">CLIMA</span>
+
+                @Html.Action("Widget", "Clima")
+            </div>
+
+            <div class="widget-card">
+                <span class="widget-label">Cotización</span>
+                <h3>USD / UYU</h3>
+                <p>Próximamente desde API</p>
+            </div>
+
+            <div class="widget-card">
+                <span class="widget-label">Tu cuenta</span>
+                <h3>Hola @Session["UsuarioNombre"]</h3>
+                <p>Explorá tus películas y series</p>
+            </div>
+
+        </section>
+
+        <section class="content-section">
+
+            <div class="section-header">
+                <h2>Populares ahora</h2>
+                <a href="#">Ver todo</a>
+            </div>
+
+            <div class="movie-row-horizontal">
+
+                @foreach (var pelicula in Model.Take(6))
+                {
+                    <div class="movie-card-wide">
+
+                        <img src="https://image.tmdb.org/t/p/w500/@pelicula.PosterPath"
+                             alt="@pelicula.Title" />
+
+                        <div class="movie-card-info">
+                            <h3>@pelicula.Title</h3>
+                            <p>Película popular</p>
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </section>
+
+        <section class="content-section">
+
+            <div class="section-header">
+                <h2>Catálogo recomendado</h2>
+                <a href="#">Ver todo</a>
+            </div>
+
+            <div class="poster-grid-redflix">
+
+                @foreach (var pelicula in Model.Skip(6).Take(12))
+                {
+                    <div class="poster-card-redflix">
+
+                        <button class="btn-card-plus">+</button>
+
+                        <img src="https://image.tmdb.org/t/p/w500/@pelicula.PosterPath"
+                             alt="@pelicula.Title" />
+
+                        <div class="poster-info">
+                            <h3>@pelicula.Title</h3>
+                            <p>Comprar o alquilar</p>
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </section>
+
+    </main>
 }

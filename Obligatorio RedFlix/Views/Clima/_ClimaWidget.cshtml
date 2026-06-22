@@ -1,0 +1,29 @@
+﻿@using Obligatorio_RedFlix.Models
+@model ClimaViewModel
+
+@if (Model != null)
+{
+    <div class="clima-mini">
+        <div>
+            <h3>@Model.Ciudad</h3>
+
+            <p class="clima-mini-temp">
+                @Model.Temperatura.ToString("0")°C
+            </p>
+
+            <p class="clima-mini-desc">
+                @Model.Descripcion
+            </p>
+        </div>
+
+        <img src="@("https://openweathermap.org/img/wn/" + Model.Icono + "@2x.png")"
+             alt="Clima"
+             class="clima-mini-icono" />
+    </div>
+}
+else
+{
+    <section class="clima-section">
+        <p>No se pudo cargar el clima en este momento.</p>
+    </section>
+}

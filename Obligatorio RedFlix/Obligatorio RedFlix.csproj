@@ -150,9 +150,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ClimaController.cs" />
     <Compile Include="Controllers\FavotirosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PeliculaController.cs" />
+    <Compile Include="Models\ClimaMain.cs" />
+    <Compile Include="Models\ClimaViewModel.cs" />
+    <Compile Include="Models\ClimaWeather.cs" />
     <Compile Include="Models\FavoritoVistaViewModel.cs" />
     <Compile Include="Models\RolesController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
@@ -249,6 +253,7 @@
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VideoTmdb.cs" />
+    <Compile Include="Models\Weather.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -330,6 +335,7 @@
     <Content Include="Views\Pelicula\Series.cshtml" />
     <Content Include="Views\Pelicula\DetalleSerie.cshtml" />
     <Content Include="Views\Favoritos\Index.cshtml" />
+    <Content Include="Views\Clima\_ClimaWidget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

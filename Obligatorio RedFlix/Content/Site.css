@@ -166,3 +166,431 @@ body {
     background-color: #e6c04b !important;
     transform: translateY(-2px);
 }
+
+
+
+/* =========================
+   DASHBOARD USUARIO LOGUEADO
+   ========================= */
+
+.dashboard-redflix {
+    min-height: 100vh;
+    padding: 40px 6%;
+    background: radial-gradient(circle at top right, rgba(212, 175, 55, 0.10), transparent 35%), radial-gradient(circle at top left, rgba(255, 255, 255, 0.03), transparent 25%), #0B0B0B;
+}
+
+/* HERO PRINCIPAL */
+
+.dashboard-hero {
+    min-height: 420px;
+    background: linear-gradient(135deg, #111111, #050505);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 24px;
+    padding: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55);
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 28px;
+}
+
+    .dashboard-hero::before {
+        content: "";
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        background: rgba(212, 175, 55, 0.08);
+        border-radius: 50%;
+        right: -120px;
+        top: -120px;
+    }
+
+.hero-info {
+    max-width: 600px;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(212, 175, 55, 0.13);
+    color: #D4AF37;
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.hero-info h1 {
+    color: #ffffff;
+    font-size: 58px;
+    font-weight: 900;
+    margin-bottom: 18px;
+    line-height: 1.05;
+}
+
+.hero-info p {
+    color: #cfcfcf;
+    font-size: 17px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    max-width: 520px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.btn-hero-primary {
+    background: #D4AF37;
+    color: #000000;
+    padding: 13px 26px;
+    border-radius: 12px;
+    font-weight: 900;
+    text-decoration: none;
+    transition: 0.25s;
+}
+
+    .btn-hero-primary:hover {
+        background: #f0c94d;
+        color: #000000;
+        text-decoration: none;
+        transform: translateY(-2px);
+    }
+
+.btn-hero-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 13px 26px;
+    border-radius: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: 0.25s;
+}
+
+    .btn-hero-secondary:hover {
+        border-color: #D4AF37;
+        color: #D4AF37;
+        text-decoration: none;
+    }
+
+.hero-poster {
+    position: relative;
+    z-index: 2;
+}
+
+    .hero-poster img {
+        width: 260px;
+        height: 360px;
+        object-fit: cover;
+        border-radius: 20px;
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+    }
+
+/* WIDGETS CLIMA / COTIZACIÓN */
+
+.dashboard-widgets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 38px;
+}
+
+.widget-card {
+    background: #151515;
+    border: 1px solid #262626;
+    border-radius: 18px;
+    padding: 22px;
+    transition: 0.25s;
+}
+
+    .widget-card:hover {
+        border-color: rgba(212, 175, 55, 0.65);
+        transform: translateY(-4px);
+    }
+
+.widget-label {
+    color: #D4AF37;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.widget-card h3 {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 800;
+    margin: 10px 0 6px;
+}
+
+.widget-card p {
+    color: #aaaaaa;
+    margin: 0;
+}
+
+/* SECCIONES */
+
+.content-section {
+    margin-bottom: 42px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+    .section-header h2 {
+        color: #ffffff;
+        font-size: 26px;
+        font-weight: 900;
+        margin: 0;
+    }
+
+    .section-header a {
+        color: #D4AF37;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+        .section-header a:hover {
+            color: #f0c94d;
+        }
+
+/* FILA POPULARES */
+
+.movie-row-horizontal {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 18px;
+}
+
+.movie-card-wide {
+    background: #151515;
+    border: 1px solid #272727;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: 0.25s;
+}
+
+    .movie-card-wide:hover {
+        transform: translateY(-6px);
+        border-color: #D4AF37;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+    }
+
+    .movie-card-wide img {
+        width: 100%;
+        height: 175px;
+        object-fit: cover;
+        display: block;
+    }
+
+.movie-card-info {
+    padding: 14px;
+}
+
+    .movie-card-info h3 {
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 800;
+        margin: 0 0 6px;
+    }
+
+    .movie-card-info p {
+        color: #aaaaaa;
+        font-size: 13px;
+        margin: 0;
+    }
+
+/* GRID CATÁLOGO */
+
+.poster-grid-redflix {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+}
+
+.poster-card-redflix {
+    background: #151515;
+    border: 1px solid #272727;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    transition: 0.25s;
+}
+
+    .poster-card-redflix:hover {
+        transform: scale(1.04);
+        border-color: #D4AF37;
+        box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6);
+    }
+
+    .poster-card-redflix img {
+        width: 100%;
+        height: 310px;
+        object-fit: cover;
+        display: block;
+    }
+
+.poster-info {
+    padding: 14px;
+}
+
+    .poster-info h3 {
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 800;
+        margin: 0 0 6px;
+    }
+
+    .poster-info p {
+        color: #aaaaaa;
+        font-size: 13px;
+        margin: 0;
+    }
+
+.btn-card-plus {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.75);
+    color: #D4AF37;
+    border: 1px solid rgba(212, 175, 55, 0.6);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 28px;
+    cursor: pointer;
+    z-index: 5;
+    transition: 0.25s;
+}
+
+    .btn-card-plus:hover {
+        background: #D4AF37;
+        color: #000000;
+    }
+
+/* RESPONSIVE */
+
+@media (max-width: 1200px) {
+    .movie-row-horizontal {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .poster-grid-redflix {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .dashboard-hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 35px;
+    }
+
+    .hero-info h1 {
+        font-size: 40px;
+    }
+
+    .hero-poster img {
+        width: 220px;
+        height: 320px;
+    }
+
+    .dashboard-widgets {
+        grid-template-columns: 1fr;
+    }
+
+    .movie-row-horizontal {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .poster-grid-redflix {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+
+.clima-section {
+    margin: 30px auto;
+    padding: 28px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #111111, #1d1d1d);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    color: white;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.45);
+}
+
+.clima-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.clima-section h2 {
+    color: #D4AF37;
+    margin-bottom: 10px;
+}
+
+.clima-temp {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.clima-desc {
+    font-size: 20px;
+    text-transform: capitalize;
+    color: #e5e5e5;
+}
+
+.clima-humedad {
+    color: #bdbdbd;
+}
+
+.clima-icono img {
+    width: 100px;
+    height: 100px;
+}
+
+.clima-recomendacion {
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 14px;
+    background-color: rgba(212, 175, 55, 0.12);
+    border-left: 4px solid #D4AF37;
+    color: #f1f1f1;
+}
+
+/* Fondos según clima */
+.clima-lluvia {
+    background: linear-gradient(135deg, #101820, #1d2b36);
+}
+
+.clima-frio {
+    background: linear-gradient(135deg, #111111, #1b2733);
+}
+
+.clima-calor {
+    background: linear-gradient(135deg, #1a1110, #3a2413);
+}
+
+.clima-templado {
+    background: linear-gradient(135deg, #111111, #1f1a10);
+}
