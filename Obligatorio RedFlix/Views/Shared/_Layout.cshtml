@@ -55,20 +55,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Favoritos")">
-                                Favoritos
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
                             <a class="nav-link" href="#">
                                 Biblioteca
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                Carrito
                             </a>
                         </li>
                     }
@@ -95,11 +83,25 @@
                                style="width:250px"
                                placeholder="Buscar..." />
 
+                        <a href="@Url.Action("Index", "Favoritos")"
+                           class="text-light me-3"
+                           style="font-size: 26px; text-decoration: none; line-height: 1;"
+                           title="Favoritos">
+                            ♡
+                        </a>
+
+                        <a href="#"
+                           class="text-light me-3"
+                           style="font-size: 24px; text-decoration: none; line-height: 1;"
+                           title="Carrito">
+                            🛒
+                        </a>
+
                         <span class="text-light me-3">
                             Hola @Session["UsuarioNombre"]
                         </span>
 
-                        <a href="@Url.Action("Logout", "Account")"
+                        <a href="@Url.Action("Logout","Account")"
                            class="btn btn-outline-danger">
                             Salir
                         </a>

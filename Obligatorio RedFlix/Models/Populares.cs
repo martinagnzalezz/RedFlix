@@ -104,5 +104,6 @@ namespace Obligatorio_RedFlix.Models
                 return "https://image.tmdb.org/t/p/w500" + PosterPath;
             }
         }
+        public string TipoContenido { get; set; }
     }
 }

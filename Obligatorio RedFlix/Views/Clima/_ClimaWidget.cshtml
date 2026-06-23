@@ -3,27 +3,49 @@
 
 @if (Model != null)
 {
-    <div class="clima-mini">
-        <div>
-            <h3>@Model.Ciudad</h3>
+    <div style="color:white;">
 
-            <p class="clima-mini-temp">
-                @Model.Temperatura.ToString("0")°C
-            </p>
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
 
-            <p class="clima-mini-desc">
-                @Model.Descripcion
-            </p>
+            <div>
+                <h3 style="margin:0; color:white;">
+                    @Model.Temperatura.ToString("0")°C
+                </h3>
+
+                <p style="margin:6px 0 0 0; color:#ccc;">
+                    @Model.Ciudad
+                </p>
+
+                <p style="margin:4px 0 0 0; color:#aaa; text-transform:capitalize;">
+                    @Model.Descripcion
+                </p>
+            </div>
+
+            <img src="@("https://openweathermap.org/img/wn/" + Model.Icono + "@2x.png")"
+                 alt="Clima"
+                 style="width:55px; height:55px;" />
+
         </div>
 
-        <img src="@("https://openweathermap.org/img/wn/" + Model.Icono + "@2x.png")"
-             alt="Clima"
-             class="clima-mini-icono" />
+        <p style="color:#ccc; margin-top:18px; margin-bottom:12px;">
+            @Model.Recomendacion
+        </p>
+
+        <div style="background:#222; border-left:4px solid #D4AF37; padding:10px; border-radius:6px;">
+            <strong style="color:#D4AF37;">Promo:</strong>
+            <span style="color:#ddd;">@Model.Promocion</span>
+        </div>
+
+        <a href="@Url.Action("Index", "Clima")"
+           style="display:inline-block; margin-top:14px; color:#D4AF37; text-decoration:none;">
+            Ver recomendaciones →
+        </a>
+
     </div>
 }
 else
 {
-    <section class="clima-section">
-        <p>No se pudo cargar el clima en este momento.</p>
-    </section>
+    <p style="color:#ccc;">
+        No se pudo cargar el clima.
+    </p>
 }

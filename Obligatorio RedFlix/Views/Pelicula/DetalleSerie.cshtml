@@ -13,51 +13,51 @@
     }
     else
     {
-<div class="row">
+        <div class="row">
 
-    <div class="col-md-4">
-        <img src="@Model.Pelicula.ImagenUrl"
-             style="width:100%; border-radius:12px;" />
-    </div>
+            <div class="col-md-4">
+                <img src="@Model.Pelicula.ImagenUrl"
+                     style="width:100%; border-radius:12px;" />
+            </div>
 
-    <div class="col-md-8">
+            <div class="col-md-8">
 
-        <h2 style="color:#D4AF37;">
-            @Model.Pelicula.TituloMostrar
-        </h2>
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:15px;">
 
-        <p style="color:#ccc;">
-            <strong>ID TMDB:</strong> @Model.Pelicula.Id
-        </p>
+                    <h2 style="color:#D4AF37; margin:0;">
+                        @Model.Pelicula.TituloMostrar
+                    </h2>
 
-        <p style="color:#ccc;">
-            <strong>Fecha de estreno:</strong> @Model.Pelicula.FechaMostrar
-        </p>
+                    @if (Session["UsuarioId"] != null)
+                    {
+                        <a href="@Url.Action("AgregarSerie", "Favoritos", new { idTmdb = Model.Pelicula.Id, titulo = Model.Pelicula.TituloMostrar })"
+                           style="font-size:34px; color:white; text-decoration:none; line-height:1;"
+                           title="Agregar a favoritos">
+                            ♡
+                        </a>
+                    }
 
-        <p style="color:#ccc;">
-            <strong>Puntaje:</strong> ⭐ @Model.Pelicula.VoteAverage
-        </p>
+                </div>
 
-        <p style="color:#aaa;">
-            @Model.Pelicula.Overview
-        </p>
+                <p style="color:#ccc; margin-top:20px;">
+                    <strong>ID TMDB:</strong> @Model.Pelicula.Id
+                </p>
 
-    </div>
-    @if (Session["UsuarioId"] != null && Model.Pelicula != null)
-    {
-        @Html.ActionLink(
-            "Agregar a favoritos",
-            "AgregarSerie",
-            "Favoritos",
-            new
-            {
-                idTmdb = Model.Pelicula.Id,
-                titulo = Model.Pelicula.TituloMostrar
-            },
-            new { @class = "btn btn-gold mt-3" }
-        )
-    }
-</div>
+                <p style="color:#ccc;">
+                    <strong>Fecha de estreno:</strong> @Model.Pelicula.FechaMostrar
+                </p>
+
+                <p style="color:#ccc;">
+                    <strong>Puntaje:</strong> ⭐ @Model.Pelicula.VoteAverage
+                </p>
+
+                <p style="color:#aaa;">
+                    @Model.Pelicula.Overview
+                </p>
+
+            </div>
+
+        </div>
 
         <hr style="border-color:#333;" />
 

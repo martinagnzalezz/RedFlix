@@ -1,0 +1,212 @@
+﻿@model Obligatorio_RedFlix.Models.ClimaViewModel
+@using System.Linq
+
+@{
+    ViewBag.Title = "Clima y recomendaciones";
+}
+
+<div class="container-fluid px-5 py-4" style="max-width:1400px;">
+
+    <h2 style="color:#D4AF37; margin-bottom:25px;">
+        Clima y recomendaciones
+    </h2>
+
+    @if (Model == null)
+    {
+        <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:25px;">
+            <h3 style="color:#D4AF37;">No se pudo cargar el clima</h3>
+
+            <p style="color:#ccc;">
+                Revisá la API Key del clima en el Web.config.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="row mb-4">
+
+            <div class="col-md-4 mb-3">
+                <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:25px; height:100%;">
+
+                    <span style="color:#D4AF37; font-weight:bold; font-size:13px;">
+                        CLIMA ACTUAL
+                    </span>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
+
+                        <div>
+                            <h1 style="color:white; margin:0;">
+                                @Model.Temperatura.ToString("0")°C
+                            </h1>
+
+                            <p style="color:#ccc; margin:8px 0 0 0;">
+                                @Model.Ciudad
+                            </p>
+
+                            <p style="color:#aaa; margin:5px 0 0 0; text-transform:capitalize;">
+                                @Model.Descripcion
+                            </p>
+                        </div>
+
+                        <img src="@("https://openweathermap.org/img/wn/" + Model.Icono + "@2x.png")"
+                             alt="Clima"
+                             style="width:80px; height:80px;" />
+
+                    </div>
+
+                    <p style="color:#ccc; margin-top:15px;">
+                        Humedad: @Model.Humedad%
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:25px; height:100%;">
+
+                    <span style="color:#D4AF37; font-weight:bold; font-size:13px;">
+                        RECOMENDACIÓN
+                    </span>
+
+                    <h3 style="color:white; margin-top:15px; text-transform:capitalize;">
+                        @Model.Emoji @Model.CategoriaClima
+                    </h3>
+
+                    <p style="color:#ccc;">
+                        @Model.Recomendacion
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div style="background:#151515; border:1px solid #D4AF37; border-radius:14px; padding:25px; height:100%;">
+
+                    <span style="color:#D4AF37; font-weight:bold; font-size:13px;">
+                        PROMOCIÓN ACTIVA
+                    </span>
+
+                    <h3 style="color:white; margin-top:15px;">
+                        Promo RedFlix
+                    </h3>
+
+                    <p style="color:#ccc;">
+                        @Model.Promocion
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+        if (Model.PronosticoDias != null && Model.PronosticoDias.Any())
+        {
+            <div style="margin-top:35px; margin-bottom:35px;">
+
+                <h3 style="color:#D4AF37; margin-bottom:20px;">
+                    Pronóstico de los próximos días
+                </h3>
+
+                <div class="row">
+
+                    @foreach (var dia in Model.PronosticoDias)
+                    {
+                        <div class="col-md-2 mb-3">
+
+                            <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:18px; height:100%; text-align:center;">
+
+                                <h5 style="color:#D4AF37; text-transform:capitalize;">
+                                    @dia.Dia
+                                </h5>
+
+                                <img src="@("https://openweathermap.org/img/wn/" + dia.Icono + "@2x.png")"
+                                     alt="Clima"
+                                     style="width:65px; height:65px;" />
+
+                                <h3 style="color:white;">
+                                    @dia.Temperatura.ToString("0")°C
+                                </h3>
+
+                                <p style="color:#ccc; text-transform:capitalize; min-height:45px;">
+                                    @dia.Descripcion
+                                </p>
+
+                                <p style="color:#aaa;">
+                                    @dia.Emoji @dia.CategoriaClima
+                                </p>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        }
+
+        <hr style="border-color:#333;" />
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 style="color:#D4AF37;">
+                Películas y series recomendadas según el clima
+            </h3>
+
+            <a href="@Url.Action("Index", "Pelicula")"
+               style="color:#D4AF37; text-decoration:none;">
+                Ver catálogo completo
+            </a>
+        </div>
+
+        if (Model.PeliculasRecomendadas == null || !Model.PeliculasRecomendadas.Any())
+        {
+            <p style="color:#ccc;">
+                No se pudieron cargar recomendaciones.
+            </p>
+        }
+        else
+        {
+            <div class="row">
+
+                @foreach (var contenido in Model.PeliculasRecomendadas)
+                {
+                    var accionDetalle = contenido.TipoContenido == "Serie" ? "DetalleSerie" : "Detalle";
+
+                    <div class="col-md-3 mb-4">
+
+                        <div style="background:#151515; border:1px solid #333; border-radius:12px; overflow:hidden; height:100%;">
+
+                            <a href="@Url.Action(accionDetalle, "Pelicula", new { id = contenido.Id })"
+                               style="text-decoration:none; color:inherit;">
+
+                                <img src="@contenido.ImagenUrl"
+                                     style="width:100%; height:320px; object-fit:cover;" />
+
+                                <div style="padding:15px;">
+
+                                    <h5 style="color:white; min-height:50px;">
+                                        @contenido.TituloMostrar
+                                    </h5>
+
+                                    <p style="color:#D4AF37; margin-bottom:5px;">
+                                        ⭐ @contenido.VoteAverage
+                                    </p>
+
+                                    <p style="color:#aaa; font-size:14px;">
+                                        @contenido.TipoContenido recomendada por clima: @Model.CategoriaClima
+                                    </p>
+
+                                </div>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+    }
+
+</div>

@@ -1,9 +1,7 @@
 ﻿@model List<Obligatorio_RedFlix.Models.Populares>
 
-
 @if (Session["UsuarioId"] == null)
 {
-
     <section class="hero-redflix">
 
         <div class="hero-content">
@@ -20,12 +18,14 @@
 
             <div class="comenzar-box">
                 <p>Ingresá tu email para comenzar</p>
+
                 @using (Html.BeginForm("Registrar", "Account", FormMethod.Get, new { @class = "comenzar-form" }))
                 {
                     <input type="email"
                            name="email"
                            placeholder="Correo electrónico"
                            class="input-comenzar" />
+
                     <button type="submit" class="btn-comenzar">
                         Comenzar
                     </button>
@@ -36,9 +36,8 @@
 
     </section>
 
-
     <div class="container pb-5">
-        <h2 class="mb-5">Un poco de lo mas visto</h2>
+        <h2 class="mb-5">Un poco de lo más visto</h2>
 
         <div class="row">
 
@@ -46,11 +45,14 @@
             {
                 <div class="col-md-3 mb-4">
                     <div class="card-redflix">
+
                         <img src="https://image.tmdb.org/t/p/w500/@pelicula.PosterPath"
                              alt="@pelicula.Title" />
+
                         <div class="card-body">
                             <h5>@pelicula.Title</h5>
                         </div>
+
                     </div>
                 </div>
             }
@@ -59,7 +61,6 @@
 
     </div>
 }
-
 else
 {
     var destacada = Model.FirstOrDefault();
@@ -96,21 +97,24 @@ else
             </section>
         }
 
-        <section class="dashboard-widgets">
+        <section class="dashboard-widgets"
+                 style="display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;">
 
-            <div class="dashboard-card">
-                <span class="dashboard-label">CLIMA</span>
-
+            <div class="widget-card"
+                 style="background:#151515; border:1px solid #333; border-radius:14px; padding:25px; min-height:250px;">
+                <span class="widget-label">CLIMA</span>
                 @Html.Action("Widget", "Clima")
             </div>
 
-            <div class="widget-card">
+            <div class="widget-card"
+                 style="background:#151515; border:1px solid #333; border-radius:14px; padding:25px; min-height:250px;">
                 <span class="widget-label">Cotización</span>
                 <h3>USD / UYU</h3>
                 <p>Próximamente desde API</p>
             </div>
 
-            <div class="widget-card">
+            <div class="widget-card"
+                 style="background:#151515; border:1px solid #333; border-radius:14px; padding:25px; min-height:250px;">
                 <span class="widget-label">Tu cuenta</span>
                 <h3>Hola @Session["UsuarioNombre"]</h3>
                 <p>Explorá tus películas y series</p>

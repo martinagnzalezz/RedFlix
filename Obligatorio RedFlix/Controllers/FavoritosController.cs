@@ -146,7 +146,7 @@ namespace Obligatorio_RedFlix.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Index");
+            return VolverAtras();
         }
 
         public ActionResult AgregarSerie(int idTmdb, string titulo)
@@ -193,7 +193,7 @@ namespace Obligatorio_RedFlix.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Index");
+            return VolverAtras();
         }
 
         public ActionResult Eliminar(int id)
@@ -215,6 +215,16 @@ namespace Obligatorio_RedFlix.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+    
+    private ActionResult VolverAtras()
+        {
+            if (Request.UrlReferrer != null)
+            {
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

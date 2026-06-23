@@ -1,22 +1,29 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Obligatorio_RedFlix.Models
 {
     public class ClimaWeather
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        [JsonProperty("weather")]
+        public List<ClimaWeatherInfo> Weather { get; set; }
 
         [JsonProperty("main")]
         public ClimaMain Main { get; set; }
 
-        [JsonProperty("weather")]
-        public List<ClimaWeather> Weather { get; set; }
-        public string Icon { get; internal set; }
-        public string Description { get; internal set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+    }
+
+    public class ClimaWeatherInfo
+    {
+        [JsonProperty("main")]
+        public string Main { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("icon")]
+        public string Icon { get; set; }
     }
 }

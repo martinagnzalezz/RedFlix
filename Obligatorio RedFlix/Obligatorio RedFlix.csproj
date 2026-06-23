@@ -151,14 +151,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClimaController.cs" />
-    <Compile Include="Controllers\FavotirosController.cs" />
+    <Compile Include="Controllers\FavoritosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PeliculaController.cs" />
+    <Compile Include="Models\ClimaForecast.cs" />
     <Compile Include="Models\ClimaMain.cs" />
     <Compile Include="Models\ClimaViewModel.cs" />
     <Compile Include="Models\ClimaWeather.cs" />
     <Compile Include="Models\FavoritoVistaViewModel.cs" />
-    <Compile Include="Models\RolesController.cs" />
+    <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -222,6 +223,7 @@
     <Compile Include="Models\PromocionesClima.cs">
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PronosticoDiaViewModel.cs" />
     <Compile Include="Models\Recomendacione.cs">
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
@@ -323,7 +325,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Roles\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Registrar.cshtml" />
@@ -336,6 +337,8 @@
     <Content Include="Views\Pelicula\DetalleSerie.cshtml" />
     <Content Include="Views\Favoritos\Index.cshtml" />
     <Content Include="Views\Clima\_ClimaWidget.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Clima\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,57 +1,83 @@
 ﻿@model Obligatorio_RedFlix.Models.PeliculaDetalleViewModel
 
 @{
-    ViewBag.Title = Model.Pelicula.Title;
+    ViewBag.Title = Model.Pelicula != null ? Model.Pelicula.TituloMostrar : "Detalle de película";
 }
 
-<div class="redflix-page">
-    <div class="row">
-        <div class="col-md-4">
-            <img src="@Model.Pelicula.ImagenUrl" style="width:100%; border-radius:12px;" />
-        </div>
+<div class="container-fluid px-5 py-4" style="max-width:1400px;">
 
-        <div class="col-md-8">
-            <h2 class="redflix-title">@Model.Pelicula.Title</h2>
-
-            <p><strong>ID TMDB:</strong> @Model.Pelicula.Id</p>
-            <p><strong>Fecha de estreno:</strong> @Model.Pelicula.ReleaseDate</p>
-            <p><strong>Puntaje:</strong> ⭐ @Model.Pelicula.VoteAverage</p>
-
-            <p style="color:#ccc;">
-                @Model.Pelicula.Overview
-            </p>
-        </div>
-    </div>
-    @if (Session["UsuarioId"] != null && Model.Pelicula != null)
+    @if (Model.Pelicula == null)
     {
-        @Html.ActionLink(
-            "Agregar a favoritos",
-            "AgregarPelicula",
-            "Favoritos",
-            new
-            {
-                idTmdb = Model.Pelicula.Id,
-                titulo = Model.Pelicula.Title
-            },
-            new { @class = "btn btn-gold mt-3" }
-        )
+        <h2 style="color:#D4AF37;">No se encontró la película</h2>
+        <p style="color:#ccc;">No se pudo cargar la información desde TMDB.</p>
     }
-    <hr />
-
-    <h3 class="redflix-title">Tráiler</h3>
-
-    @if (Model.Trailer != null)
+    else
     {
-        <div class="embed-responsive embed-responsive-16by9">
-            <iframe width="100%" height="450"
+        <div class="row">
+
+            <div class="col-md-4">
+                <img src="@Model.Pelicula.ImagenUrl"
+                     style="width:100%; border-radius:12px;" />
+            </div>
+
+            <div class="col-md-8">
+
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:15px;">
+
+                    <h2 style="color:#D4AF37; margin:0;">
+                        @Model.Pelicula.TituloMostrar
+                    </h2>
+
+                    @if (Session["UsuarioId"] != null)
+                    {
+                        <a href="@Url.Action("AgregarPelicula", "Favoritos", new { idTmdb = Model.Pelicula.Id, titulo = Model.Pelicula.TituloMostrar })"
+                           style="font-size:34px; color:white; text-decoration:none; line-height:1;"
+                           title="Agregar a favoritos">
+                            ♡
+                        </a>
+                    }
+
+                </div>
+
+                <p style="color:#ccc; margin-top:20px;">
+                    <strong>ID TMDB:</strong> @Model.Pelicula.Id
+                </p>
+
+                <p style="color:#ccc;">
+                    <strong>Fecha de estreno:</strong> @Model.Pelicula.FechaMostrar
+                </p>
+
+                <p style="color:#ccc;">
+                    <strong>Puntaje:</strong> ⭐ @Model.Pelicula.VoteAverage
+                </p>
+
+                <p style="color:#aaa;">
+                    @Model.Pelicula.Overview
+                </p>
+
+            </div>
+
+        </div>
+
+        <hr style="border-color:#333;" />
+
+        <h3 style="color:#D4AF37;">Tráiler</h3>
+
+        if (Model.Trailer != null)
+        {
+            <iframe width="100%"
+                    height="450"
                     src="@Model.Trailer.YoutubeUrl"
                     frameborder="0"
                     allowfullscreen>
             </iframe>
-        </div>
+        }
+        else
+        {
+            <p style="color:#ccc;">
+                No hay tráiler disponible para esta película.
+            </p>
+        }
     }
-    else
-    {
-        <p>No hay tráiler disponible para esta película.</p>
-    }
+
 </div>

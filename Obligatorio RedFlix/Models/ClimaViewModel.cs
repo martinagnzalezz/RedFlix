@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace Obligatorio_RedFlix.Models
 {
@@ -14,5 +11,11 @@ namespace Obligatorio_RedFlix.Models
         public string Icono { get; set; }
         public string Recomendacion { get; set; }
         public string CategoriaClima { get; set; }
+
+        public string Emoji { get; set; }
+        public string Promocion { get; set; }
+
+        public List<Populares> PeliculasRecomendadas { get; set; }
+        public List<PronosticoDiaViewModel> PronosticoDias { get; set; }
     }
 }

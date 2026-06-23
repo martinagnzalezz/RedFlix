@@ -1,8 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Obligatorio_RedFlix.Models
 {
@@ -13,10 +9,5 @@ namespace Obligatorio_RedFlix.Models
 
         [JsonProperty("humidity")]
         public int Humidity { get; set; }
-
-        internal string ToLower()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
