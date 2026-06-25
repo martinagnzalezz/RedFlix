@@ -59,7 +59,7 @@ namespace Obligatorio_RedFlix.Controllers
         {
             string apiKey = ConfigurationManager.AppSettings["OpenWeatherApiKey"];
 
-            string endpoint = $"/weather?q=Maldonado,UY&appid={apiKey}&units=metric&lang=es";
+            string endpoint = $"/weather?lat=-34.9&lon=-54.95&appid={apiKey}&units=metric&lang=es";
 
             RestResponse response = HacerRequestClima(endpoint);
 
@@ -216,7 +216,7 @@ namespace Obligatorio_RedFlix.Controllers
         {
             string apiKey = ConfigurationManager.AppSettings["OpenWeatherApiKey"];
 
-            string endpoint = $"/forecast?q=Maldonado,UY&appid={apiKey}&units=metric&lang=es";
+            string endpoint = $"/forecast?lat=-34.9&lon=-54.95&appid={apiKey}&units=metric&lang=es";
 
             RestResponse response = HacerRequestClima(endpoint);
 
