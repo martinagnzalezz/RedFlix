@@ -150,14 +150,19 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CarritoController.cs" />
     <Compile Include="Controllers\ClimaController.cs" />
+    <Compile Include="Controllers\CotizacionController.cs" />
     <Compile Include="Controllers\FavoritosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PeliculaController.cs" />
+    <Compile Include="Models\CarritoItemVistaViewModel.cs" />
     <Compile Include="Models\ClimaForecast.cs" />
     <Compile Include="Models\ClimaMain.cs" />
     <Compile Include="Models\ClimaViewModel.cs" />
     <Compile Include="Models\ClimaWeather.cs" />
+    <Compile Include="Models\CotizacionViewModel.cs" />
+    <Compile Include="Models\ExchangeRateResponse.cs" />
     <Compile Include="Models\FavoritoVistaViewModel.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
@@ -220,6 +225,7 @@
     <Compile Include="Models\PrecioContenido.cs">
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PrecioContenidoViewModel.cs" />
     <Compile Include="Models\PromocionesClima.cs">
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
@@ -339,6 +345,9 @@
     <Content Include="Views\Clima\_ClimaWidget.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Clima\Index.cshtml" />
+    <Content Include="Views\Cotizacion\_CotizacionWidget.cshtml" />
+    <Content Include="Views\Cotizacion\_PrecioContenido.cshtml" />
+    <Content Include="Views\Carrito\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

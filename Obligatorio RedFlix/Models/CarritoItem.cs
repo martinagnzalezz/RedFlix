@@ -20,6 +20,8 @@ namespace Obligatorio_RedFlix.Models
         public Nullable<int> IdSerie { get; set; }
         public int Cantidad { get; set; }
         public decimal Precio { get; set; }
+        public string TipoOperacion { get; set; }
+        public string Moneda { get; set; }
     
         public virtual Carrito Carrito { get; set; }
         public virtual Pelicula Pelicula { get; set; }

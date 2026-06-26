@@ -55,6 +55,8 @@
                     @Model.Pelicula.Overview
                 </p>
 
+                @Html.Action("PrecioContenido", "Cotizacion", new { tipoContenido = "Película", idTmdb = Model.Pelicula.Id, titulo = Model.Pelicula.TituloMostrar })
+
             </div>
 
         </div>

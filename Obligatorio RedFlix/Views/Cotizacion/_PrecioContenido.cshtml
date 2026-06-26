@@ -1,0 +1,157 @@
+﻿@model Obligatorio_RedFlix.Models.PrecioContenidoViewModel
+
+@if (Model == null || !Model.Correcto)
+{
+    <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:20px; margin-top:25px;">
+
+        <h4 style="color:#D4AF37; margin-bottom:10px;">
+            Precios
+        </h4>
+
+        <p style="color:#ccc; margin:0;">
+            No se pudieron cargar los precios.
+        </p>
+
+        @if (Model != null && !string.IsNullOrEmpty(Model.MensajeError))
+        {
+            <p style="color:#aaa; font-size:13px; margin-top:8px;">
+                @Model.MensajeError
+            </p>
+        }
+
+    </div>
+}
+else
+{
+    <div style="background:#151515; border:1px solid #D4AF37; border-radius:14px; padding:22px; margin-top:25px;">
+
+        <h4 style="color:#D4AF37; margin-bottom:18px;">
+            Precios de @Model.TipoContenido
+        </h4>
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <div style="background:#202020; border:1px solid #333; border-radius:12px; padding:18px; height:100%;">
+
+                    <h5 style="color:white; margin-bottom:12px;">
+                        Comprar
+                    </h5>
+
+                    <p style="color:#ccc; margin-bottom:6px;">
+                        USD @Model.PrecioCompraUsd.ToString("0.00")
+                    </p>
+
+                    <p style="color:#ccc; margin-bottom:6px;">
+                        UYU $@Model.PrecioCompraUyu.ToString("0")
+                    </p>
+
+                    <p style="color:#ccc; margin-bottom:14px;">
+                        EUR €@Model.PrecioCompraEur.ToString("0.00")
+                    </p>
+
+                    @if (Session["UsuarioId"] != null)
+                    {
+                        using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="idTmdb" value="@Model.IdTmdb" />
+                            <input type="hidden" name="titulo" value="@Model.Titulo" />
+                            <input type="hidden" name="tipoContenido" value="@Model.TipoContenido" />
+                            <input type="hidden" name="tipoOperacion" value="Compra" />
+
+                            <label style="color:#ccc; display:block; margin-bottom:6px;">
+                                Moneda
+                            </label>
+
+                            <select name="moneda"
+                                    style="width:100%; background:#111; color:white; border:1px solid #444; border-radius:8px; padding:8px; margin-bottom:12px;">
+                                <option value="USD">Dólares USD</option>
+                                <option value="UYU">Pesos UYU</option>
+                                <option value="EUR">Euros EUR</option>
+                            </select>
+
+                            <button type="submit"
+                                    style="width:100%; background:#D4AF37; color:#111; border:none; border-radius:8px; padding:10px; font-weight:bold;">
+                                Agregar compra al carrito
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <p style="color:#aaa; margin:0;">
+                            Iniciá sesión para comprar.
+                        </p>
+                    }
+
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div style="background:#202020; border:1px solid #333; border-radius:12px; padding:18px; height:100%;">
+
+                    <h5 style="color:white; margin-bottom:12px;">
+                        Alquilar
+                    </h5>
+
+                    <p style="color:#ccc; margin-bottom:6px;">
+                        USD @Model.PrecioAlquilerUsd.ToString("0.00")
+                    </p>
+
+                    <p style="color:#ccc; margin-bottom:6px;">
+                        UYU $@Model.PrecioAlquilerUyu.ToString("0")
+                    </p>
+
+                    <p style="color:#ccc; margin-bottom:14px;">
+                        EUR €@Model.PrecioAlquilerEur.ToString("0.00")
+                    </p>
+
+                    @if (Session["UsuarioId"] != null)
+                    {
+                        using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="idTmdb" value="@Model.IdTmdb" />
+                            <input type="hidden" name="titulo" value="@Model.Titulo" />
+                            <input type="hidden" name="tipoContenido" value="@Model.TipoContenido" />
+                            <input type="hidden" name="tipoOperacion" value="Alquiler" />
+
+                            <label style="color:#ccc; display:block; margin-bottom:6px;">
+                                Moneda
+                            </label>
+
+                            <select name="moneda"
+                                    style="width:100%; background:#111; color:white; border:1px solid #444; border-radius:8px; padding:8px; margin-bottom:12px;">
+                                <option value="USD">Dólares USD</option>
+                                <option value="UYU">Pesos UYU</option>
+                                <option value="EUR">Euros EUR</option>
+                            </select>
+
+                            <button type="submit"
+                                    style="width:100%; background:#D4AF37; color:#111; border:none; border-radius:8px; padding:10px; font-weight:bold;">
+                                Agregar alquiler al carrito
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <p style="color:#aaa; margin:0;">
+                            Iniciá sesión para alquilar.
+                        </p>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+
+        <p style="color:#aaa; font-size:13px; margin-top:8px; margin-bottom:0;">
+            Conversión automática usando cotización actual:
+            1 USD = $@Model.CotizacionUyu.ToString("0.00") UYU /
+            €@Model.CotizacionEur.ToString("0.00") EUR
+        </p>
+
+    </div>
+}

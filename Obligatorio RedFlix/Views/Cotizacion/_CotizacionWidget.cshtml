@@ -1,0 +1,49 @@
+﻿@model Obligatorio_RedFlix.Models.CotizacionViewModel
+
+@if (Model == null || !Model.Correcto)
+{
+    <div style="color:white;">
+
+        <h3 style="color:white; margin-top:10px;">
+            USD / UYU / EUR
+        </h3>
+
+        <p style="color:#ccc;">
+            No se pudo cargar la cotización.
+        </p>
+
+        if (Model != null && !string.IsNullOrEmpty(Model.MensajeError))
+        {
+        <p style="color:#aaa; font-size:13px;">
+            @Model.MensajeError
+        </p>
+        }
+
+    </div>
+}
+else
+{
+    <div style="color:white;">
+
+        <h3 style="color:white; margin-top:10px;">
+            USD / UYU / EUR
+        </h3>
+
+        <p style="color:#ccc; margin-bottom:8px;">
+            1 USD = $@Model.Uyu.ToString("0.00") UYU
+        </p>
+
+        <p style="color:#ccc; margin-bottom:8px;">
+            1 USD = €@Model.Eur.ToString("0.00") EUR
+        </p>
+
+        <div style="background:#222; border-left:4px solid #D4AF37; padding:10px; border-radius:6px; margin-top:15px;">
+            <strong style="color:#D4AF37;">Conversión automática</strong>
+
+            <p style="color:#ddd; margin:5px 0 0 0;">
+                Los precios se calculan desde dólares a pesos y euros.
+            </p>
+        </div>
+
+    </div>
+}

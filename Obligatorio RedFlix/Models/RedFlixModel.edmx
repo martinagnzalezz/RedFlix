@@ -27,6 +27,8 @@
           <Property Name="IdSerie" Type="int" />
           <Property Name="Cantidad" Type="int" Nullable="false" />
           <Property Name="Precio" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="TipoOperacion" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Moneda" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="Carritos">
           <Key>
@@ -798,6 +800,8 @@
           <NavigationProperty Name="Carrito" Relationship="Self.FK__CarritoIt__IdCar__1DB06A4F" FromRole="CarritoItems" ToRole="Carritos" />
           <NavigationProperty Name="Pelicula" Relationship="Self.FK__CarritoIt__IdPel__1EA48E88" FromRole="CarritoItems" ToRole="Peliculas" />
           <NavigationProperty Name="Series" Relationship="Self.FK__CarritoIt__IdSer__1F98B2C1" FromRole="CarritoItems" ToRole="Series" />
+          <Property Name="TipoOperacion" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Moneda" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Carrito">
           <Key>
@@ -1615,6 +1619,8 @@
           <EntitySetMapping Name="CarritoItems">
             <EntityTypeMapping TypeName="RedFlixDBModel.CarritoItem">
               <MappingFragment StoreEntitySet="CarritoItems">
+                <ScalarProperty Name="Moneda" ColumnName="Moneda" />
+                <ScalarProperty Name="TipoOperacion" ColumnName="TipoOperacion" />
                 <ScalarProperty Name="IdCarritoItem" ColumnName="IdCarritoItem" />
                 <ScalarProperty Name="IdCarrito" ColumnName="IdCarrito" />
                 <ScalarProperty Name="IdPelicula" ColumnName="IdPelicula" />
