@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Obligatorio_RedFlix.Models;
 using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
-using System;
 
 namespace Obligatorio_RedFlix.Controllers
 {
@@ -48,7 +48,8 @@ namespace Obligatorio_RedFlix.Controllers
 
             if (vm != null)
             {
-                vm.PeliculasRecomendadas = ObtenerContenidoPorClima(vm.CategoriaClima);
+                vm.PeliculasRecomendadas = ObtenerPeliculasPorClima(vm.CategoriaClima);
+                vm.SeriesRecomendadas = ObtenerSeriesPorClima(vm.CategoriaClima);
                 vm.PronosticoDias = ObtenerPronosticoDias();
             }
 
@@ -130,88 +131,114 @@ namespace Obligatorio_RedFlix.Controllers
                 CategoriaClima = categoria,
                 Emoji = emoji,
                 Promocion = promocion,
-                PeliculasRecomendadas = new List<Populares>()
+                PeliculasRecomendadas = new List<Populares>(),
+                SeriesRecomendadas = new List<Populares>(),
+                PronosticoDias = new List<PronosticoDiaViewModel>()
             };
 
             return vm;
         }
 
-        private List<Populares> ObtenerContenidoPorClima(string categoriaClima)
+        private List<Populares> ObtenerPeliculasPorClima(string categoriaClima)
         {
             string generosPeliculas;
+
+            switch (categoriaClima)
+            {
+                case "lluvia":
+                    generosPeliculas = "18,53,9648";
+                    break;
+                case "frio":
+                    generosPeliculas = "10749,35,18";
+                    break;
+                case "calor":
+                    generosPeliculas = "28,12,35";
+                    break;
+                case "nublado":
+                    generosPeliculas = "9648,878,53";
+                    break;
+                default:
+                    generosPeliculas = "28,35,18";
+                    break;
+            }
+
+            string endpoint = "/discover/movie?language=es-ES&page=1&sort_by=popularity.desc&with_genres=" + generosPeliculas;
+
+            RestResponse response = HacerRequestTmdb(endpoint);
+
+            if (response == null || !response.IsSuccessful || string.IsNullOrEmpty(response.Content))
+            {
+                return new List<Populares>();
+            }
+
+            ListaPopulares resultado = JsonConvert.DeserializeObject<ListaPopulares>(response.Content);
+
+            if (resultado == null || resultado.Results == null)
+            {
+                return new List<Populares>();
+            }
+
+            foreach (var pelicula in resultado.Results)
+            {
+                pelicula.TipoContenido = "Película";
+            }
+
+            return resultado.Results
+                .OrderByDescending(p => p.Popularity ?? 0)
+                .Take(8)
+                .ToList();
+        }
+
+        private List<Populares> ObtenerSeriesPorClima(string categoriaClima)
+        {
             string generosSeries;
 
             switch (categoriaClima)
             {
                 case "lluvia":
-                    generosPeliculas = "18,53,9648"; // Drama, Thriller, Misterio
-                    generosSeries = "18,9648,80";    // Drama, Misterio, Crimen
+                    generosSeries = "18,9648,80";
                     break;
-
                 case "frio":
-                    generosPeliculas = "10749,35,18"; // Romance, Comedia, Drama
-                    generosSeries = "18,35,10751";    // Drama, Comedia, Familia
+                    generosSeries = "18,35,10751";
                     break;
-
                 case "calor":
-                    generosPeliculas = "28,12,35";    // Acción, Aventura, Comedia
-                    generosSeries = "10759,35,10751"; // Acción/Aventura, Comedia, Familia
+                    generosSeries = "10759,35,10751";
                     break;
-
                 case "nublado":
-                    generosPeliculas = "9648,878,53"; // Misterio, Ciencia ficción, Thriller
-                    generosSeries = "9648,10765,80";  // Misterio, Sci-Fi/Fantasía, Crimen
+                    generosSeries = "9648,10765,80";
                     break;
-
                 default:
-                    generosPeliculas = "28,35,18";    // Acción, Comedia, Drama
-                    generosSeries = "18,35,10759";    // Drama, Comedia, Acción/Aventura
+                    generosSeries = "18,35,10759";
                     break;
             }
 
-            List<Populares> contenidos = new List<Populares>();
+            string endpoint = "/discover/tv?language=es-ES&page=1&sort_by=popularity.desc&with_genres=" + generosSeries;
 
-            string endpointPeliculas = "/discover/movie?language=es-ES&page=1&sort_by=popularity.desc&with_genres=" + generosPeliculas;
+            RestResponse response = HacerRequestTmdb(endpoint);
 
-            RestResponse responsePeliculas = HacerRequestTmdb(endpointPeliculas);
-
-            if (responsePeliculas != null && responsePeliculas.IsSuccessful && !string.IsNullOrEmpty(responsePeliculas.Content))
+            if (response == null || !response.IsSuccessful || string.IsNullOrEmpty(response.Content))
             {
-                ListaPopulares resultadoPeliculas = JsonConvert.DeserializeObject<ListaPopulares>(responsePeliculas.Content);
-
-                if (resultadoPeliculas != null && resultadoPeliculas.Results != null)
-                {
-                    foreach (var pelicula in resultadoPeliculas.Results.Take(4))
-                    {
-                        pelicula.TipoContenido = "Película";
-                        contenidos.Add(pelicula);
-                    }
-                }
+                return new List<Populares>();
             }
 
-            string endpointSeries = "/discover/tv?language=es-ES&page=1&sort_by=popularity.desc&with_genres=" + generosSeries;
+            ListaPopulares resultado = JsonConvert.DeserializeObject<ListaPopulares>(response.Content);
 
-            RestResponse responseSeries = HacerRequestTmdb(endpointSeries);
-
-            if (responseSeries != null && responseSeries.IsSuccessful && !string.IsNullOrEmpty(responseSeries.Content))
+            if (resultado == null || resultado.Results == null)
             {
-                ListaPopulares resultadoSeries = JsonConvert.DeserializeObject<ListaPopulares>(responseSeries.Content);
-
-                if (resultadoSeries != null && resultadoSeries.Results != null)
-                {
-                    foreach (var serie in resultadoSeries.Results.Take(4))
-                    {
-                        serie.TipoContenido = "Serie";
-                        contenidos.Add(serie);
-                    }
-                }
+                return new List<Populares>();
             }
 
-            return contenidos
-                .OrderByDescending(c => c.Popularity ?? 0)
+            foreach (var serie in resultado.Results)
+            {
+                serie.TipoContenido = "Serie";
+            }
+
+            return resultado.Results
+                .OrderByDescending(s => s.Popularity ?? 0)
                 .Take(8)
                 .ToList();
         }
+
         private List<PronosticoDiaViewModel> ObtenerPronosticoDias()
         {
             string apiKey = ConfigurationManager.AppSettings["OpenWeatherApiKey"];

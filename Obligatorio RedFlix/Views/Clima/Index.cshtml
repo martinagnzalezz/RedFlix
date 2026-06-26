@@ -107,35 +107,31 @@
                     Pronóstico de los próximos días
                 </h3>
 
-                <div class="row">
+                <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:22px;">
 
                     @foreach (var dia in Model.PronosticoDias)
                     {
-                        <div class="col-md-2 mb-3">
+                        <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:22px; height:100%; text-align:center;">
 
-                            <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:18px; height:100%; text-align:center;">
+                            <h5 style="color:#D4AF37; text-transform:capitalize; min-height:45px;">
+                                @dia.Dia
+                            </h5>
 
-                                <h5 style="color:#D4AF37; text-transform:capitalize;">
-                                    @dia.Dia
-                                </h5>
+                            <img src="@("https://openweathermap.org/img/wn/" + dia.Icono + "@2x.png")"
+                                 alt="Clima"
+                                 style="width:75px; height:75px;" />
 
-                                <img src="@("https://openweathermap.org/img/wn/" + dia.Icono + "@2x.png")"
-                                     alt="Clima"
-                                     style="width:65px; height:65px;" />
+                            <h3 style="color:white; font-size:32px; margin-top:10px;">
+                                @dia.Temperatura.ToString("0")°C
+                            </h3>
 
-                                <h3 style="color:white;">
-                                    @dia.Temperatura.ToString("0")°C
-                                </h3>
+                            <p style="color:#ccc; text-transform:capitalize; min-height:45px;">
+                                @dia.Descripcion
+                            </p>
 
-                                <p style="color:#ccc; text-transform:capitalize; min-height:45px;">
-                                    @dia.Descripcion
-                                </p>
-
-                                <p style="color:#aaa;">
-                                    @dia.Emoji @dia.CategoriaClima
-                                </p>
-
-                            </div>
+                            <p style="color:#aaa; margin:0;">
+                                @dia.Emoji @dia.CategoriaClima
+                            </p>
 
                         </div>
                     }
@@ -148,52 +144,147 @@
         <hr style="border-color:#333;" />
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 style="color:#D4AF37;">
-                Películas y series recomendadas según el clima
-            </h3>
+            <div>
+                <h3 style="color:#D4AF37; margin-bottom:5px;">
+                    Series recomendadas según el clima
+                </h3>
 
-            <a href="@Url.Action("Index", "Pelicula")"
+                <p style="color:#aaa; margin:0;">
+                    Selección automática de series según el clima actual en @Model.Ciudad.
+                </p>
+            </div>
+
+            <a href="@Url.Action("Series", "Pelicula")"
                style="color:#D4AF37; text-decoration:none;">
-                Ver catálogo completo
+                Ver más series
             </a>
         </div>
 
-        if (Model.PeliculasRecomendadas == null || !Model.PeliculasRecomendadas.Any())
+        if (Model.SeriesRecomendadas == null || !Model.SeriesRecomendadas.Any())
         {
             <p style="color:#ccc;">
-                No se pudieron cargar recomendaciones.
+                No se pudieron cargar series recomendadas.
             </p>
         }
         else
         {
             <div class="row">
 
-                @foreach (var contenido in Model.PeliculasRecomendadas)
+                @foreach (var serie in Model.SeriesRecomendadas)
                 {
-                    var accionDetalle = contenido.TipoContenido == "Serie" ? "DetalleSerie" : "Detalle";
-
                     <div class="col-md-3 mb-4">
 
-                        <div style="background:#151515; border:1px solid #333; border-radius:12px; overflow:hidden; height:100%;">
+                        <div style="background:#151515; border:1px solid #333; border-radius:14px; overflow:hidden; height:100%; position:relative;">
 
-                            <a href="@Url.Action(accionDetalle, "Pelicula", new { id = contenido.Id })"
+                            <span style="position:absolute; top:12px; left:12px; background:#D4AF37; color:#111; font-weight:bold; font-size:12px; padding:6px 12px; border-radius:20px; z-index:2;">
+                                Serie
+                            </span>
+
+                            <a href="@Url.Action("DetalleSerie", "Pelicula", new { id = serie.Id })"
                                style="text-decoration:none; color:inherit;">
 
-                                <img src="@contenido.ImagenUrl"
-                                     style="width:100%; height:320px; object-fit:cover;" />
+                                <img src="@serie.ImagenUrl"
+                                     style="width:100%; height:330px; object-fit:cover;" />
 
-                                <div style="padding:15px;">
+                                <div style="padding:16px;">
 
-                                    <h5 style="color:white; min-height:50px;">
-                                        @contenido.TituloMostrar
+                                    <h5 style="color:white; min-height:55px; margin-bottom:12px;">
+                                        @serie.TituloMostrar
                                     </h5>
 
-                                    <p style="color:#D4AF37; margin-bottom:5px;">
-                                        ⭐ @contenido.VoteAverage
+                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+
+                                        <span style="color:#D4AF37;">
+                                            ⭐ @serie.VoteAverage
+                                        </span>
+
+                                        <span style="color:#aaa; font-size:13px; text-transform:capitalize;">
+                                            @Model.CategoriaClima
+                                        </span>
+
+                                    </div>
+
+                                    <p style="color:#aaa; font-size:14px; margin:0;">
+                                        Serie recomendada según el clima actual.
                                     </p>
 
-                                    <p style="color:#aaa; font-size:14px;">
-                                        @contenido.TipoContenido recomendada por clima: @Model.CategoriaClima
+                                </div>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+        <hr style="border-color:#333;" />
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 style="color:#D4AF37; margin-bottom:5px;">
+                    Películas recomendadas según el clima
+                </h3>
+
+                <p style="color:#aaa; margin:0;">
+                    Selección automática de películas según el clima actual en @Model.Ciudad.
+                </p>
+            </div>
+
+            <a href="@Url.Action("Index", "Pelicula")"
+               style="color:#D4AF37; text-decoration:none;">
+                Ver más películas
+            </a>
+        </div>
+
+        if (Model.PeliculasRecomendadas == null || !Model.PeliculasRecomendadas.Any())
+        {
+            <p style="color:#ccc;">
+                No se pudieron cargar películas recomendadas.
+            </p>
+        }
+        else
+        {
+            <div class="row">
+
+                @foreach (var pelicula in Model.PeliculasRecomendadas)
+                {
+                    <div class="col-md-3 mb-4">
+
+                        <div style="background:#151515; border:1px solid #333; border-radius:14px; overflow:hidden; height:100%; position:relative;">
+
+                            <span style="position:absolute; top:12px; left:12px; background:#D4AF37; color:#111; font-weight:bold; font-size:12px; padding:6px 12px; border-radius:20px; z-index:2;">
+                                Película
+                            </span>
+
+                            <a href="@Url.Action("Detalle", "Pelicula", new { id = pelicula.Id })"
+                               style="text-decoration:none; color:inherit;">
+
+                                <img src="@pelicula.ImagenUrl"
+                                     style="width:100%; height:330px; object-fit:cover;" />
+
+                                <div style="padding:16px;">
+
+                                    <h5 style="color:white; min-height:55px; margin-bottom:12px;">
+                                        @pelicula.TituloMostrar
+                                    </h5>
+
+                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+
+                                        <span style="color:#D4AF37;">
+                                            ⭐ @pelicula.VoteAverage
+                                        </span>
+
+                                        <span style="color:#aaa; font-size:13px; text-transform:capitalize;">
+                                            @Model.CategoriaClima
+                                        </span>
+
+                                    </div>
+
+                                    <p style="color:#aaa; font-size:14px; margin:0;">
+                                        Película recomendada según el clima actual.
                                     </p>
 
                                 </div>

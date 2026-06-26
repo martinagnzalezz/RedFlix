@@ -16,6 +16,7 @@ namespace Obligatorio_RedFlix.Models
         public string Promocion { get; set; }
 
         public List<Populares> PeliculasRecomendadas { get; set; }
+        public List<Populares> SeriesRecomendadas { get; set; }
         public List<PronosticoDiaViewModel> PronosticoDias { get; set; }
     }
 }
