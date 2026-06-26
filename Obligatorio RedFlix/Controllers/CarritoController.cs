@@ -186,7 +186,7 @@ namespace Obligatorio_RedFlix.Controllers
                 TempData["MensajeCarrito"] = "El item fue eliminado del carrito.";
             }
 
-            return RedirectToAction("Index", "Carrito");
+            return RedirectToAction("Index", "Carrito"); 
         }
         private decimal ObtenerPrecioBaseUsd(string tipoContenido, string tipoOperacion)
         {
