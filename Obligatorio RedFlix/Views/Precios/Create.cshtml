@@ -1,8 +1,7 @@
-﻿@model Obligatorio_RedFlix.Models.Usuario
-
-
+﻿
+@model Obligatorio_RedFlix.Models.PrecioContenido
 @{
-    ViewBag.Title = "Crear usuario";
+    ViewBag.Title = "Nuevo Precio";
 }
 
 @section styles {
@@ -19,7 +18,7 @@
             border-radius: 12px;
             padding: 36px 40px;
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
         }
 
             .admin-form-box h2 {
@@ -45,11 +44,9 @@
                 margin-bottom: 6px;
                 font-weight: 500;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
             }
 
-            .rf-input-group input,
-            .rf-input-group select {
+            .rf-input-group input, .rf-input-group select {
                 width: 100%;
                 background: #1a1a1a;
                 border: 1px solid #2a2a2a;
@@ -57,16 +54,11 @@
                 padding: 12px 14px;
                 color: #F0F0F0;
                 font-size: 15px;
-                outline: none;
             }
 
-                .rf-input-group input:focus,
-                .rf-input-group select:focus {
+                .rf-input-group input:focus, .rf-input-group select:focus {
                     border-color: #D4A017;
-                }
-
-                .rf-input-group select option {
-                    background: #1a1a1a;
+                    outline: none;
                 }
 
         .input-row {
@@ -109,22 +101,22 @@
             align-items: center;
         }
 
-            .btn-outline-gray:hover {
-                border-color: #555;
-                color: #fff;
-                text-decoration: none;
-            }
-
         .text-danger {
             color: #e50914 !important;
             font-size: 13px;
+        }
+
+        .hint {
+            color: #666;
+            font-size: 12px;
+            margin-top: 4px;
         }
     </style>
 }
 
 <div class="admin-form-page">
     <div class="admin-form-box">
-        <h2>Crear usuario</h2>
+        <h2>Cargar nuevo precio</h2>
         <hr />
 
         @using (Html.BeginForm())
@@ -132,44 +124,49 @@
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+            <div class="rf-input-group">
+                @Html.LabelFor(model => model.Titulo)
+                @Html.EditorFor(model => model.Titulo)
+                @Html.ValidationMessageFor(model => model.Titulo, "", new { @class = "text-danger" })
+            </div>
+
             <div class="input-row">
                 <div class="rf-input-group">
-                    @Html.LabelFor(model => model.Nombre)
-                    @Html.EditorFor(model => model.Nombre)
-                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.TmdbId, "ID de TMDB")
+                    @Html.EditorFor(model => model.TmdbId)
+                    @Html.ValidationMessageFor(model => model.TmdbId, "", new { @class = "text-danger" })
+                    <div class="hint">Lo ves en la URL de la película/serie en TMDB</div>
                 </div>
                 <div class="rf-input-group">
-                    @Html.LabelFor(model => model.Apellido)
-                    @Html.EditorFor(model => model.Apellido)
-                    @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.TipoContenido, "Tipo")
+                    @Html.DropDownListFor(model => model.TipoContenido,
+                        new SelectList(new[] { "pelicula", "serie" }))
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="rf-input-group">
+                    @Html.LabelFor(model => model.PrecioCompra, "Precio compra (USD)")
+                    @Html.EditorFor(model => model.PrecioCompra)
+                    @Html.ValidationMessageFor(model => model.PrecioCompra, "", new { @class = "text-danger" })
+                </div>
+                <div class="rf-input-group">
+                    @Html.LabelFor(model => model.PrecioAlquier, "Precio alquiler (USD)")
+                    @Html.EditorFor(model => model.PrecioAlquier)
+                    @Html.ValidationMessageFor(model => model.PrecioAlquier, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="rf-input-group">
-                @Html.LabelFor(model => model.Email)
-                @Html.EditorFor(model => model.Email)
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="rf-input-group">
-                @Html.Label("Contraseña")
-                <input type="password" name="password" />
-            </div>
-
-            <div class="rf-input-group">
-                @Html.LabelFor(model => model.IdRol, "Rol")
-                @Html.DropDownList("IdRol", null, new { })
-                @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.DiasAlquiler, "Días de alquiler")
+                @Html.EditorFor(model => model.DiasAlquiler)
             </div>
 
             <div class="form-actions">
-                <input type="submit" value="Crear" class="btn-gold" />
+                <input type="submit" value="Guardar" class="btn-gold" />
                 @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn-outline-gray" })
             </div>
         }
     </div>
 </div>
 
-@section scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

@@ -1,0 +1,109 @@
+﻿@model Obligatorio_RedFlix.Models.Usuario
+@{
+    ViewBag.Title = "Detalles del Usuario";
+}
+
+@section styles {
+    <style>
+        .admin-form-page {
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .admin-form-box {
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 36px 40px;
+            width: 100%;
+            max-width: 480px;
+        }
+
+            .admin-form-box h2 {
+                color: #F0F0F0;
+                font-weight: 700;
+                margin-bottom: 24px;
+                font-size: 22px;
+            }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #1f1f1f;
+        }
+
+            .detail-row:last-child {
+                border-bottom: none;
+            }
+
+            .detail-row .label {
+                color: #888;
+                font-size: 13px;
+                text-transform: uppercase;
+            }
+
+            .detail-row .value {
+                color: #F0F0F0;
+                font-weight: 600;
+            }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .btn-gold {
+            background: #D4A017;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 22px;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+            .btn-gold:hover {
+                background: #F0C040;
+                color: #000;
+                text-decoration: none;
+            }
+
+        .btn-outline-gray {
+            background: transparent;
+            color: #ccc;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 12px 22px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+            .btn-outline-gray:hover {
+                border-color: #555;
+                color: #fff;
+                text-decoration: none;
+            }
+    </style>
+}
+
+<div class="admin-form-page">
+    <div class="admin-form-box">
+        <h2>Detalles del usuario</h2>
+
+        <div class="detail-row"><span class="label">Nombre</span><span class="value">@Model.Nombre @Model.Apellido</span></div>
+        <div class="detail-row"><span class="label">Email</span><span class="value">@Model.Email</span></div>
+        <div class="detail-row"><span class="label">Registro</span><span class="value">@Model.FechaRegistro.ToString("dd/MM/yyyy")</span></div>
+        <div class="detail-row"><span class="label">Estado</span><span class="value">@Model.Estado</span></div>
+        <div class="detail-row"><span class="label">Rol</span><span class="value">@Model.Role.Nombre</span></div>
+
+        <div class="form-actions">
+            @Html.ActionLink("Editar", "Edit", new { id = Model.IdUsuario }, new { @class = "btn-gold" })
+            @Html.ActionLink("Volver", "Index", null, new { @class = "btn-outline-gray" })
+        </div>
+    </div>
+</div>

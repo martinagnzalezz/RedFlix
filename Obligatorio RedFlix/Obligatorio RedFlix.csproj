@@ -156,6 +156,9 @@
     <Compile Include="Controllers\FavoritosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PeliculaController.cs" />
+    <Compile Include="Controllers\PreciosController.cs" />
+    <Compile Include="Controllers\PromocionesController.cs" />
+    <Compile Include="Filters\AutorizarRol.cs" />
     <Compile Include="Models\CarritoItemVistaViewModel.cs" />
     <Compile Include="Models\ClimaForecast.cs" />
     <Compile Include="Models\ClimaMain.cs" />
@@ -329,8 +332,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Roles\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Registrar.cshtml" />
@@ -348,10 +349,18 @@
     <Content Include="Views\Cotizacion\_CotizacionWidget.cshtml" />
     <Content Include="Views\Cotizacion\_PrecioContenido.cshtml" />
     <Content Include="Views\Carrito\Index.cshtml" />
+    <Content Include="Views\Roles\Create.cshtml" />
+    <Content Include="Views\Roles\Delete.cshtml" />
+    <Content Include="Views\Roles\Edit.cshtml" />
+    <Content Include="Views\Roles\Details.cshtml" />
+    <Content Include="Views\Usuarios\Details.cshtml" />
+    <Content Include="Views\Precios\Create.cshtml" />
+    <Content Include="Views\Precios\Index.cshtml" />
+    <Content Include="Views\Promociones\Index.cshtml" />
+    <Content Include="Views\Promociones\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Usuario\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

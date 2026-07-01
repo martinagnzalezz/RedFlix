@@ -4,64 +4,167 @@
     ViewBag.Title = "Editar usuario";
 }
 
-<h2>Editar usuario</h2>
+@section styles {
+    <style>
+        .admin-form-page {
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+        .admin-form-box {
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 36px 40px;
+            width: 100%;
+            max-width: 480px;
+        }
 
-    <div class="form-horizontal">
-        <h4>Usuario</h4>
-        <hr />
+            .admin-form-box h2 {
+                color: #F0F0F0;
+                font-weight: 700;
+                margin-bottom: 4px;
+                font-size: 22px;
+            }
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            .admin-form-box hr {
+                border-color: #2a2a2a;
+                margin-bottom: 24px;
+            }
 
-        @Html.HiddenFor(model => model.IdUsuario)
+        .rf-input-group {
+            margin-bottom: 18px;
+        }
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-            </div>
-        </div>
+            .rf-input-group label {
+                display: block;
+                font-size: 12px;
+                color: #888;
+                margin-bottom: 6px;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Apellido, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Apellido, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "text-danger" })
-            </div>
-        </div>
+            .rf-input-group input,
+            .rf-input-group select {
+                width: 100%;
+                background: #1a1a1a;
+                border: 1px solid #2a2a2a;
+                border-radius: 8px;
+                padding: 12px 14px;
+                color: #F0F0F0;
+                font-size: 15px;
+                outline: none;
+            }
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                .rf-input-group input:focus,
+                .rf-input-group select:focus {
+                    border-color: #D4A017;
+                }
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.IdRol, "Rol", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("IdRol", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                .rf-input-group select option {
+                    background: #1a1a1a;
+                }
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Guardar cambios" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn-gold {
+            background: #D4A017;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 22px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+            .btn-gold:hover {
+                background: #F0C040;
+            }
+
+        .btn-outline-gray {
+            background: transparent;
+            color: #ccc;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 12px 22px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+            .btn-outline-gray:hover {
+                border-color: #555;
+                color: #fff;
+                text-decoration: none;
+            }
+
+        .text-danger {
+            color: #e50914 !important;
+            font-size: 13px;
+        }
+    </style>
 }
 
-<div>
-    @Html.ActionLink("Volver a la lista", "Index")
+<div class="admin-form-page">
+    <div class="admin-form-box">
+        <h2>Editar usuario</h2>
+        <hr />
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.IdUsuario)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="input-row">
+                <div class="rf-input-group">
+                    @Html.LabelFor(model => model.Nombre)
+                    @Html.EditorFor(model => model.Nombre)
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
+                <div class="rf-input-group">
+                    @Html.LabelFor(model => model.Apellido)
+                    @Html.EditorFor(model => model.Apellido)
+                    @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="rf-input-group">
+                @Html.LabelFor(model => model.Email)
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="rf-input-group">
+                @Html.LabelFor(model => model.IdRol, "Rol")
+                @Html.DropDownList("IdRol", null, new { })
+                @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-actions">
+                <input type="submit" value="Guardar cambios" class="btn-gold" />
+                @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn-outline-gray" })
+            </div>
+        }
+    </div>
 </div>
 
-@section Scripts {
+@section scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

@@ -2,12 +2,14 @@
 using Obligatorio_RedFlix.Models;
 using RestSharp;
 using System.Configuration;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Obligatorio_RedFlix.Controllers
 {
     public class CotizacionController : Controller
     {
+        private RedFlixDBEntities db = new RedFlixDBEntities();
         private RestResponse HacerRequestCotizacion(string endpoint)
         {
             var options = new RestClientOptions("https://v6.exchangerate-api.com/v6");
@@ -98,26 +100,34 @@ namespace Obligatorio_RedFlix.Controllers
                 };
             }
 
+            string tipoBD = tipoContenido == "Serie" ? "serie" : "pelicula";
+
+            var precio = db.PrecioContenidoes.FirstOrDefault(p =>
+                p.TmdbId == idTmdb && p.TipoContenido == tipoBD && p.Activo);
+
             double precioCompraUsd;
             double precioAlquilerUsd;
+            int? idPrecio = null;
 
-            if (tipoContenido == "Serie")
+            if (precio != null)
             {
-                precioCompraUsd = 9.99;
-                precioAlquilerUsd = 4.99;
+                precioCompraUsd = (double)precio.PrecioCompra;
+                precioAlquilerUsd = (double)precio.PrecioAlquier;
+                idPrecio = precio.IdPrecio;
             }
             else
             {
-                precioCompraUsd = 5.99;
-                precioAlquilerUsd = 2.99;
-                tipoContenido = "Película";
+                precioCompraUsd = tipoContenido == "Serie" ? 9.99 : 5.99;
+                precioAlquilerUsd = tipoContenido == "Serie" ? 4.99 : 2.99;
             }
 
-            PrecioContenidoViewModel vm = new PrecioContenidoViewModel
+            string tipoDisplay = tipoContenido == "Serie" ? "Serie" : "Película";
+
+            return new PrecioContenidoViewModel
             {
                 IdTmdb = idTmdb,
                 Titulo = titulo,
-                TipoContenido = tipoContenido,
+                TipoContenido = tipoDisplay,
 
                 PrecioCompraUsd = precioCompraUsd,
                 PrecioAlquilerUsd = precioAlquilerUsd,
@@ -131,10 +141,17 @@ namespace Obligatorio_RedFlix.Controllers
                 CotizacionUyu = cotizacion.Uyu,
                 CotizacionEur = cotizacion.Eur,
 
+                IdPrecio = idPrecio,
+
                 Correcto = true
             };
-
-            return vm;
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) db.Dispose();
+            base.Dispose(disposing);
+        }
+
     }
 }

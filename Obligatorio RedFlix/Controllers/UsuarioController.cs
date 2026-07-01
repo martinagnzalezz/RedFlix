@@ -1,4 +1,5 @@
-﻿using Obligatorio_RedFlix.Models;
+﻿using Obligatorio_RedFlix.Filters;
+using Obligatorio_RedFlix.Models;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Obligatorio_RedFlix.Controllers
 {
+    [AutorizarRol("Administrador")]
     public class UsuariosController : Controller
     {
         private RedFlixDBEntities db = new RedFlixDBEntities();
@@ -111,6 +113,18 @@ namespace Obligatorio_RedFlix.Controllers
             return View(usuario);
         }
 
+        public ActionResult Details(int id)
+        {
+            Usuario usuario = db.Usuarios.Find(id);
+
+            if (usuario == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(usuario);
+        }
+
         // ACTIVAR O INACTIVAR USUARIO
         public ActionResult CambiarEstado(int id)
         {
@@ -153,5 +167,7 @@ namespace Obligatorio_RedFlix.Controllers
                 return resultado.ToString();
             }
         }
+
+
     }
 }

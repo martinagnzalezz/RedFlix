@@ -1,45 +1,196 @@
-﻿@model IEnumerable<Obligatorio_RedFlix.Models.Usuario>
-
-@{
-    ViewBag.Title = "Usuarios";
-}
-
-<h2>Usuarios</h2>
-
-<p>
-    @Html.ActionLink("Crear nuevo usuario", "Create")
-</p>
-
-<table class="table">
-    <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Email</th>
-        <th>Fecha de registro</th>
-        <th>Estado</th>
-        <th>Rol</th>
-        <th>Acciones</th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
-            <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
-            <td>@Html.DisplayFor(modelItem => item.Email)</td>
-            <td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
-            <td>@Html.DisplayFor(modelItem => item.Estado)</td>
-            <td>@Html.DisplayFor(modelItem => item.Role.Nombre)</td>
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.IdUsuario }) |
-                @Html.ActionLink("Detalles", "Details", new { id = item.IdUsuario }) |
-                @Html.ActionLink(
-                    item.Estado == "Activo" ? "Inactivar" : "Activar",
-                    "CambiarEstado",
-                    new { id = item.IdUsuario }
-                )
-            </td>
-        </tr>
+﻿@@model IEnumerable<Obligatorio_RedFlix.Models.Usuario>
+    @{
+        ViewBag.Title = "Gestión de Usuarios";
     }
 
-</table>
+    @section styles {
+        <style>
+            .admin-page {
+                padding: 10px 0 40px;
+            }
+
+            .admin-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+            }
+
+                .admin-header h2 {
+                    color: #F0F0F0;
+                    font-weight: 700;
+                    margin: 0;
+                }
+
+            .btn-gold-sm {
+                background: #D4A017;
+                color: #000;
+                border: none;
+                border-radius: 6px;
+                padding: 10px 18px;
+                font-weight: 600;
+                font-size: 14px;
+                text-decoration: none;
+            }
+
+                .btn-gold-sm:hover {
+                    background: #F0C040;
+                    color: #000;
+                    text-decoration: none;
+                }
+
+            .admin-card {
+                background: #111;
+                border: 1px solid #2a2a2a;
+                border-radius: 12px;
+                overflow: hidden;
+            }
+
+            .table-redflix {
+                margin-bottom: 0;
+                color: #F0F0F0;
+            }
+
+                .table-redflix thead th {
+                    background: #1a1a1a;
+                    color: #888;
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    border-bottom: 1px solid #2a2a2a;
+                    padding: 14px 20px;
+                }
+
+                .table-redflix tbody td {
+                    padding: 14px 20px;
+                    border-bottom: 1px solid #1f1f1f;
+                    vertical-align: middle;
+                    font-size: 14px;
+                }
+
+                .table-redflix tbody tr:last-child td {
+                    border-bottom: none;
+                }
+
+                .table-redflix tbody tr:hover {
+                    background: #161616;
+                }
+
+            .rol-badge {
+                display: inline-block;
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 600;
+            }
+
+                .rol-badge.admin {
+                    background: rgba(212,160,23,0.15);
+                    color: #D4A017;
+                    border: 1px solid rgba(212,160,23,0.4);
+                }
+
+                .rol-badge.usuario {
+                    background: rgba(70,211,105,0.12);
+                    color: #46d369;
+                    border: 1px solid rgba(70,211,105,0.3);
+                }
+
+            .estado-badge {
+                display: inline-block;
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 600;
+            }
+
+                .estado-badge.activo {
+                    background: rgba(70,211,105,0.12);
+                    color: #46d369;
+                    border: 1px solid rgba(70,211,105,0.3);
+                }
+
+                .estado-badge.inactivo {
+                    background: rgba(229,9,20,0.1);
+                    color: #e50914;
+                    border: 1px solid rgba(229,9,20,0.3);
+                }
+
+            .action-link {
+                color: #D4A017;
+                text-decoration: none;
+                font-size: 13px;
+                font-weight: 500;
+                margin-right: 12px;
+            }
+
+                .action-link:hover {
+                    color: #F0C040;
+                    text-decoration: underline;
+                }
+
+                .action-link.warn {
+                    color: #e50914;
+                }
+
+                    .action-link.warn:hover {
+                        color: #ff4d4d;
+                    }
+        </style>
+    }
+
+    <div class="admin-page">
+
+        <div class="admin-header">
+            <h2><i class="fa fa-users"></i> Gestión de Usuarios</h2>
+            @Html.ActionLink("+ Nuevo usuario", "Create", null, new { @class = "btn-gold-sm" })
+        </div>
+
+        <div class="admin-card">
+            <table class="table table-redflix mb-0">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                        <th>Registro</th>
+                        <th>Estado</th>
+                        <th>Rol</th>
+                        <th style="width:220px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Nombre</td>
+                            <td>@item.Apellido</td>
+                            <td>@item.Email</td>
+                            <td>@item.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <span class="estado-badge @(item.Estado == "Activo" ? "activo" : "inactivo")">
+                                    @item.Estado
+                                </span>
+                            </td>
+                            <td>
+                                <span class="rol-badge @(item.Role.Nombre == "Administrador" ? "admin" : "usuario")">
+                                    @item.Role.Nombre
+                                </span>
+                            </td>
+                            <td>
+                                @Html.ActionLink("Editar", "Edit", new { id = item.IdUsuario }, new { @class = "action-link" })
+                                @Html.ActionLink("Detalles", "Details", new { id = item.IdUsuario }, new { @class = "action-link" })
+                                @Html.ActionLink(
+                                    item.Estado == "Activo" ? "Inactivar" : "Activar",
+                                    "CambiarEstado",
+                                    new { id = item.IdUsuario },
+                                    new { @class = "action-link warn" }
+                                )
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>

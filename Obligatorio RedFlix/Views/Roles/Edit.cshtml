@@ -1,8 +1,6 @@
-﻿@model Obligatorio_RedFlix.Models.Usuario
-
-
+﻿@model Obligatorio_RedFlix.Models.Role
 @{
-    ViewBag.Title = "Crear usuario";
+    ViewBag.Title = "Editar Rol";
 }
 
 @section styles {
@@ -19,19 +17,14 @@
             border-radius: 12px;
             padding: 36px 40px;
             width: 100%;
-            max-width: 480px;
+            max-width: 460px;
         }
 
             .admin-form-box h2 {
                 color: #F0F0F0;
                 font-weight: 700;
-                margin-bottom: 4px;
-                font-size: 22px;
-            }
-
-            .admin-form-box hr {
-                border-color: #2a2a2a;
                 margin-bottom: 24px;
+                font-size: 22px;
             }
 
         .rf-input-group {
@@ -48,8 +41,7 @@
                 letter-spacing: 0.5px;
             }
 
-            .rf-input-group input,
-            .rf-input-group select {
+            .rf-input-group input {
                 width: 100%;
                 background: #1a1a1a;
                 border: 1px solid #2a2a2a;
@@ -58,22 +50,12 @@
                 color: #F0F0F0;
                 font-size: 15px;
                 outline: none;
+                transition: border 0.2s;
             }
 
-                .rf-input-group input:focus,
-                .rf-input-group select:focus {
+                .rf-input-group input:focus {
                     border-color: #D4A017;
                 }
-
-                .rf-input-group select option {
-                    background: #1a1a1a;
-                }
-
-        .input-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
 
         .form-actions {
             display: flex;
@@ -105,8 +87,6 @@
             font-weight: 600;
             font-size: 14px;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
         }
 
             .btn-outline-gray:hover {
@@ -124,52 +104,24 @@
 
 <div class="admin-form-page">
     <div class="admin-form-box">
-        <h2>Crear usuario</h2>
-        <hr />
+        <h2>Editar rol</h2>
 
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.IdRol)
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            <div class="input-row">
-                <div class="rf-input-group">
-                    @Html.LabelFor(model => model.Nombre)
-                    @Html.EditorFor(model => model.Nombre)
-                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-                </div>
-                <div class="rf-input-group">
-                    @Html.LabelFor(model => model.Apellido)
-                    @Html.EditorFor(model => model.Apellido)
-                    @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
             <div class="rf-input-group">
-                @Html.LabelFor(model => model.Email)
-                @Html.EditorFor(model => model.Email)
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="rf-input-group">
-                @Html.Label("Contraseña")
-                <input type="password" name="password" />
-            </div>
-
-            <div class="rf-input-group">
-                @Html.LabelFor(model => model.IdRol, "Rol")
-                @Html.DropDownList("IdRol", null, new { })
-                @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Nombre)
+                @Html.TextBoxFor(model => model.Nombre)
+                @Html.ValidationMessageFor(model => model.Nombre)
             </div>
 
             <div class="form-actions">
-                <input type="submit" value="Crear" class="btn-gold" />
+                <button type="submit" class="btn-gold">Guardar cambios</button>
                 @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn-outline-gray" })
             </div>
         }
     </div>
 </div>
-
-@section scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

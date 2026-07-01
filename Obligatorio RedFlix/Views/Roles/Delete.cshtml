@@ -1,0 +1,126 @@
+﻿@model Obligatorio_RedFlix.Models.Role
+@{
+    ViewBag.Title = "Eliminar Rol";
+}
+
+@section styles {
+    <style>
+        .admin-form-page {
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .admin-form-box {
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 36px 40px;
+            width: 100%;
+            max-width: 460px;
+        }
+
+            .admin-form-box h2 {
+                color: #F0F0F0;
+                font-weight: 700;
+                margin-bottom: 16px;
+                font-size: 22px;
+            }
+
+        .warning-box {
+            background: rgba(229,9,20,0.1);
+            border: 1px solid rgba(229,9,20,0.3);
+            color: #e50914;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #1f1f1f;
+        }
+
+            .detail-row .label {
+                color: #888;
+                font-size: 13px;
+                text-transform: uppercase;
+            }
+
+            .detail-row .value {
+                color: #F0F0F0;
+                font-weight: 600;
+            }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .btn-danger-solid {
+            background: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 22px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+            .btn-danger-solid:hover {
+                background: #ff2030;
+            }
+
+        .btn-outline-gray {
+            background: transparent;
+            color: #ccc;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 12px 22px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+            .btn-outline-gray:hover {
+                border-color: #555;
+                color: #fff;
+                text-decoration: none;
+            }
+    </style>
+}
+
+<div class="admin-form-page">
+    <div class="admin-form-box">
+        <h2>¿Eliminar este rol?</h2>
+
+        <div class="warning-box">
+            Esta acción no se puede deshacer.
+        </div>
+
+        <div class="detail-row">
+            <span class="label">ID</span>
+            <span class="value">@Model.IdRol</span>
+        </div>
+        <div class="detail-row">
+            <span class="label">Nombre</span>
+            <span class="value">@Model.Nombre</span>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.IdRol)
+
+            <div class="form-actions">
+                <button type="submit" class="btn-danger-solid">Eliminar</button>
+                @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn-outline-gray" })
+            </div>
+        }
+    </div>
+</div>

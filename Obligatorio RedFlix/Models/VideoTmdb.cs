@@ -35,6 +35,8 @@ namespace Obligatorio_RedFlix.Models
 
     public class PeliculaDetalleViewModel
     {
+        internal PrecioContenidoViewModel PrecioContenido;
+
         public Populares Pelicula { get; set; }
         public VideoTmdb Trailer { get; set; }
     }

@@ -10,6 +10,8 @@ namespace Obligatorio_RedFlix.Controllers
 {
     public class PeliculaController : Controller
     {
+        private RedFlixDBEntities db = new RedFlixDBEntities();
+
         static string token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMTFhMDAwMjVlNjZkYmIxZjQ0ZmZjYzVhZWY5Nzk0OCIsIm5iZiI6MTc3OTQ5OTI4NS40MTY5OTk4LCJzdWIiOiI2YTExMDExNTE3YzM2ZjNjMTBhZWI5NjUiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.zTH2CzrPgTnbjCUv2cgxEcrTKySFdp9-ts0EWwX_ICc";
 
         static RestResponse HacerRequest(string endpoint)
@@ -116,7 +118,11 @@ namespace Obligatorio_RedFlix.Controllers
             PeliculaDetalleViewModel modelo = new PeliculaDetalleViewModel
             {
                 Pelicula = pelicula,
-                Trailer = trailer
+                Trailer = trailer,
+                PrecioContenido = ArmarPrecioContenido(
+                Convert.ToInt32(id),
+                pelicula.Title,
+                "pelicula")
             };
 
             return View(modelo);
@@ -152,10 +158,108 @@ namespace Obligatorio_RedFlix.Controllers
             PeliculaDetalleViewModel modelo = new PeliculaDetalleViewModel
             {
                 Pelicula = serie,
-                Trailer = trailer
+                Trailer = trailer,
+                PrecioContenido = ArmarPrecioContenido(
+                Convert.ToInt32(id),
+                serie.Name,
+                "serie")
             };
 
             return View(modelo);
+        }
+
+        private PrecioContenidoViewModel ArmarPrecioContenido(int idTmdb, string titulo, string tipoContenido)
+        {
+            double precioCompraUsd = 5.99;
+            double precioAlquilerUsd = 2.99;
+
+            int? idPrecio = null;
+
+            var precioBD = db.PrecioContenidoes.FirstOrDefault(p =>
+                p.TmdbId == idTmdb &&
+                p.TipoContenido.ToLower() == tipoContenido.ToLower() &&
+                p.Activo == true);
+
+            if (precioBD != null)
+            {
+                idPrecio = precioBD.IdPrecio;
+                precioCompraUsd = Convert.ToDouble(precioBD.PrecioCompra);
+                precioAlquilerUsd = Convert.ToDouble(precioBD.PrecioAlquier);
+            }
+
+            double cotizacionUyu = 40.25;
+            double cotizacionEur = 0.88;
+
+            
+            decimal temperaturaActual = 8;
+            string condicionClimaActual = "Frio";
+
+            var promocion = db.PromocionesClimas
+                .Where(p => p.Activa == true)
+                .Where(p => p.TemperaturaMax >= temperaturaActual)
+                .OrderByDescending(p => p.PorcentajeDesc)
+                .FirstOrDefault();
+
+            bool tienePromocion = false;
+            string nombrePromocion = "";
+            string condicionPromocion = "";
+            double porcentajeDescuento = 0;
+
+            if (promocion != null)
+            {
+                tienePromocion = true;
+                nombrePromocion = promocion.Nombre;
+                condicionPromocion = promocion.CondicionClima;
+                porcentajeDescuento = Convert.ToDouble(promocion.PorcentajeDesc);
+            }
+
+            double factorDescuento = 1 - (porcentajeDescuento / 100);
+
+            double precioCompraUsdFinal = precioCompraUsd;
+            double precioAlquilerUsdFinal = precioAlquilerUsd;
+
+            if (tienePromocion)
+            {
+                precioCompraUsdFinal = precioCompraUsd * factorDescuento;
+                precioAlquilerUsdFinal = precioAlquilerUsd * factorDescuento;
+            }
+
+            return new PrecioContenidoViewModel
+            {
+                IdTmdb = idTmdb,
+                Titulo = titulo,
+                TipoContenido = tipoContenido,
+
+                PrecioCompraUsd = precioCompraUsd,
+                PrecioAlquilerUsd = precioAlquilerUsd,
+
+                PrecioCompraUyu = precioCompraUsd * cotizacionUyu,
+                PrecioAlquilerUyu = precioAlquilerUsd * cotizacionUyu,
+
+                PrecioCompraEur = precioCompraUsd * cotizacionEur,
+                PrecioAlquilerEur = precioAlquilerUsd * cotizacionEur,
+
+                PrecioCompraUsdFinal = precioCompraUsdFinal,
+                PrecioAlquilerUsdFinal = precioAlquilerUsdFinal,
+
+                PrecioCompraUyuFinal = precioCompraUsdFinal * cotizacionUyu,
+                PrecioAlquilerUyuFinal = precioAlquilerUsdFinal * cotizacionUyu,
+
+                PrecioCompraEurFinal = precioCompraUsdFinal * cotizacionEur,
+                PrecioAlquilerEurFinal = precioAlquilerUsdFinal * cotizacionEur,
+
+                CotizacionUyu = cotizacionUyu,
+                CotizacionEur = cotizacionEur,
+
+                IdPrecio = idPrecio,
+
+                TienePromocion = tienePromocion,
+                NombrePromocion = nombrePromocion,
+                CondicionPromocion = condicionPromocion,
+                PorcentajeDescuento = porcentajeDescuento,
+
+                Correcto = true
+            };
         }
     }
 }

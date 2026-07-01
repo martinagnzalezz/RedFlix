@@ -1,6 +1,7 @@
-﻿@model IEnumerable<Obligatorio_RedFlix.Models.Role>
+﻿
+@model IEnumerable<Obligatorio_RedFlix.Models.PromocionesClima>
 @{
-    ViewBag.Title = "Gestión de Roles";
+    ViewBag.Title = "Promociones por Clima";
 }
 
 @section styles {
@@ -31,7 +32,6 @@
             font-weight: 600;
             font-size: 14px;
             text-decoration: none;
-            transition: background 0.2s;
         }
 
             .btn-gold-sm:hover {
@@ -57,7 +57,6 @@
                 color: #888;
                 font-size: 12px;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
                 border-bottom: 1px solid #2a2a2a;
                 padding: 14px 20px;
             }
@@ -66,34 +65,32 @@
                 padding: 14px 20px;
                 border-bottom: 1px solid #1f1f1f;
                 vertical-align: middle;
-            }
-
-            .table-redflix tbody tr:last-child td {
-                border-bottom: none;
+                font-size: 14px;
             }
 
             .table-redflix tbody tr:hover {
                 background: #161616;
             }
 
-        .rol-badge {
-            display: inline-block;
+        .estado-badge {
             padding: 4px 12px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
+            cursor: pointer;
+            border: none;
         }
 
-            .rol-badge.admin {
-                background: rgba(212,160,23,0.15);
-                color: #D4A017;
-                border: 1px solid rgba(212,160,23,0.4);
-            }
-
-            .rol-badge.usuario {
+            .estado-badge.activo {
                 background: rgba(70,211,105,0.12);
                 color: #46d369;
                 border: 1px solid rgba(70,211,105,0.3);
+            }
+
+            .estado-badge.inactivo {
+                background: rgba(229,9,20,0.1);
+                color: #e50914;
+                border: 1px solid rgba(229,9,20,0.3);
             }
 
         .action-link {
@@ -109,74 +106,64 @@
                 text-decoration: underline;
             }
 
-            .action-link.danger {
+            .action-link.warn {
                 color: #e50914;
             }
 
-                .action-link.danger:hover {
-                    color: #ff4d4d;
-                }
-
-        .alert-redflix {
-            background: rgba(70,211,105,0.1);
-            border: 1px solid rgba(70,211,105,0.3);
-            color: #46d369;
-            border-radius: 8px;
-            padding: 12px 16px;
-            margin-bottom: 16px;
-            font-size: 14px;
+        .desc-badge {
+            background: rgba(212,160,23,0.15);
+            color: #D4A017;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
         }
-
-            .alert-redflix.error {
-                background: rgba(229,9,20,0.1);
-                border-color: rgba(229,9,20,0.3);
-                color: #e50914;
-            }
     </style>
 }
 
 <div class="admin-page">
-
     <div class="admin-header">
-        <h2><i class="fa fa-user-shield"></i> Gestión de Roles</h2>
-        @Html.ActionLink("+ Nuevo rol", "Create", null, new { @class = "btn-gold-sm" })
+        <h2><i class="fa fa-cloud-sun-rain"></i> Promociones por Clima</h2>
+        @Html.ActionLink("+ Nueva promoción", "Create", null, new { @class = "btn-gold-sm" })
     </div>
-
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert-redflix">@TempData["Success"]</div>
-    }
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert-redflix error">@TempData["Error"]</div>
-    }
 
     <div class="admin-card">
         <table class="table table-redflix mb-0">
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th style="width:200px;">Acciones</th>
+                    <th>Condición</th>
+                    <th>Temp. máx</th>
+                    <th>Género</th>
+                    <th>Descuento</th>
+                    <th>Estado</th>
+                    <th style="width:180px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
+                        <td>@item.Nombre</td>
+                        <td>@item.CondicionClima</td>
+                        <td>@(item.TemperaturaMax.HasValue ? item.TemperaturaMax + "°C" : "—")</td>
+                        <td>@(item.Genero != null ? item.Genero.Nombre : "Todos")</td>
+                        <td><span class="desc-badge">-@item.PorcentajeDesc%</span></td>
                         <td>
-                            <span class="rol-badge @(item.Nombre == "Administrador" ? "admin" : "usuario")">
-                                @item.Nombre
-                            </span>
+                            @using (Html.BeginForm("CambiarEstado", "Promociones", new { id = item.IdPromocion }, FormMethod.Get))
+                            {
+                                <button type="submit" class="estado-badge @(item.Activa ? "activo" : "inactivo")">
+                                    @(item.Activa ? "Activa" : "Inactiva")
+                                </button>
+                            }
                         </td>
                         <td>
-                            @Html.ActionLink("Editar", "Edit", new { id = item.IdRol }, new { @class = "action-link" })
-                            @Html.ActionLink("Detalles", "Details", new { id = item.IdRol }, new { @class = "action-link" })
-                            @Html.ActionLink("Eliminar", "Delete", new { id = item.IdRol }, new { @class = "action-link danger" })
+                            @Html.ActionLink("Editar", "Edit", new { id = item.IdPromocion }, new { @class = "action-link" })
+                            @Html.ActionLink("Eliminar", "Delete", new { id = item.IdPromocion }, new { @class = "action-link warn" })
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-
 </div>
