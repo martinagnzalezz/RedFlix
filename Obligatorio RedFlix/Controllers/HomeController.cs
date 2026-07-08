@@ -25,25 +25,36 @@ namespace Obligatorio_RedFlix.Controllers
         }
         public ActionResult Index()
         {
-            RestResponse response = HacerRequest("/3/discover/movie?language=es-ES&page=1&sort_by=popularity.desc");
+            List<Populares> peliculas = ObtenerPopulares("/3/discover/movie?language=es-ES&page=1&sort_by=popularity.desc", true, 20);
+            List<Populares> series = ObtenerPopulares("/3/discover/tv?language=es-ES&page=1&sort_by=popularity.desc", false, 20);
 
-            List<Populares> peliculas = new List<Populares>();
-
-            if (response != null && !string.IsNullOrEmpty(response.Content))
-            {
-                ListaPopulares populares =
-                    JsonConvert.DeserializeObject<ListaPopulares>(response.Content);
-
-                if (populares != null && populares.Results != null)
-                {
-                    peliculas = populares.Results
-                        .Where(p => !string.IsNullOrEmpty(p.Title))
-                        .Take(8)
-                        .ToList();
-                }
-            }
+            ViewBag.Series = series;
 
             return View(peliculas);
+        }
+
+        private List<Populares> ObtenerPopulares(string endpoint, bool sonPeliculas, int cantidad)
+        {
+            RestResponse response = HacerRequest(endpoint);
+
+            if (response == null || !response.IsSuccessful || string.IsNullOrEmpty(response.Content))
+            {
+                return new List<Populares>();
+            }
+
+            ListaPopulares populares = JsonConvert.DeserializeObject<ListaPopulares>(response.Content);
+
+            if (populares == null || populares.Results == null)
+            {
+                return new List<Populares>();
+            }
+
+            return populares.Results
+                .Where(p => sonPeliculas
+                    ? !string.IsNullOrEmpty(p.Title)
+                    : !string.IsNullOrEmpty(p.Name))
+                .Take(cantidad)
+                .ToList();
         }
         public ActionResult About()
         {

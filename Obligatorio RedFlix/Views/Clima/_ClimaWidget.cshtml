@@ -31,10 +31,28 @@
             @Model.Recomendacion
         </p>
 
-        <div style="background:#222; border-left:4px solid #D4AF37; padding:10px; border-radius:6px;">
-            <strong style="color:#D4AF37;">Promo:</strong>
-            <span style="color:#ddd;">@Model.Promocion</span>
-        </div>
+        @if (Model.TienePromocionActiva)
+        {
+            <div style="background:#222; border-left:4px solid #D4AF37; padding:10px; border-radius:6px;">
+                <strong style="color:#D4AF37;">Promo:</strong>
+                <span style="color:#ddd;">
+                    @Model.NombrePromocionActiva - @Model.PorcentajePromocionActiva.ToString("0.##")% OFF
+                </span>
+
+                <p style="color:#ccc; margin:6px 0 0 0;">
+                    @(string.IsNullOrWhiteSpace(Model.DescripcionPromocionActiva)
+                        ? "Promoción aplicada según el clima actual."
+                        : Model.DescripcionPromocionActiva)
+                </p>
+            </div>
+        }
+        else
+        {
+            <div style="background:#222; border-left:4px solid #555; padding:10px; border-radius:6px;">
+                <strong style="color:#D4AF37;">Promo:</strong>
+                <span style="color:#ddd;">No hay promoción activa para este clima.</span>
+            </div>
+        }
 
         <a href="@Url.Action("Index", "Clima")"
            style="display:inline-block; margin-top:14px; color:#D4AF37; text-decoration:none;">

@@ -99,7 +99,10 @@ namespace Obligatorio_RedFlix.Controllers
                 precioBD.PrecioCompra = precio.PrecioCompra;
                 precioBD.PrecioAlquier = precio.PrecioAlquier;
                 precioBD.DiasAlquiler = precio.DiasAlquiler;
-                precioBD.Activo = precio.Activo;
+
+                // IMPORTANTE:
+                // Al editar, lo dejamos activo para que se siga usando en la película
+                precioBD.Activo = true;
 
                 db.SaveChanges();
 

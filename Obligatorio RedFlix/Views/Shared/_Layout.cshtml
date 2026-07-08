@@ -70,11 +70,12 @@
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "Usuarios")">Usuarios</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "Roles")">Roles</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "Promociones")">Promociones</a></li>
-</ul>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Precios")">Precios</a></li>
+                                </ul>
                             </li>
                         }
                     }
-                    
+
 
                 </ul>
 
@@ -94,9 +95,14 @@
                     }
                     else
                     {
-                        <input class="form-control me-3"
-                               style="width:250px"
-                               placeholder="Buscar..." />
+                        using (Html.BeginForm("Buscar", "Pelicula", FormMethod.Get, new { @class = "d-flex me-3" }))
+                        {
+                            <input class="form-control"
+                                   style="width:250px"
+                                   name="q"
+                                   placeholder="Buscar..."
+                                   value="@Request.QueryString["q"]" />
+                        }
 
                         <a href="@Url.Action("Index", "Favoritos")"
                            class="text-light me-3"
@@ -105,7 +111,7 @@
                             ♡
                         </a>
 
-                        <a href="@Url.Action("Index", "Carrito")"   
+                        <a href="@Url.Action("Index", "Carrito")"
                            class="text-light me-3"
                            style="font-size: 24px; text-decoration: none; line-height: 1;"
                            title="Carrito">
@@ -113,8 +119,15 @@
                         </a>
 
                         <span class="text-light me-3">
-                            Hola @Session["UsuarioNombre"]
+                            Hola @(Session["PerfilNombre"] ?? Session["UsuarioNombre"])
                         </span>
+
+                        <a href="@Url.Action("Seleccionar", "Perfiles")"
+                           class="profile-mini me-3"
+                           title="Cambiar perfil"
+                           style="background:@(Session["PerfilColor"] ?? "#D4AF37");">
+                            @(Session["PerfilInicial"] ?? Session["UsuarioNombre"].ToString().Substring(0, 1).ToUpper())
+                        </a>
 
                         <a href="@Url.Action("Logout","Account")"
                            class="btn btn-outline-danger">

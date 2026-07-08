@@ -74,7 +74,22 @@
                             </td>
 
                             <td style="padding:15px;">
-                                @item.Moneda @item.Precio.ToString("0.00")
+                                @if (item.TienePromocion)
+                                {
+                                    <span style="color:#888; text-decoration:line-through; display:block;">
+                                        @item.Moneda @item.PrecioOriginal.ToString("0.00")
+                                    </span>
+                                    <span style="color:#D4AF37; font-weight:bold;">
+                                        @item.Moneda @item.Precio.ToString("0.00")
+                                    </span>
+                                    <small style="display:block; color:#9fdf9f;">
+                                        @item.NombrePromocion - @item.PorcentajeDescuento.ToString("0.##")% OFF
+                                    </small>
+                                }
+                                else
+                                {
+                                    <span>@item.Moneda @item.Precio.ToString("0.00")</span>
+                                }
                             </td>
 
                             <td style="padding:15px;">
@@ -82,6 +97,12 @@
                             </td>
 
                             <td style="padding:15px; color:#D4AF37; font-weight:bold;">
+                                @if (item.TienePromocion)
+                                {
+                                    <span style="color:#888; text-decoration:line-through; display:block; font-weight:normal;">
+                                        @item.Moneda @item.TotalOriginal.ToString("0.00")
+                                    </span>
+                                }
                                 @item.Moneda @item.Total.ToString("0.00")
                             </td>
                             <td style="padding:15px;">
@@ -118,7 +139,7 @@
                     </p>
 
                     <p style="color:#aaa; margin:0;">
-                        Los precios fueron agregados según la moneda seleccionada y la cotización actual.
+                        Los precios fueron agregados según la moneda seleccionada, la cotización actual y las promociones por clima activas.
                     </p>
                 </div>
             </div>

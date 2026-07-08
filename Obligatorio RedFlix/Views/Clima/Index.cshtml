@@ -87,12 +87,35 @@
                     </span>
 
                     <h3 style="color:white; margin-top:15px;">
-                        Promo RedFlix
+                        @(Model.TienePromocionActiva ? Model.NombrePromocionActiva : "Sin promoción activa")
                     </h3>
 
-                    <p style="color:#ccc;">
-                        @Model.Promocion
-                    </p>
+                    @if (Model.TienePromocionActiva)
+                    {
+                        <p style="color:#ccc; margin-bottom:10px;">
+                            @(string.IsNullOrWhiteSpace(Model.DescripcionPromocionActiva)
+                                ? "Promoción aplicada según el clima actual."
+                                : Model.DescripcionPromocionActiva)
+                        </p>
+
+                        <p style="color:#D4AF37; font-weight:bold; font-size:20px; margin-bottom:6px;">
+                            @Model.PorcentajePromocionActiva.ToString("0.##")% OFF
+                        </p>
+
+                        <p style="color:#aaa; margin:0;">
+                            Condición: @Model.CondicionPromocionActiva
+                        </p>
+                    }
+                    else
+                    {
+                        <p style="color:#ccc;">
+                            No hay una promoción creada que coincida con el clima actual.
+                        </p>
+
+                        <p style="color:#aaa; margin:0;">
+                            Clima actual: @Model.CategoriaClima
+                        </p>
+                    }
 
                 </div>
             </div>

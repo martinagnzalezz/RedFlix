@@ -1,0 +1,23 @@
+﻿
+@model List<Obligatorio_RedFlix.Models.PerfilNetflixViewModel>
+
+@{
+    ViewBag.Title = "Elegir perfil";
+}
+
+<div class="profiles-page">
+    <h1>¿Quién está mirando?</h1>
+
+    <div class="profiles-grid">
+        @foreach (var perfil in Model)
+        {
+            <a class="profile-card" href="@Url.Action("Usar", "Perfiles", new { nombre = perfil.Nombre })">
+                <span class="profile-avatar" style="background:@perfil.Color;">
+                    @perfil.Inicial
+                </span>
+                <span class="profile-name">@perfil.Nombre</span>
+            </a>
+        }
+    </div>
+</div>
+

@@ -50,9 +50,12 @@ namespace Obligatorio_RedFlix.Controllers
             Session["UsuarioEmail"] = usuario.Email;
             Session["RolId"] = usuario.IdRol;
             Session["RolNombre"] = usuario.Role.Nombre;
+            Session.Remove("PerfilNombre");
+            Session.Remove("PerfilColor");
+            Session.Remove("PerfilInicial");
 
             TempData["Success"] = "¡Bienvenido, " + usuario.Nombre + "!";
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Seleccionar", "Perfiles");
         }
 
         public ActionResult Registrar()

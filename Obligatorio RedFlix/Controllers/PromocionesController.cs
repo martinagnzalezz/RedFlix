@@ -23,7 +23,7 @@ namespace Obligatorio_RedFlix.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.IdGenero = new SelectList(db.Generos, "IdGenero", "Nombre");
+            CargarGeneros();
             return View();
         }
 
@@ -41,7 +41,7 @@ namespace Obligatorio_RedFlix.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdGenero = new SelectList(db.Generos, "IdGenero", "Nombre", promo.IdGenero);
+            CargarGeneros(promo.IdGenero);
             return View(promo);
         }
 
@@ -52,7 +52,7 @@ namespace Obligatorio_RedFlix.Controllers
             if (promo == null)
                 return HttpNotFound();
 
-            ViewBag.IdGenero = new SelectList(db.Generos, "IdGenero", "Nombre", promo.IdGenero);
+            CargarGeneros(promo.IdGenero);
             return View(promo);
         }
 
@@ -81,8 +81,39 @@ namespace Obligatorio_RedFlix.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdGenero = new SelectList(db.Generos, "IdGenero", "Nombre", promo.IdGenero);
+            CargarGeneros(promo.IdGenero);
             return View(promo);
+        }
+
+        private void CargarGeneros(int? idSeleccionado = null)
+        {
+            if (!db.Generos.Any())
+            {
+                string[] nombres = {
+                    "Acción",
+                    "Aventura",
+                    "Animación",
+                    "Comedia",
+                    "Crimen",
+                    "Drama",
+                    "Familia",
+                    "Fantasía",
+                    "Misterio",
+                    "Romance",
+                    "Suspenso",
+                    "Terror",
+                    "Ciencia ficción"
+                };
+
+                foreach (string nombre in nombres)
+                {
+                    db.Generos.Add(new Genero { Nombre = nombre });
+                }
+
+                db.SaveChanges();
+            }
+
+            ViewBag.IdGenero = new SelectList(db.Generos.OrderBy(g => g.Nombre), "IdGenero", "Nombre", idSeleccionado);
         }
 
         // Activar/Desactivar rápido desde el listado

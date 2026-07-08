@@ -1,0 +1,29 @@
+﻿
+@model Obligatorio_RedFlix.Models.PromocionesClima
+
+@{
+    ViewBag.Title = "Eliminar promoción";
+}
+
+<div class="container py-4" style="max-width:640px;">
+    <div style="background:#111; border:1px solid #5c1f1f; border-radius:12px; padding:32px;">
+        <h2 style="color:#F0F0F0;">Eliminar promoción</h2>
+        <p style="color:#ccc;">¿Seguro que querés eliminar la promoción <strong>@Model.Nombre</strong>?</p>
+
+        <dl class="row text-light">
+            <dt class="col-sm-4">Clima</dt>
+            <dd class="col-sm-8">@Model.CondicionClima</dd>
+            <dt class="col-sm-4">Descuento</dt>
+            <dd class="col-sm-8">@Model.PorcentajeDesc.ToString("0.##")%</dd>
+            <dt class="col-sm-4">Estado</dt>
+            <dd class="col-sm-8">@(Model.Activa ? "Activa" : "Inactiva")</dd>
+        </dl>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger fw-bold">Eliminar</button>
+            @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-outline-light ms-2" })
+        }
+    </div>
+</div>

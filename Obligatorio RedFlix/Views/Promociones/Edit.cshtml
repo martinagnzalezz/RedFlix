@@ -1,6 +1,7 @@
 ﻿@model Obligatorio_RedFlix.Models.PromocionesClima
+
 @{
-    ViewBag.Title = "Nueva Promoción";
+    ViewBag.Title = "Editar promoción";
 }
 
 @section styles {
@@ -17,14 +18,14 @@
             border-radius: 12px;
             padding: 36px 40px;
             width: 100%;
-            max-width: 520px;
+            max-width: 760px;
         }
 
             .admin-form-box h2 {
                 color: #F0F0F0;
                 font-weight: 700;
                 margin-bottom: 4px;
-                font-size: 22px;
+                font-size: 34px;
             }
 
             .admin-form-box hr {
@@ -38,14 +39,15 @@
 
             .rf-input-group label {
                 display: block;
-                font-size: 12px;
-                color: #888;
-                margin-bottom: 6px;
+                font-size: 14px;
+                color: #F0F0F0;
+                margin-bottom: 8px;
                 font-weight: 500;
-                text-transform: uppercase;
             }
 
-            .rf-input-group input, .rf-input-group select, .rf-input-group textarea {
+            .rf-input-group input,
+            .rf-input-group select,
+            .rf-input-group textarea {
                 width: 100%;
                 background: #1a1a1a;
                 border: 1px solid #2a2a2a;
@@ -53,11 +55,14 @@
                 padding: 12px 14px;
                 color: #F0F0F0;
                 font-size: 15px;
+                outline: none;
             }
 
-                .rf-input-group input:focus, .rf-input-group select:focus, .rf-input-group textarea:focus {
+                .rf-input-group input:focus,
+                .rf-input-group select:focus,
+                .rf-input-group textarea:focus {
                     border-color: #D4A017;
-                    outline: none;
+                    box-shadow: 0 0 0 2px rgba(212,160,23,0.15);
                 }
 
                 .rf-input-group select option {
@@ -68,13 +73,13 @@
         .input-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 28px;
         }
 
         .form-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 8px;
+            gap: 12px;
+            margin-top: 18px;
         }
 
         .btn-gold {
@@ -95,7 +100,7 @@
         .btn-outline-gray {
             background: transparent;
             color: #ccc;
-            border: 1px solid #2a2a2a;
+            border: 1px solid #ccc;
             border-radius: 8px;
             padding: 12px 22px;
             font-weight: 600;
@@ -105,69 +110,96 @@
             align-items: center;
         }
 
+            .btn-outline-gray:hover {
+                border-color: #D4A017;
+                color: #D4A017;
+                text-decoration: none;
+            }
+
         .text-danger {
             color: #e50914 !important;
             font-size: 13px;
         }
 
-        .hint {
-            color: #666;
-            font-size: 12px;
-            margin-top: 4px;
+        .check-redflix {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 10px;
+            color: #F0F0F0;
+            font-weight: 600;
+            cursor: pointer;
         }
+
+            .check-redflix input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                accent-color: #D4A017;
+                cursor: pointer;
+            }
+
+            .check-redflix span {
+                cursor: pointer;
+            }
+
     </style>
 }
 
 <div class="admin-form-page">
     <div class="admin-form-box">
-        <h2>Nueva promoción por clima</h2>
+        <h2>Editar promoción por clima</h2>
         <hr />
 
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.IdPromocion)
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
             <div class="rf-input-group">
                 @Html.LabelFor(model => model.Nombre)
-                @Html.EditorFor(model => model.Nombre)
+                @Html.TextBoxFor(model => model.Nombre)
                 @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
             </div>
 
             <div class="rf-input-group">
                 @Html.LabelFor(model => model.Descripcion)
-                @Html.TextAreaFor(model => model.Descripcion, new { rows = 2 })
+                @Html.TextAreaFor(model => model.Descripcion, new { rows = 3 })
             </div>
 
             <div class="rf-input-group">
                 @Html.LabelFor(model => model.CondicionClima, "Condición de clima")
-                @Html.DropDownListFor(model => model.CondicionClima,
-                         new SelectList(new[] { "Lluvia", "Frio", "Tormenta", "Nublado", "Calor" }))
-                <div class="hint">Texto que vas a comparar con el resultado de tu API de clima</div>
+                @Html.DropDownListFor(model => model.CondicionClima, new SelectList(new[] { "Lluvia", "Frio", "Tormenta", "Nublado", "Calor" }, Model.CondicionClima))
             </div>
 
             <div class="input-row">
                 <div class="rf-input-group">
                     @Html.LabelFor(model => model.TemperaturaMax, "Temp. máxima (°C)")
-                    @Html.EditorFor(model => model.TemperaturaMax)
-                    <div class="hint">Opcional. Ej: 10 = aplica si hace menos de 10°C</div>
+                    @Html.TextBoxFor(model => model.TemperaturaMax, new { type = "number", step = "0.1" })
                 </div>
                 <div class="rf-input-group">
                     @Html.LabelFor(model => model.PorcentajeDesc, "% Descuento")
-                    @Html.EditorFor(model => model.PorcentajeDesc)
+                    @Html.TextBoxFor(model => model.PorcentajeDesc, new { type = "number", step = "0.01" })
                     @Html.ValidationMessageFor(model => model.PorcentajeDesc, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="rf-input-group">
-                @Html.LabelFor(model => model.IdGenero, "Género (opcional)")
-                @Html.DropDownList("IdGenero", null, "Todos los géneros", new { })
+                @Html.LabelFor(model => model.IdGenero, "Género")
+                @Html.DropDownList("IdGenero", null, "Todos los géneros")
+            </div>
+
+            <div class="rf-input-group">
+                <label class="check-redflix">
+                    @Html.CheckBoxFor(model => model.Activa)
+                    <span>Activa</span>
+                </label>
             </div>
 
             <div class="form-actions">
-                <input type="submit" value="Crear promoción" class="btn-gold" />
+                <input type="submit" value="Guardar cambios" class="btn-gold" />
                 @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn-outline-gray" })
             </div>
         }
     </div>
 </div>
+

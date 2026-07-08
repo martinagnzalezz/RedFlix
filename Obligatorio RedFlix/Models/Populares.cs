@@ -62,6 +62,9 @@ namespace Obligatorio_RedFlix.Models
         [JsonProperty("first_air_date", NullValueHandling = NullValueHandling.Ignore)]
         public DateTimeOffset? FirstAirDate { get; set; }
 
+        [JsonProperty("media_type", NullValueHandling = NullValueHandling.Ignore)]
+        public string MediaType { get; set; }
+
         public string TituloMostrar
         {
             get

@@ -156,9 +156,12 @@
     <Compile Include="Controllers\FavoritosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PeliculaController.cs" />
+    <Compile Include="Controllers\PerfilesController.cs" />
     <Compile Include="Controllers\PreciosController.cs" />
     <Compile Include="Controllers\PromocionesController.cs" />
     <Compile Include="Filters\AutorizarRol.cs" />
+    <Compile Include="Models\ActorTmdb.cs" />
+    <Compile Include="Models\BusquedaViewModel.cs" />
     <Compile Include="Models\CarritoItemVistaViewModel.cs" />
     <Compile Include="Models\ClimaForecast.cs" />
     <Compile Include="Models\ClimaMain.cs" />
@@ -221,6 +224,7 @@
     <Compile Include="Models\Pelicula.cs">
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PerfilNetflixViewModel.cs" />
     <Compile Include="Models\Permiso.cs">
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
@@ -264,7 +268,6 @@
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VideoTmdb.cs" />
-    <Compile Include="Models\Weather.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -358,6 +361,13 @@
     <Content Include="Views\Precios\Index.cshtml" />
     <Content Include="Views\Promociones\Index.cshtml" />
     <Content Include="Views\Promociones\Create.cshtml" />
+    <Content Include="Views\Promociones\Delete.cshtml" />
+    <Content Include="Views\Promociones\Edit.cshtml" />
+    <Content Include="Views\Precios\Edit.cshtml" />
+    <Content Include="Views\Precios\Delete.cshtml" />
+    <Content Include="Views\Pelicula\Buscar.cshtml" />
+    <Content Include="Views\Perfiles\Seleccionar.cshtml" />
+    <Content Include="Views\Pelicula\Actor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

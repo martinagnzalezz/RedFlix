@@ -14,6 +14,11 @@ namespace Obligatorio_RedFlix.Models
 
         public string Emoji { get; set; }
         public string Promocion { get; set; }
+        public bool TienePromocionActiva { get; set; }
+        public string NombrePromocionActiva { get; set; }
+        public string DescripcionPromocionActiva { get; set; }
+        public string CondicionPromocionActiva { get; set; }
+        public double PorcentajePromocionActiva { get; set; }
 
         public List<Populares> PeliculasRecomendadas { get; set; }
         public List<Populares> SeriesRecomendadas { get; set; }

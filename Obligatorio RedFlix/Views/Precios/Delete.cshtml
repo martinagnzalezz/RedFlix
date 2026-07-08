@@ -1,0 +1,128 @@
+﻿@model Obligatorio_RedFlix.Models.PrecioContenido
+
+@{
+    ViewBag.Title = "Eliminar Precio";
+}
+
+@section styles {
+    <style>
+        .delete-page {
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .delete-box {
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 36px 40px;
+            width: 100%;
+            max-width: 520px;
+        }
+
+            .delete-box h2 {
+                color: #F0F0F0;
+                font-weight: 700;
+                font-size: 22px;
+                margin-bottom: 8px;
+            }
+
+            .delete-box p {
+                color: #aaa;
+                margin-bottom: 24px;
+            }
+
+        .delete-info {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 24px;
+        }
+
+            .delete-info div {
+                margin-bottom: 10px;
+                color: #ddd;
+            }
+
+            .delete-info strong {
+                color: #D4A017;
+            }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-danger-redflix {
+            background: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 22px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+            .btn-danger-redflix:hover {
+                background: #ff1b26;
+            }
+
+        .btn-outline-gray {
+            background: transparent;
+            color: #ccc;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 12px 22px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+    </style>
+}
+
+<div class="delete-page">
+    <div class="delete-box">
+
+        <h2>Eliminar precio</h2>
+
+        <p>¿Seguro que querés eliminar este precio? Esta acción borrará el registro de la base.</p>
+
+        <div class="delete-info">
+            <div>
+                <strong>Título:</strong> @Model.Titulo
+            </div>
+
+            <div>
+                <strong>Tipo:</strong> @Model.TipoContenido
+            </div>
+
+            <div>
+                <strong>Precio compra:</strong> USD @Model.PrecioCompra
+            </div>
+
+            <div>
+                <strong>Precio alquiler:</strong> USD @Model.PrecioAlquier
+            </div>
+
+            <div>
+                <strong>Días alquiler:</strong> @Model.DiasAlquiler
+            </div>
+        </div>
+
+        @using (Html.BeginForm("Delete", "Precios", new { id = Model.IdPrecio }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions">
+                <input type="submit" value="Eliminar" class="btn-danger-redflix" />
+
+                @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn-outline-gray" })
+            </div>
+        }
+
+    </div>
+</div>
+

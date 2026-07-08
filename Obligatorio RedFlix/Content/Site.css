@@ -51,6 +51,16 @@ body {
     transition: transform .3s, border-color .3s, box-shadow .3s;
 }
 
+    .card-redflix.home-card-link {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .card-redflix.home-card-preview {
+        cursor: default;
+    }
+
     .card-redflix:hover {
         transform: scale(1.04);
         border-color: #D4AF37;
@@ -165,6 +175,83 @@ body {
 .btn-comenzar:hover {
     background-color: #e6c04b !important;
     transform: translateY(-2px);
+}
+
+.profile-mini {
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    color: #111;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+    .profile-mini:hover {
+        color: #111;
+        text-decoration: none;
+        transform: scale(1.05);
+    }
+
+.profiles-page {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+    .profiles-page h1 {
+        color: #f5f5f5;
+        font-size: 44px;
+        font-weight: 800;
+        margin-bottom: 36px;
+    }
+
+.profiles-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 34px;
+}
+
+.profile-card {
+    color: #aaa;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+    .profile-card:hover {
+        color: #fff;
+        text-decoration: none;
+        transform: translateY(-4px);
+    }
+
+.profile-avatar {
+    width: 145px;
+    height: 145px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #111;
+    font-size: 58px;
+    font-weight: 900;
+    margin-bottom: 14px;
+    border: 3px solid transparent;
+}
+
+.profile-card:hover .profile-avatar {
+    border-color: #fff;
+}
+
+.profile-name {
+    display: block;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 
@@ -341,7 +428,7 @@ body {
 /* SECCIONES */
 
 .content-section {
-    margin-bottom: 42px;
+    margin-bottom: 52px;
 }
 
 .section-header {
@@ -371,34 +458,63 @@ body {
 /* FILA POPULARES */
 
 .movie-row-horizontal {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 18px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 4px 0 16px;
+    scroll-behavior: smooth;
+}
+
+.netflix-style-row::-webkit-scrollbar {
+    height: 8px;
+}
+
+.netflix-style-row::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.netflix-style-row::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 20px;
 }
 
 .movie-card-wide {
     background: #151515;
-    border: 1px solid #272727;
-    border-radius: 16px;
+    border: 0;
+    border-radius: 4px;
     overflow: hidden;
+    position: relative;
     transition: 0.25s;
+    color: inherit;
+    display: block;
+    flex: 0 0 292px;
+    height: 164px;
+    text-decoration: none;
 }
 
     .movie-card-wide:hover {
-        transform: translateY(-6px);
-        border-color: #D4AF37;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+        transform: scale(1.06);
+        color: inherit;
+        text-decoration: none;
+        z-index: 8;
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.75);
     }
 
     .movie-card-wide img {
         width: 100%;
-        height: 175px;
+        height: 100%;
         object-fit: cover;
         display: block;
     }
 
 .movie-card-info {
-    padding: 14px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 34px 12px 10px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
 }
 
     .movie-card-info h3 {
@@ -417,35 +533,50 @@ body {
 /* GRID CATÁLOGO */
 
 .poster-grid-redflix {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 20px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 4px 0 16px;
+    scroll-behavior: smooth;
 }
 
 .poster-card-redflix {
     background: #151515;
-    border: 1px solid #272727;
-    border-radius: 16px;
+    border: 0;
+    border-radius: 4px;
     overflow: hidden;
     position: relative;
     transition: 0.25s;
+    color: inherit;
+    display: block;
+    flex: 0 0 292px;
+    height: 164px;
+    text-decoration: none;
 }
 
     .poster-card-redflix:hover {
-        transform: scale(1.04);
-        border-color: #D4AF37;
-        box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6);
+        transform: scale(1.06);
+        color: inherit;
+        text-decoration: none;
+        z-index: 8;
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.75);
     }
 
     .poster-card-redflix img {
         width: 100%;
-        height: 310px;
+        height: 100%;
         object-fit: cover;
         display: block;
     }
 
 .poster-info {
-    padding: 14px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 34px 12px 10px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
 }
 
     .poster-info h3 {
@@ -465,6 +596,9 @@ body {
     position: absolute;
     top: 12px;
     right: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -473,7 +607,7 @@ body {
     border: 1px solid rgba(212, 175, 55, 0.6);
     font-size: 22px;
     font-weight: 700;
-    line-height: 28px;
+    line-height: 1;
     cursor: pointer;
     z-index: 5;
     transition: 0.25s;
@@ -487,12 +621,10 @@ body {
 /* RESPONSIVE */
 
 @media (max-width: 1200px) {
-    .movie-row-horizontal {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .poster-grid-redflix {
-        grid-template-columns: repeat(4, 1fr);
+    .movie-card-wide,
+    .poster-card-redflix {
+        flex-basis: 260px;
+        height: 146px;
     }
 }
 
@@ -516,12 +648,10 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .movie-row-horizontal {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .poster-grid-redflix {
-        grid-template-columns: repeat(2, 1fr);
+    .movie-card-wide,
+    .poster-card-redflix {
+        flex-basis: 230px;
+        height: 130px;
     }
 }
 

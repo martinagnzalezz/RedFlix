@@ -1,5 +1,9 @@
 ﻿@model List<Obligatorio_RedFlix.Models.Populares>
 
+@{
+    var seriesInicio = ViewBag.Series as System.Collections.Generic.List<Obligatorio_RedFlix.Models.Populares> ?? new System.Collections.Generic.List<Obligatorio_RedFlix.Models.Populares>();
+}
+
 @if (Session["UsuarioId"] == null)
 {
     <section class="hero-redflix">
@@ -44,13 +48,13 @@
             @foreach (var pelicula in Model.Take(8))
             {
                 <div class="col-md-3 mb-4">
-                    <div class="card-redflix">
+                    <div class="card-redflix home-card-preview">
 
-                        <img src="https://image.tmdb.org/t/p/w500/@pelicula.PosterPath"
-                             alt="@pelicula.Title" />
+                        <img src="@pelicula.ImagenUrl"
+                             alt="@pelicula.TituloMostrar" />
 
                         <div class="card-body">
-                            <h5>@pelicula.Title</h5>
+                            <h5>@pelicula.TituloMostrar</h5>
                         </div>
 
                     </div>
@@ -75,7 +79,7 @@ else
 
                     <span class="hero-badge">Destacada</span>
 
-                    <h1>@destacada.Title</h1>
+                    <h1>@destacada.TituloMostrar</h1>
 
                     <p>
                         Descubrí una de las películas más vistas del momento.
@@ -83,16 +87,23 @@ else
                     </p>
 
                     <div class="hero-buttons">
-                        <a href="#" class="btn-hero-primary">Ver ahora</a>
-                        <a href="#" class="btn-hero-secondary">+ Mi lista</a>
+                        <a href="@Url.Action("Detalle", "Pelicula", new { id = destacada.Id })"
+                           class="btn-hero-primary">
+                            Ver ahora
+                        </a>
+
+                        <a href="@Url.Action("AgregarPelicula", "Favoritos", new { idTmdb = destacada.Id, titulo = destacada.TituloMostrar })"
+                           class="btn-hero-secondary">
+                            + Mi lista
+                        </a>
                     </div>
 
                 </div>
 
-                <div class="hero-poster">
-                    <img src="https://image.tmdb.org/t/p/w500/@destacada.PosterPath"
-                         alt="@destacada.Title" />
-                </div>
+                <a class="hero-poster" href="@Url.Action("Detalle", "Pelicula", new { id = destacada.Id })">
+                    <img src="@destacada.ImagenUrl"
+                         alt="@destacada.TituloMostrar" />
+                </a>
 
             </section>
         }
@@ -124,25 +135,53 @@ else
         <section class="content-section">
 
             <div class="section-header">
-                <h2>Populares ahora</h2>
-                <a href="#">Ver todo</a>
+                <h2>Películas populares</h2>
+                <a href="@Url.Action("Index", "Pelicula")">Ver todo</a>
             </div>
 
-            <div class="movie-row-horizontal">
+            <div class="movie-row-horizontal netflix-style-row">
 
-                @foreach (var pelicula in Model.Take(6))
+                @foreach (var pelicula in Model.Take(12))
                 {
-                    <div class="movie-card-wide">
+                    <a class="movie-card-wide" href="@Url.Action("Detalle", "Pelicula", new { id = pelicula.Id })">
 
-                        <img src="https://image.tmdb.org/t/p/w500/@pelicula.PosterPath"
-                             alt="@pelicula.Title" />
+                        <img src="@(string.IsNullOrEmpty(pelicula.BackdropPath) ? pelicula.ImagenUrl : "https://image.tmdb.org/t/p/w780" + pelicula.BackdropPath)"
+                             alt="@pelicula.TituloMostrar" />
 
                         <div class="movie-card-info">
-                            <h3>@pelicula.Title</h3>
+                            <h3>@pelicula.TituloMostrar</h3>
                             <p>Película popular</p>
                         </div>
 
-                    </div>
+                    </a>
+                }
+
+            </div>
+
+        </section>
+
+        <section class="content-section">
+
+            <div class="section-header">
+                <h2>Series para maratonear</h2>
+                <a href="@Url.Action("Series", "Pelicula")">Ver todo</a>
+            </div>
+
+            <div class="movie-row-horizontal netflix-style-row">
+
+                @foreach (var serie in seriesInicio.Take(12))
+                {
+                    <a class="movie-card-wide" href="@Url.Action("DetalleSerie", "Pelicula", new { id = serie.Id })">
+
+                        <img src="@(string.IsNullOrEmpty(serie.BackdropPath) ? serie.ImagenUrl : "https://image.tmdb.org/t/p/w780" + serie.BackdropPath)"
+                             alt="@serie.TituloMostrar" />
+
+                        <div class="movie-card-info">
+                            <h3>@serie.TituloMostrar</h3>
+                            <p>Serie popular</p>
+                        </div>
+
+                    </a>
                 }
 
             </div>
@@ -153,26 +192,56 @@ else
 
             <div class="section-header">
                 <h2>Catálogo recomendado</h2>
-                <a href="#">Ver todo</a>
+                <a href="@Url.Action("Index", "Pelicula")">Ver películas</a>
             </div>
 
-            <div class="poster-grid-redflix">
+            <div class="poster-grid-redflix netflix-style-row">
 
                 @foreach (var pelicula in Model.Skip(6).Take(12))
                 {
-                    <div class="poster-card-redflix">
+                    <a class="poster-card-redflix" href="@Url.Action("Detalle", "Pelicula", new { id = pelicula.Id })">
 
-                        <button class="btn-card-plus">+</button>
+                        <span class="btn-card-plus">+</span>
 
-                        <img src="https://image.tmdb.org/t/p/w500/@pelicula.PosterPath"
-                             alt="@pelicula.Title" />
+                        <img src="@(string.IsNullOrEmpty(pelicula.BackdropPath) ? pelicula.ImagenUrl : "https://image.tmdb.org/t/p/w780" + pelicula.BackdropPath)"
+                             alt="@pelicula.TituloMostrar" />
 
                         <div class="poster-info">
-                            <h3>@pelicula.Title</h3>
+                            <h3>@pelicula.TituloMostrar</h3>
                             <p>Comprar o alquilar</p>
                         </div>
 
-                    </div>
+                    </a>
+                }
+
+            </div>
+
+        </section>
+
+        <section class="content-section">
+
+            <div class="section-header">
+                <h2>Más series populares</h2>
+                <a href="@Url.Action("Series", "Pelicula")">Ver series</a>
+            </div>
+
+            <div class="poster-grid-redflix netflix-style-row">
+
+                @foreach (var serie in seriesInicio.Skip(6).Take(12))
+                {
+                    <a class="poster-card-redflix" href="@Url.Action("DetalleSerie", "Pelicula", new { id = serie.Id })">
+
+                        <span class="btn-card-plus">+</span>
+
+                        <img src="@(string.IsNullOrEmpty(serie.BackdropPath) ? serie.ImagenUrl : "https://image.tmdb.org/t/p/w780" + serie.BackdropPath)"
+                             alt="@serie.TituloMostrar" />
+
+                        <div class="poster-info">
+                            <h3>@serie.TituloMostrar</h3>
+                            <p>Comprar o alquilar</p>
+                        </div>
+
+                    </a>
                 }
 
             </div>

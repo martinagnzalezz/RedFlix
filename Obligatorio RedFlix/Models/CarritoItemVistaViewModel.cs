@@ -13,5 +13,11 @@
         public int Cantidad { get; set; }
         public decimal Precio { get; set; }
         public decimal Total { get; set; }
+
+        public decimal PrecioOriginal { get; set; }
+        public decimal TotalOriginal { get; set; }
+        public bool TienePromocion { get; set; }
+        public string NombrePromocion { get; set; }
+        public decimal PorcentajeDescuento { get; set; }
     }
 }

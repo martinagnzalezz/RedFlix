@@ -1,6 +1,7 @@
-﻿@model Obligatorio_RedFlix.Models.PromocionesClima
+﻿@model Obligatorio_RedFlix.Models.PrecioContenido
+
 @{
-    ViewBag.Title = "Nueva Promoción";
+    ViewBag.Title = "Editar Precio";
 }
 
 @section styles {
@@ -17,7 +18,7 @@
             border-radius: 12px;
             padding: 36px 40px;
             width: 100%;
-            max-width: 520px;
+            max-width: 500px;
         }
 
             .admin-form-box h2 {
@@ -45,7 +46,8 @@
                 text-transform: uppercase;
             }
 
-            .rf-input-group input, .rf-input-group select, .rf-input-group textarea {
+            .rf-input-group input,
+            .rf-input-group select {
                 width: 100%;
                 background: #1a1a1a;
                 border: 1px solid #2a2a2a;
@@ -55,14 +57,10 @@
                 font-size: 15px;
             }
 
-                .rf-input-group input:focus, .rf-input-group select:focus, .rf-input-group textarea:focus {
+                .rf-input-group input:focus,
+                .rf-input-group select:focus {
                     border-color: #D4A017;
                     outline: none;
-                }
-
-                .rf-input-group select option {
-                    background: #1a1a1a;
-                    color: #F0F0F0;
                 }
 
         .input-row {
@@ -120,54 +118,62 @@
 
 <div class="admin-form-page">
     <div class="admin-form-box">
-        <h2>Nueva promoción por clima</h2>
+        <h2>Editar precio</h2>
         <hr />
 
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("Edit", "Precios", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            <div class="rf-input-group">
-                @Html.LabelFor(model => model.Nombre)
-                @Html.EditorFor(model => model.Nombre)
-                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-            </div>
+            @Html.HiddenFor(model => model.IdPrecio)
 
             <div class="rf-input-group">
-                @Html.LabelFor(model => model.Descripcion)
-                @Html.TextAreaFor(model => model.Descripcion, new { rows = 2 })
-            </div>
-
-            <div class="rf-input-group">
-                @Html.LabelFor(model => model.CondicionClima, "Condición de clima")
-                @Html.DropDownListFor(model => model.CondicionClima,
-                         new SelectList(new[] { "Lluvia", "Frio", "Tormenta", "Nublado", "Calor" }))
-                <div class="hint">Texto que vas a comparar con el resultado de tu API de clima</div>
+                @Html.LabelFor(model => model.Titulo)
+                @Html.EditorFor(model => model.Titulo)
+                @Html.ValidationMessageFor(model => model.Titulo, "", new { @class = "text-danger" })
             </div>
 
             <div class="input-row">
                 <div class="rf-input-group">
-                    @Html.LabelFor(model => model.TemperaturaMax, "Temp. máxima (°C)")
-                    @Html.EditorFor(model => model.TemperaturaMax)
-                    <div class="hint">Opcional. Ej: 10 = aplica si hace menos de 10°C</div>
+                    @Html.LabelFor(model => model.TmdbId, "ID de TMDB")
+                    @Html.EditorFor(model => model.TmdbId)
+                    @Html.ValidationMessageFor(model => model.TmdbId, "", new { @class = "text-danger" })
+                    <div class="hint">Lo ves en la URL de la película/serie en TMDB</div>
                 </div>
+
                 <div class="rf-input-group">
-                    @Html.LabelFor(model => model.PorcentajeDesc, "% Descuento")
-                    @Html.EditorFor(model => model.PorcentajeDesc)
-                    @Html.ValidationMessageFor(model => model.PorcentajeDesc, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.TipoContenido, "Tipo")
+                    @Html.DropDownListFor(model => model.TipoContenido,
+                        new SelectList(new[] { "pelicula", "serie" }, Model.TipoContenido))
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="rf-input-group">
+                    @Html.LabelFor(model => model.PrecioCompra, "Precio compra (USD)")
+                    @Html.EditorFor(model => model.PrecioCompra)
+                    @Html.ValidationMessageFor(model => model.PrecioCompra, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="rf-input-group">
+                    @Html.LabelFor(model => model.PrecioAlquier, "Precio alquiler (USD)")
+                    @Html.EditorFor(model => model.PrecioAlquier)
+                    @Html.ValidationMessageFor(model => model.PrecioAlquier, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="rf-input-group">
-                @Html.LabelFor(model => model.IdGenero, "Género (opcional)")
-                @Html.DropDownList("IdGenero", null, "Todos los géneros", new { })
+                @Html.LabelFor(model => model.DiasAlquiler, "Días de alquiler")
+                @Html.EditorFor(model => model.DiasAlquiler)
+                @Html.ValidationMessageFor(model => model.DiasAlquiler, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-actions">
-                <input type="submit" value="Crear promoción" class="btn-gold" />
+                <input type="submit" value="Guardar cambios" class="btn-gold" />
                 @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn-outline-gray" })
             </div>
         }
     </div>
 </div>
+

@@ -1,0 +1,80 @@
+﻿@model Obligatorio_RedFlix.Models.ActorDetalleViewModel
+
+@{
+    ViewBag.Title = Model.Actor != null ? Model.Actor.Nombre : "Actor";
+}
+
+<div class="container-fluid px-5 py-4" style="max-width:1600px;">
+    @if (Model.Actor == null)
+    {
+        <h2 style="color:#D4AF37;">No se encontró el actor</h2>
+        <p style="color:#ccc;">No se pudo cargar la información desde TMDB.</p>
+    }
+    else
+    {
+        <div class="d-flex align-items-center gap-4 mb-5">
+            <img src="@Model.Actor.FotoUrl"
+                 alt="@Model.Actor.Nombre"
+                 style="width:150px; height:150px; object-fit:cover; border-radius:12px; border:1px solid #333;" />
+
+            <div>
+                <h2 style="color:#D4AF37; margin:0;">@Model.Actor.Nombre</h2>
+                <p style="color:#ccc; margin-top:10px;">Películas y series donde aparece este actor.</p>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <div class="section-header">
+                <h2>Películas</h2>
+            </div>
+
+            @if (Model.Peliculas.Count == 0)
+            {
+                <p style="color:#aaa;">No encontramos películas para este actor.</p>
+            }
+            else
+            {
+                <div class="poster-grid-redflix netflix-style-row">
+                    @foreach (var pelicula in Model.Peliculas)
+                    {
+                        <a class="poster-card-redflix" href="@Url.Action("Detalle", "Pelicula", new { id = pelicula.Id })">
+                            <img src="@(string.IsNullOrEmpty(pelicula.BackdropPath) ? pelicula.ImagenUrl : "https://image.tmdb.org/t/p/w780" + pelicula.BackdropPath)"
+                                 alt="@pelicula.TituloMostrar" />
+                            <div class="poster-info">
+                                <h3>@pelicula.TituloMostrar</h3>
+                                <p>Película</p>
+                            </div>
+                        </a>
+                    }
+                </div>
+            }
+        </section>
+
+        <section class="content-section">
+            <div class="section-header">
+                <h2>Series</h2>
+            </div>
+
+            @if (Model.Series.Count == 0)
+            {
+                <p style="color:#aaa;">No encontramos series para este actor.</p>
+            }
+            else
+            {
+                <div class="poster-grid-redflix netflix-style-row">
+                    @foreach (var serie in Model.Series)
+                    {
+                        <a class="poster-card-redflix" href="@Url.Action("DetalleSerie", "Pelicula", new { id = serie.Id })">
+                            <img src="@(string.IsNullOrEmpty(serie.BackdropPath) ? serie.ImagenUrl : "https://image.tmdb.org/t/p/w780" + serie.BackdropPath)"
+                                 alt="@serie.TituloMostrar" />
+                            <div class="poster-info">
+                                <h3>@serie.TituloMostrar</h3>
+                                <p>Serie</p>
+                            </div>
+                        </a>
+                    }
+                </div>
+            }
+        </section>
+    }
+</div>

@@ -49,7 +49,7 @@ namespace Obligatorio_RedFlix.Controllers
             if (resultado != null && resultado.Results != null)
             {
                 peliculas = resultado.Results
-                    .Where(pelicula => !string.IsNullOrEmpty(pelicula.Title))
+                    .Where(pelicula => pelicula.Id.HasValue && !string.IsNullOrEmpty(pelicula.Title))
                     .ToList();
             }
 
@@ -84,7 +84,7 @@ namespace Obligatorio_RedFlix.Controllers
             if (resultado != null && resultado.Results != null)
             {
                 series = resultado.Results
-                    .Where(serie => !string.IsNullOrEmpty(serie.Name))
+                    .Where(serie => serie.Id.HasValue && !string.IsNullOrEmpty(serie.Name))
                     .ToList();
             }
 
@@ -96,16 +96,142 @@ namespace Obligatorio_RedFlix.Controllers
 
             return View(series);
         }
-        // GET: Pelicula/Detalle/ID
-        public ActionResult Detalle(long id)
+
+        public ActionResult Buscar(string q)
         {
-            RestResponse responsePelicula = HacerRequest("/3/movie/" + id + "?language=es-ES");
+            BusquedaViewModel modelo = new BusquedaViewModel
+            {
+                Query = q
+            };
+
+            if (string.IsNullOrWhiteSpace(q))
+            {
+                return View(modelo);
+            }
+
+            string query = Uri.EscapeDataString(q.Trim());
+
+            RestResponse responsePeliculas = HacerRequest("/3/search/movie?language=es-ES&page=1&query=" + query);
+            RestResponse responseSeries = HacerRequest("/3/search/tv?language=es-ES&page=1&query=" + query);
+            RestResponse responseActores = HacerRequest("/3/search/person?language=es-ES&page=1&query=" + query);
+
+            if (responsePeliculas != null && responsePeliculas.IsSuccessful && !string.IsNullOrEmpty(responsePeliculas.Content))
+            {
+                ListaPopulares resultadoPeliculas = JsonConvert.DeserializeObject<ListaPopulares>(responsePeliculas.Content);
+
+                if (resultadoPeliculas != null && resultadoPeliculas.Results != null)
+                {
+                    modelo.Peliculas = resultadoPeliculas.Results
+                        .Where(p => p.Id.HasValue && !string.IsNullOrEmpty(p.Title))
+                        .Take(18)
+                        .ToList();
+                }
+            }
+
+            if (responseSeries != null && responseSeries.IsSuccessful && !string.IsNullOrEmpty(responseSeries.Content))
+            {
+                ListaPopulares resultadoSeries = JsonConvert.DeserializeObject<ListaPopulares>(responseSeries.Content);
+
+                if (resultadoSeries != null && resultadoSeries.Results != null)
+                {
+                    modelo.Series = resultadoSeries.Results
+                        .Where(s => s.Id.HasValue && !string.IsNullOrEmpty(s.Name))
+                        .Take(18)
+                        .ToList();
+                }
+            }
+
+            if (responseActores != null && responseActores.IsSuccessful && !string.IsNullOrEmpty(responseActores.Content))
+            {
+                ListaPersonas resultadoActores = JsonConvert.DeserializeObject<ListaPersonas>(responseActores.Content);
+
+                if (resultadoActores != null && resultadoActores.Results != null)
+                {
+                    modelo.Actores = resultadoActores.Results
+                    .Where(a => a.Id > 0 &&
+                        !string.IsNullOrEmpty(a.Nombre) &&
+                        !string.IsNullOrEmpty(a.FotoPath))
+                    .GroupBy(a => a.Id)
+                    .Select(g => g.First())
+                    .Take(12)
+                    .ToList();
+                }
+            }
+
+            return View(modelo);
+        }
+
+        public ActionResult Actor(long? id)
+        {
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Buscar");
+            }
+
+            RestResponse responseActor = HacerRequest("/3/person/" + id.Value + "?language=es-ES");
+            RestResponse responseCreditos = HacerRequest("/3/person/" + id.Value + "/combined_credits?language=es-ES");
+
+            ActorTmdb actor = null;
+
+            if (responseActor != null && responseActor.IsSuccessful && !string.IsNullOrEmpty(responseActor.Content))
+            {
+                actor = JsonConvert.DeserializeObject<ActorTmdb>(responseActor.Content);
+            }
+
+            ListaCreditosActor creditos = null;
+
+            if (responseCreditos != null && responseCreditos.IsSuccessful && !string.IsNullOrEmpty(responseCreditos.Content))
+            {
+                creditos = JsonConvert.DeserializeObject<ListaCreditosActor>(responseCreditos.Content);
+            }
+
+            ActorDetalleViewModel modelo = new ActorDetalleViewModel
+            {
+                Actor = actor
+            };
+
+            if (creditos != null && creditos.Cast != null)
+            {
+                modelo.Peliculas = creditos.Cast
+                    .Where(c => c.Id.HasValue && c.MediaType == "movie" && !string.IsNullOrEmpty(c.Title))
+                    .OrderByDescending(c => c.Popularity ?? 0)
+                    .Take(18)
+                    .ToList();
+
+                modelo.Series = creditos.Cast
+                .Where(c => c.Id.HasValue && c.MediaType == "tv" && !string.IsNullOrEmpty(c.Name))
+                .GroupBy(c => c.Id.Value)
+                .Select(g => g.First())
+                .OrderByDescending(c => c.Popularity ?? 0)
+                .Take(18)
+                .ToList();
+            }
+
+            return View(modelo);
+        }
+
+        // GET: Pelicula/Detalle/ID
+        public ActionResult Detalle(long? id)
+        {
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Index");
+            }
+
+            RestResponse responsePelicula = HacerRequest("/3/movie/" + id.Value + "?language=es-ES");
 
             Populares pelicula = JsonConvert.DeserializeObject<Populares>(responsePelicula.Content);
 
-            RestResponse responseVideos = HacerRequest("/3/movie/" + id + "/videos?language=es-ES");
+            RestResponse responseVideos = HacerRequest("/3/movie/" + id.Value + "/videos?language=es-ES");
+            RestResponse responseActores = HacerRequest("/3/movie/" + id.Value + "/credits?language=es-ES");
 
             ListaVideos videos = JsonConvert.DeserializeObject<ListaVideos>(responseVideos.Content);
+            ListaActores actores = null;
+
+            if (responseActores != null && !string.IsNullOrEmpty(responseActores.Content))
+            {
+                actores = JsonConvert.DeserializeObject<ListaActores>(responseActores.Content);
+            }
 
             VideoTmdb trailer = null;
 
@@ -120,16 +246,24 @@ namespace Obligatorio_RedFlix.Controllers
                 Pelicula = pelicula,
                 Trailer = trailer,
                 PrecioContenido = ArmarPrecioContenido(
-                Convert.ToInt32(id),
+                Convert.ToInt32(id.Value),
                 pelicula.Title,
-                "pelicula")
+                "pelicula"),
+                Actores = actores != null && actores.Cast != null
+                    ? actores.Cast.Take(8).ToList()
+                    : new List<ActorTmdb>()
             };
 
             return View(modelo);
         }
-        public ActionResult DetalleSerie(long id)
+        public ActionResult DetalleSerie(long? id)
         {
-            RestResponse responseSerie = HacerRequest("/3/tv/" + id + "?language=es-ES");
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Series");
+            }
+
+            RestResponse responseSerie = HacerRequest("/3/tv/" + id.Value + "?language=es-ES");
 
             Populares serie = null;
 
@@ -138,13 +272,20 @@ namespace Obligatorio_RedFlix.Controllers
                 serie = JsonConvert.DeserializeObject<Populares>(responseSerie.Content);
             }
 
-            RestResponse responseVideos = HacerRequest("/3/tv/" + id + "/videos?language=es-ES");
+            RestResponse responseVideos = HacerRequest("/3/tv/" + id.Value + "/videos?language=es-ES");
+            RestResponse responseActores = HacerRequest("/3/tv/" + id.Value + "/credits?language=es-ES");
 
             ListaVideos videos = null;
+            ListaActores actores = null;
 
             if (responseVideos != null && !string.IsNullOrEmpty(responseVideos.Content))
             {
                 videos = JsonConvert.DeserializeObject<ListaVideos>(responseVideos.Content);
+            }
+
+            if (responseActores != null && !string.IsNullOrEmpty(responseActores.Content))
+            {
+                actores = JsonConvert.DeserializeObject<ListaActores>(responseActores.Content);
             }
 
             VideoTmdb trailer = null;
@@ -160,9 +301,12 @@ namespace Obligatorio_RedFlix.Controllers
                 Pelicula = serie,
                 Trailer = trailer,
                 PrecioContenido = ArmarPrecioContenido(
-                Convert.ToInt32(id),
+                Convert.ToInt32(id.Value),
                 serie.Name,
-                "serie")
+                "serie"),
+                Actores = actores != null && actores.Cast != null
+                    ? actores.Cast.Take(8).ToList()
+                    : new List<ActorTmdb>()
             };
 
             return View(modelo);

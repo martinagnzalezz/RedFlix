@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Obligatorio_RedFlix.Models;
 using RestSharp;
+using System;
 using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
@@ -10,11 +11,11 @@ namespace Obligatorio_RedFlix.Controllers
     public class CotizacionController : Controller
     {
         private RedFlixDBEntities db = new RedFlixDBEntities();
+
         private RestResponse HacerRequestCotizacion(string endpoint)
         {
             var options = new RestClientOptions("https://v6.exchangerate-api.com/v6");
             var client = new RestClient(options);
-
             var request = new RestRequest(endpoint, Method.Get);
 
             return client.Execute(request);
@@ -23,14 +24,12 @@ namespace Obligatorio_RedFlix.Controllers
         public ActionResult Widget()
         {
             CotizacionViewModel vm = ObtenerCotizacion();
-
             return PartialView("~/Views/Cotizacion/_CotizacionWidget.cshtml", vm);
         }
 
         public ActionResult PrecioContenido(string tipoContenido, int idTmdb, string titulo)
         {
             PrecioContenidoViewModel vm = ObtenerPreciosContenido(tipoContenido, idTmdb, titulo);
-
             return PartialView("~/Views/Cotizacion/_PrecioContenido.cshtml", vm);
         }
 
@@ -47,9 +46,7 @@ namespace Obligatorio_RedFlix.Controllers
                 };
             }
 
-            string endpoint = "/" + apiKey + "/latest/USD";
-
-            RestResponse response = HacerRequestCotizacion(endpoint);
+            RestResponse response = HacerRequestCotizacion("/" + apiKey + "/latest/USD");
 
             if (response == null || !response.IsSuccessful || string.IsNullOrEmpty(response.Content))
             {
@@ -75,7 +72,7 @@ namespace Obligatorio_RedFlix.Controllers
                 };
             }
 
-            CotizacionViewModel vm = new CotizacionViewModel
+            return new CotizacionViewModel
             {
                 Usd = 1,
                 Uyu = resultado.ConversionRates["UYU"],
@@ -83,8 +80,6 @@ namespace Obligatorio_RedFlix.Controllers
                 FechaActualizacion = resultado.TimeLastUpdateUtc,
                 Correcto = true
             };
-
-            return vm;
         }
 
         private PrecioContenidoViewModel ObtenerPreciosContenido(string tipoContenido, int idTmdb, string titulo)
@@ -101,8 +96,7 @@ namespace Obligatorio_RedFlix.Controllers
             }
 
             string tipoBD = tipoContenido == "Serie" ? "serie" : "pelicula";
-
-            var precio = db.PrecioContenidoes.FirstOrDefault(p =>
+            PrecioContenido precio = db.PrecioContenidoes.FirstOrDefault(p =>
                 p.TmdbId == idTmdb && p.TipoContenido == tipoBD && p.Activo);
 
             double precioCompraUsd;
@@ -121,30 +115,138 @@ namespace Obligatorio_RedFlix.Controllers
                 precioAlquilerUsd = tipoContenido == "Serie" ? 4.99 : 2.99;
             }
 
-            string tipoDisplay = tipoContenido == "Serie" ? "Serie" : "Película";
+            PromocionesClima promocion = ObtenerPromocionClimaAplicable();
+            double porcentajeDescuento = promocion != null ? Convert.ToDouble(promocion.PorcentajeDesc) : 0;
+            double factorDescuento = 1 - (porcentajeDescuento / 100);
+            double precioCompraUsdFinal = promocion != null ? precioCompraUsd * factorDescuento : precioCompraUsd;
+            double precioAlquilerUsdFinal = promocion != null ? precioAlquilerUsd * factorDescuento : precioAlquilerUsd;
 
             return new PrecioContenidoViewModel
             {
                 IdTmdb = idTmdb,
                 Titulo = titulo,
-                TipoContenido = tipoDisplay,
+                TipoContenido = tipoContenido == "Serie" ? "Serie" : "Película",
 
                 PrecioCompraUsd = precioCompraUsd,
                 PrecioAlquilerUsd = precioAlquilerUsd,
 
                 PrecioCompraUyu = precioCompraUsd * cotizacion.Uyu,
                 PrecioAlquilerUyu = precioAlquilerUsd * cotizacion.Uyu,
-
                 PrecioCompraEur = precioCompraUsd * cotizacion.Eur,
                 PrecioAlquilerEur = precioAlquilerUsd * cotizacion.Eur,
 
+                PrecioCompraUsdFinal = precioCompraUsdFinal,
+                PrecioAlquilerUsdFinal = precioAlquilerUsdFinal,
+                PrecioCompraUyuFinal = precioCompraUsdFinal * cotizacion.Uyu,
+                PrecioAlquilerUyuFinal = precioAlquilerUsdFinal * cotizacion.Uyu,
+                PrecioCompraEurFinal = precioCompraUsdFinal * cotizacion.Eur,
+                PrecioAlquilerEurFinal = precioAlquilerUsdFinal * cotizacion.Eur,
+
                 CotizacionUyu = cotizacion.Uyu,
                 CotizacionEur = cotizacion.Eur,
-
                 IdPrecio = idPrecio,
+
+                TienePromocion = promocion != null,
+                NombrePromocion = promocion != null ? promocion.Nombre : "",
+                CondicionPromocion = promocion != null ? promocion.CondicionClima : "",
+                PorcentajeDescuento = porcentajeDescuento,
 
                 Correcto = true
             };
+        }
+
+        private PromocionesClima ObtenerPromocionClimaAplicable()
+        {
+            ClimaActualSimple clima = ObtenerClimaActual();
+
+            if (clima == null)
+            {
+                return null;
+            }
+
+            return db.PromocionesClimas
+                .Where(p => p.Activa)
+                .Where(p => p.TemperaturaMax == null || clima.Temperatura <= p.TemperaturaMax.Value)
+                .ToList()
+                .Where(p => string.IsNullOrWhiteSpace(p.CondicionClima) ||
+                    NormalizarTexto(p.CondicionClima) == clima.Categoria ||
+                    clima.Descripcion.Contains(NormalizarTexto(p.CondicionClima)))
+                .OrderByDescending(p => p.PorcentajeDesc)
+                .FirstOrDefault();
+        }
+
+        private ClimaActualSimple ObtenerClimaActual()
+        {
+            string apiKey = ConfigurationManager.AppSettings["OpenWeatherApiKey"];
+
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                return null;
+            }
+
+            var options = new RestClientOptions("https://api.openweathermap.org/data/2.5");
+            var client = new RestClient(options);
+            var request = new RestRequest("/weather?lat=-34.9&lon=-54.95&appid=" + apiKey + "&units=metric&lang=es", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            if (response == null || !response.IsSuccessful || string.IsNullOrEmpty(response.Content))
+            {
+                return null;
+            }
+
+            ClimaWeather clima = JsonConvert.DeserializeObject<ClimaWeather>(response.Content);
+
+            if (clima == null || clima.Main == null || clima.Weather == null || clima.Weather.Count == 0)
+            {
+                return null;
+            }
+
+            string estado = NormalizarTexto(clima.Weather[0].Main);
+            string descripcion = NormalizarTexto(clima.Weather[0].Description);
+
+            return new ClimaActualSimple
+            {
+                Temperatura = Convert.ToDecimal(clima.Main.Temp),
+                Descripcion = descripcion,
+                Categoria = ObtenerCategoriaClima(estado, Convert.ToDecimal(clima.Main.Temp))
+            };
+        }
+
+        private string ObtenerCategoriaClima(string estado, decimal temperatura)
+        {
+            if (estado.Contains("rain") || estado.Contains("drizzle") || estado.Contains("thunderstorm") || estado.Contains("lluvia"))
+            {
+                return "lluvia";
+            }
+
+            if (estado.Contains("cloud") || estado.Contains("nube"))
+            {
+                return "nublado";
+            }
+
+            if (temperatura <= 12)
+            {
+                return "frio";
+            }
+
+            if (temperatura >= 25)
+            {
+                return "calor";
+            }
+
+            return "templado";
+        }
+
+        private string NormalizarTexto(string texto)
+        {
+            return string.IsNullOrWhiteSpace(texto)
+                ? ""
+                : texto.Trim().ToLower()
+                    .Replace("í", "i")
+                    .Replace("á", "a")
+                    .Replace("é", "e")
+                    .Replace("ó", "o")
+                    .Replace("ú", "u");
         }
 
         protected override void Dispose(bool disposing)
@@ -152,6 +254,5 @@ namespace Obligatorio_RedFlix.Controllers
             if (disposing) db.Dispose();
             base.Dispose(disposing);
         }
-
     }
 }

@@ -11,6 +11,8 @@ namespace Obligatorio_RedFlix.Controllers
 {
     public class ClimaController : Controller
     {
+        private RedFlixDBEntities db = new RedFlixDBEntities();
+
         private RestResponse HacerRequestClima(string endpoint)
         {
             var options = new RestClientOptions("https://api.openweathermap.org/data/2.5");
@@ -120,6 +122,8 @@ namespace Obligatorio_RedFlix.Controllers
                 promocion = "Promo recomendada: 10% OFF en películas populares.";
             }
 
+            PromocionesClima promocionActiva = ObtenerPromocionClimaAplicable(categoria, descripcion, Convert.ToDecimal(clima.Main.Temp));
+
             ClimaViewModel vm = new ClimaViewModel
             {
                 Ciudad = clima.Name,
@@ -131,12 +135,45 @@ namespace Obligatorio_RedFlix.Controllers
                 CategoriaClima = categoria,
                 Emoji = emoji,
                 Promocion = promocion,
+                TienePromocionActiva = promocionActiva != null,
+                NombrePromocionActiva = promocionActiva != null ? promocionActiva.Nombre : "",
+                DescripcionPromocionActiva = promocionActiva != null ? promocionActiva.Descripcion : "",
+                CondicionPromocionActiva = promocionActiva != null ? promocionActiva.CondicionClima : "",
+                PorcentajePromocionActiva = promocionActiva != null ? Convert.ToDouble(promocionActiva.PorcentajeDesc) : 0,
                 PeliculasRecomendadas = new List<Populares>(),
                 SeriesRecomendadas = new List<Populares>(),
                 PronosticoDias = new List<PronosticoDiaViewModel>()
             };
 
             return vm;
+        }
+
+        private PromocionesClima ObtenerPromocionClimaAplicable(string categoria, string descripcion, decimal temperatura)
+        {
+            string categoriaNormalizada = NormalizarTexto(categoria);
+            string descripcionNormalizada = NormalizarTexto(descripcion);
+
+            return db.PromocionesClimas
+                .Where(p => p.Activa)
+                .Where(p => p.TemperaturaMax == null || temperatura <= p.TemperaturaMax.Value)
+                .ToList()
+                .Where(p => string.IsNullOrWhiteSpace(p.CondicionClima) ||
+                    NormalizarTexto(p.CondicionClima) == categoriaNormalizada ||
+                    descripcionNormalizada.Contains(NormalizarTexto(p.CondicionClima)))
+                .OrderByDescending(p => p.PorcentajeDesc)
+                .FirstOrDefault();
+        }
+
+        private string NormalizarTexto(string texto)
+        {
+            return string.IsNullOrWhiteSpace(texto)
+                ? ""
+                : texto.Trim().ToLower()
+                    .Replace("í", "i")
+                    .Replace("á", "a")
+                    .Replace("é", "e")
+                    .Replace("ó", "o")
+                    .Replace("ú", "u");
         }
 
         private List<Populares> ObtenerPeliculasPorClima(string categoriaClima)
