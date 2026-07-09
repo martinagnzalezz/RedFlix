@@ -29,11 +29,16 @@ body {
 .logo-redflix {
     color: #D4AF37 !important;
     font-size: 28px;
-    font-weight: bold;
-    text-shadow: 0 0 12px rgba(212,175,55,0.6), 0 0 25px rgba(212,175,55,0.3);
+    font-weight: 900;
     letter-spacing: 3px;
+    text-decoration: none;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.35);
 }
 
+    .logo-redflix span {
+        color: #ffffff !important;
+        text-shadow: none;
+    }
 .nav-link {
     color: white !important;
 }
@@ -723,4 +728,81 @@ body {
 
 .clima-templado {
     background: linear-gradient(135deg, #111111, #1f1a10);
+}
+/* ===== ANIMACIÓN INICIAL REDFLIX ===== */
+
+#splash-logo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #050505;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: splashOut 4s forwards;
+}
+
+.splash-content {
+    text-align: center;
+    animation: zoomLogo 1.2s ease;
+}
+
+.splash-icon {
+    width: 0;
+    height: 0;
+    border-top: 34px solid transparent;
+    border-bottom: 34px solid transparent;
+    border-left: 58px solid #D4AF37;
+    margin: 0 auto 35px auto;
+}
+
+.splash-text {
+    color: #D4AF37;
+    font-size: 64px;
+    font-weight: 900;
+    letter-spacing: 8px;
+    line-height: 1;
+}
+
+    .splash-text span {
+        color: white;
+    }
+
+.splash-content p {
+    color: #aaa;
+    margin-top: 24px;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+@keyframes zoomLogo {
+    from {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes splashOut {
+    0% {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    65% {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
 }

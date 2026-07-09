@@ -5,7 +5,18 @@
 }
 
 <div class="container-fluid px-5 py-4" style="max-width:1400px;">
-
+    @if (TempData["MensajeCarrito"] != null)
+    {
+        <div class="alert alert-warning">
+            @TempData["MensajeCarrito"]
+        </div>
+    }
+    @if (TempData["MensajeFavorito"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["MensajeFavorito"]
+        </div>
+    }
     @if (Model.Pelicula == null)
     {
         <h2 style="color:#D4AF37;">No se encontró la serie</h2>
@@ -30,10 +41,12 @@
 
                     @if (Session["UsuarioId"] != null)
                     {
+                        bool estaEnFavoritos = ViewBag.EstaEnFavoritos != null && ViewBag.EstaEnFavoritos == true;
+
                         <a href="@Url.Action("AgregarSerie", "Favoritos", new { idTmdb = Model.Pelicula.Id, titulo = Model.Pelicula.TituloMostrar })"
-                           style="font-size:34px; color:white; text-decoration:none; line-height:1;"
-                           title="Agregar a favoritos">
-                            ♡
+                           style="font-size:36px; color:white; text-decoration:none; line-height:1; text-shadow:0 0 10px rgba(255,255,255,0.7);"
+                           title="@(estaEnFavoritos ? "Ya está en favoritos" : "Agregar a favoritos")">
+                            @(estaEnFavoritos ? "♥" : "♡")
                         </a>
                     }
 

@@ -99,9 +99,9 @@ namespace Obligatorio_RedFlix.Models
         {
             get
             {
-                if (string.IsNullOrEmpty(PosterPath))
+                if (string.IsNullOrWhiteSpace(PosterPath))
                 {
-                    return "/Content/img/no-image.png";
+                    return "https://placehold.co/500x750/151515/D4AF37?text=Sin+imagen";
                 }
 
                 return "https://image.tmdb.org/t/p/w500" + PosterPath;

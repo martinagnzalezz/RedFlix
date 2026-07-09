@@ -153,34 +153,32 @@ namespace Obligatorio_RedFlix.Controllers
             }
 
             CarritoItem itemExistente = db.Set<CarritoItem>()
-                .FirstOrDefault(i =>
-                    i.IdCarrito == carrito.IdCarrito &&
-                    i.IdPelicula == idPelicula &&
-                    i.IdSerie == idSerie &&
-                    i.TipoOperacion == tipoOperacion &&
-                    i.Moneda == moneda);
+     .FirstOrDefault(i =>
+         i.IdCarrito == carrito.IdCarrito &&
+         (
+             (idPelicula != null && i.IdPelicula == idPelicula) ||
+             (idSerie != null && i.IdSerie == idSerie)
+         )
+     );
 
             if (itemExistente != null)
             {
-                itemExistente.Cantidad = itemExistente.Cantidad + 1;
-                itemExistente.Precio = precioFinal;
+                TempData["MensajeCarrito"] = "Este contenido ya está en el carrito. Si querés cambiar la moneda o el tipo de operación, eliminálo primero y agregalo nuevamente.";
+                return VolverAtras();
             }
-            else
+
+            CarritoItem item = new CarritoItem
             {
-                CarritoItem item = new CarritoItem
-                {
-                    IdCarrito = carrito.IdCarrito,
-                    IdPelicula = idPelicula,
-                    IdSerie = idSerie,
-                    Cantidad = 1,
-                    Precio = precioFinal,
-                    TipoOperacion = tipoOperacion,
-                    Moneda = moneda
-                };
+                IdCarrito = carrito.IdCarrito,
+                IdPelicula = idPelicula,
+                IdSerie = idSerie,
+                Cantidad = 1,
+                Precio = precioFinal,
+                TipoOperacion = tipoOperacion,
+                Moneda = moneda
+            };
 
-                db.Set<CarritoItem>().Add(item);
-            }
-
+            db.Set<CarritoItem>().Add(item);
             db.SaveChanges();
 
             if (resultadoPrecio.TienePromocion)

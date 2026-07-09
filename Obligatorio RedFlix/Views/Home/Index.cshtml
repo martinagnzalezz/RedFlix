@@ -201,7 +201,7 @@ else
                 {
                     <a class="poster-card-redflix" href="@Url.Action("Detalle", "Pelicula", new { id = pelicula.Id })">
 
-                        <span class="btn-card-plus">+</span>
+                        
 
                         <img src="@(string.IsNullOrEmpty(pelicula.BackdropPath) ? pelicula.ImagenUrl : "https://image.tmdb.org/t/p/w780" + pelicula.BackdropPath)"
                              alt="@pelicula.TituloMostrar" />
@@ -231,7 +231,7 @@ else
                 {
                     <a class="poster-card-redflix" href="@Url.Action("DetalleSerie", "Pelicula", new { id = serie.Id })">
 
-                        <span class="btn-card-plus">+</span>
+                       
 
                         <img src="@(string.IsNullOrEmpty(serie.BackdropPath) ? serie.ImagenUrl : "https://image.tmdb.org/t/p/w780" + serie.BackdropPath)"
                              alt="@serie.TituloMostrar" />

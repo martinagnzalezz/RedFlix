@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace Obligatorio_RedFlix.Controllers
 {
@@ -111,7 +112,7 @@ namespace Obligatorio_RedFlix.Controllers
 
             int idUsuario = Convert.ToInt32(Session["UsuarioId"]);
 
-            Pelicula pelicula = db.Peliculas
+            Pelicula pelicula = db.Set<Pelicula>()
                 .FirstOrDefault(p => p.IdTmdb == idTmdb);
 
             if (pelicula == null)
@@ -123,16 +124,23 @@ namespace Obligatorio_RedFlix.Controllers
                     Precio = 0
                 };
 
-                db.Peliculas.Add(pelicula);
+                db.Set<Pelicula>().Add(pelicula);
                 db.SaveChanges();
             }
 
-            bool yaExiste = db.Favoritos.Any(f =>
-                f.IdUsuario == idUsuario &&
-                f.IdPelicula == pelicula.IdPelicula
-            );
+            Favorito favoritoExistente = db.Set<Favorito>()
+                .FirstOrDefault(f =>
+                    f.IdUsuario == idUsuario &&
+                    f.IdPelicula == pelicula.IdPelicula);
 
-            if (!yaExiste)
+            if (favoritoExistente != null)
+            {
+                db.Set<Favorito>().Remove(favoritoExistente);
+                db.SaveChanges();
+
+                TempData["MensajeFavorito"] = "La película fue quitada de favoritos.";
+            }
+            else
             {
                 Favorito favorito = new Favorito
                 {
@@ -142,8 +150,13 @@ namespace Obligatorio_RedFlix.Controllers
                     FechaAgregado = DateTime.Now
                 };
 
-                db.Favoritos.Add(favorito);
+                db.Set<Favorito>().Add(favorito);
                 db.SaveChanges();
+
+                string genero = ObtenerGeneroPrincipalPelicula(idTmdb);
+                AgregarPeliculaABibliotecaAutomatica(idUsuario, pelicula, genero);
+
+                TempData["MensajeFavorito"] = "La película fue agregada a favoritos y también a tu biblioteca.";
             }
 
             return VolverAtras();
@@ -158,7 +171,7 @@ namespace Obligatorio_RedFlix.Controllers
 
             int idUsuario = Convert.ToInt32(Session["UsuarioId"]);
 
-            Series serie = db.Series
+            Series serie = db.Set<Series>()
                 .FirstOrDefault(s => s.IdTmdb == idTmdb);
 
             if (serie == null)
@@ -170,16 +183,23 @@ namespace Obligatorio_RedFlix.Controllers
                     Precio = 0
                 };
 
-                db.Series.Add(serie);
+                db.Set<Series>().Add(serie);
                 db.SaveChanges();
             }
 
-            bool yaExiste = db.Favoritos.Any(f =>
-                f.IdUsuario == idUsuario &&
-                f.IdSerie == serie.IdSerie
-            );
+            Favorito favoritoExistente = db.Set<Favorito>()
+                .FirstOrDefault(f =>
+                    f.IdUsuario == idUsuario &&
+                    f.IdSerie == serie.IdSerie);
 
-            if (!yaExiste)
+            if (favoritoExistente != null)
+            {
+                db.Set<Favorito>().Remove(favoritoExistente);
+                db.SaveChanges();
+
+                TempData["MensajeFavorito"] = "La serie fue quitada de favoritos.";
+            }
+            else
             {
                 Favorito favorito = new Favorito
                 {
@@ -189,8 +209,13 @@ namespace Obligatorio_RedFlix.Controllers
                     FechaAgregado = DateTime.Now
                 };
 
-                db.Favoritos.Add(favorito);
+                db.Set<Favorito>().Add(favorito);
                 db.SaveChanges();
+
+                string genero = ObtenerGeneroPrincipalSerie(idTmdb);
+                AgregarSerieABibliotecaAutomatica(idUsuario, serie, genero);
+
+                TempData["MensajeFavorito"] = "La serie fue agregada a favoritos y también a tu biblioteca.";
             }
 
             return VolverAtras();
@@ -216,8 +241,126 @@ namespace Obligatorio_RedFlix.Controllers
 
             return RedirectToAction("Index");
         }
-    
-    private ActionResult VolverAtras()
+        private string ObtenerGeneroPrincipalPelicula(int idTmdb)
+        {
+            RestResponse response = HacerRequest("/3/movie/" + idTmdb + "?language=es-ES");
+
+            if (response == null || string.IsNullOrEmpty(response.Content))
+            {
+                return "Sin categoría";
+            }
+
+            JObject datos = JObject.Parse(response.Content);
+            JArray generos = datos["genres"] as JArray;
+
+            if (generos != null && generos.Count > 0)
+            {
+                return generos[0]["name"].ToString();
+            }
+
+            return "Sin categoría";
+        }
+
+        private string ObtenerGeneroPrincipalSerie(int idTmdb)
+        {
+            RestResponse response = HacerRequest("/3/tv/" + idTmdb + "?language=es-ES");
+
+            if (response == null || string.IsNullOrEmpty(response.Content))
+            {
+                return "Sin categoría";
+            }
+
+            JObject datos = JObject.Parse(response.Content);
+            JArray generos = datos["genres"] as JArray;
+
+            if (generos != null && generos.Count > 0)
+            {
+                return generos[0]["name"].ToString();
+            }
+
+            return "Sin categoría";
+        }
+
+        private void AgregarPeliculaABibliotecaAutomatica(int idUsuario, Pelicula pelicula, string genero)
+        {
+            string nombreLista = "Favoritos - " + genero;
+
+            ListasPersonalizada lista = db.ListasPersonalizadas
+                .FirstOrDefault(l => l.IdUsuario == idUsuario && l.Nombre == nombreLista);
+
+            if (lista == null)
+            {
+                lista = new ListasPersonalizada
+                {
+                    IdUsuario = idUsuario,
+                    Nombre = nombreLista,
+                    Descripcion = "Lista creada automáticamente según el género de tus favoritos.",
+                    FechaCreacion = DateTime.Now
+                };
+
+                db.ListasPersonalizadas.Add(lista);
+                db.SaveChanges();
+            }
+
+            bool yaExiste = db.ListaContenidoes.Any(lc =>
+                lc.IdLista == lista.IdLista &&
+                lc.IdPelicula == pelicula.IdPelicula);
+
+            if (!yaExiste)
+            {
+                ListaContenido contenido = new ListaContenido
+                {
+                    IdLista = lista.IdLista,
+                    IdPelicula = pelicula.IdPelicula,
+                    IdSerie = null,
+                    FechaAgregado = DateTime.Now
+                };
+
+                db.ListaContenidoes.Add(contenido);
+                db.SaveChanges();
+            }
+        }
+
+        private void AgregarSerieABibliotecaAutomatica(int idUsuario, Series serie, string genero)
+        {
+            string nombreLista = "Favoritos - " + genero;
+
+            ListasPersonalizada lista = db.ListasPersonalizadas
+                .FirstOrDefault(l => l.IdUsuario == idUsuario && l.Nombre == nombreLista);
+
+            if (lista == null)
+            {
+                lista = new ListasPersonalizada
+                {
+                    IdUsuario = idUsuario,
+                    Nombre = nombreLista,
+                    Descripcion = "Lista creada automáticamente según el género de tus favoritos.",
+                    FechaCreacion = DateTime.Now
+                };
+
+                db.ListasPersonalizadas.Add(lista);
+                db.SaveChanges();
+            }
+
+            bool yaExiste = db.ListaContenidoes.Any(lc =>
+                lc.IdLista == lista.IdLista &&
+                lc.IdSerie == serie.IdSerie);
+
+            if (!yaExiste)
+            {
+                ListaContenido contenido = new ListaContenido
+                {
+                    IdLista = lista.IdLista,
+                    IdPelicula = null,
+                    IdSerie = serie.IdSerie,
+                    FechaAgregado = DateTime.Now
+                };
+
+                db.ListaContenidoes.Add(contenido);
+                db.SaveChanges();
+            }
+        }
+        private ActionResult VolverAtras()
         {
             if (Request.UrlReferrer != null)
             {

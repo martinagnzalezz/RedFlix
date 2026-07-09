@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Crear lista";
+}
+
+<div class="container-fluid px-5 py-4" style="max-width:900px;">
+
+    <h2 style="color:#D4AF37; margin-bottom:25px;">
+        Nueva lista personalizada
+    </h2>
+
+    @if (TempData["MensajeBiblioteca"] != null)
+    {
+        <div class="alert alert-warning">
+            @TempData["MensajeBiblioteca"]
+        </div>
+    }
+
+    <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:30px;">
+
+        @using (Html.BeginForm("Crear", "Biblioteca", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label style="color:#ccc;">Nombre de la lista</label>
+                <input type="text"
+                       name="nombre"
+                       class="form-control"
+                       placeholder="Ej: Ver más tarde"
+                       style="background:#1b1b1b; color:white; border:1px solid #333; border-radius:8px;" />
+            </div>
+
+            <div class="mb-3">
+                <label style="color:#ccc;">Descripción</label>
+                <textarea name="descripcion"
+                          class="form-control"
+                          rows="4"
+                          placeholder="Ej: Películas y series que quiero mirar después"
+                          style="background:#1b1b1b; color:white; border:1px solid #333; border-radius:8px;"></textarea>
+            </div>
+
+            <div style="display:flex; gap:10px;">
+                <button type="submit" class="btn btn-gold">
+                    Guardar lista
+                </button>
+
+                <a href="@Url.Action("Index", "Biblioteca")"
+                   class="btn btn-outline-light">
+                    Volver
+                </a>
+            </div>
+        }
+
+    </div>
+
+</div>

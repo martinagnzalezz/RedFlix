@@ -240,6 +240,21 @@ namespace Obligatorio_RedFlix.Controllers
                 trailer = videos.Results
                     .FirstOrDefault(v => v.Site == "YouTube" && v.Tipo == "Trailer");
             }
+            bool estaEnFavoritos = false;
+
+            if (Session["UsuarioId"] != null)
+            {
+                int idUsuario = Convert.ToInt32(Session["UsuarioId"]);
+                int idTmdb = Convert.ToInt32(id.Value);
+
+                estaEnFavoritos = db.Set<Favorito>().Any(f =>
+                    f.IdUsuario == idUsuario &&
+                    f.Pelicula != null &&
+                    f.Pelicula.IdTmdb == idTmdb
+                );
+            }
+
+            ViewBag.EstaEnFavoritos = estaEnFavoritos;
 
             PeliculaDetalleViewModel modelo = new PeliculaDetalleViewModel
             {
@@ -295,6 +310,21 @@ namespace Obligatorio_RedFlix.Controllers
                 trailer = videos.Results
                     .FirstOrDefault(v => v.Site == "YouTube" && v.Tipo == "Trailer");
             }
+            bool estaSerieEnFavoritos = false;
+
+            if (Session["UsuarioId"] != null)
+            {
+                int idUsuario = Convert.ToInt32(Session["UsuarioId"]);
+                int idTmdb = Convert.ToInt32(id.Value);
+
+                estaSerieEnFavoritos = db.Set<Favorito>().Any(f =>
+                    f.IdUsuario == idUsuario &&
+                    f.Series != null &&
+                    f.Series.IdTmdb == idTmdb
+                );
+            }
+
+            ViewBag.EstaEnFavoritos = estaSerieEnFavoritos;
 
             PeliculaDetalleViewModel modelo = new PeliculaDetalleViewModel
             {

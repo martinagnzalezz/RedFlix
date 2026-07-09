@@ -1,0 +1,75 @@
+﻿@model List<Obligatorio_RedFlix.Models.ListasPersonalizada>
+
+@{
+    ViewBag.Title = "Biblioteca";
+}
+
+<div class="container-fluid px-5 py-4" style="max-width:1400px;">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+        <div>
+            <h2 style="color:#D4AF37; margin-bottom:5px;">Mi biblioteca</h2>
+            <p style="color:#aaa; margin:0;">Tus listas personalizadas de películas y series.</p>
+        </div>
+
+        <a href="@Url.Action("Crear", "Biblioteca")" class="btn btn-gold">
+            + Crear lista
+        </a>
+    </div>
+
+    @if (TempData["MensajeBiblioteca"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["MensajeBiblioteca"]
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:30px;">
+            <h4 style="color:white;">Todavía no tenés listas creadas</h4>
+            <p style="color:#aaa;">Creá una lista para guardar películas o series que quieras ver después.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var lista in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:25px; height:100%;">
+
+                        <h4 style="color:#D4AF37;">@lista.Nombre</h4>
+
+                        <p style="color:#ccc; min-height:45px;">
+                            @(string.IsNullOrWhiteSpace(lista.Descripcion) ? "Sin descripción." : lista.Descripcion)
+                        </p>
+
+                        <p style="color:#aaa;">
+                            Contenidos: @lista.ListaContenidoes.Count
+                        </p>
+
+                        <p style="color:#777; font-size:13px;">
+                            Creada: @lista.FechaCreacion.ToString("dd/MM/yyyy")
+                        </p>
+
+                        <div style="display:flex; gap:10px;">
+                            <a href="@Url.Action("Detalle", "Biblioteca", new { id = lista.IdLista })"
+                               class="btn btn-gold">
+                                Ver lista
+                            </a>
+
+                            <a href="@Url.Action("Eliminar", "Biblioteca", new { id = lista.IdLista })"
+                               class="btn btn-outline-danger"
+                               onclick="return confirm('¿Seguro que querés eliminar esta lista?');">
+                                Eliminar
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+</div>

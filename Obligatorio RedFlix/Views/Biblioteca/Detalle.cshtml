@@ -1,0 +1,102 @@
+﻿@model Obligatorio_RedFlix.Models.ListasPersonalizada
+@using System.Collections.Generic
+
+@{
+    ViewBag.Title = Model.Nombre;
+}
+
+<div class="container-fluid px-5 py-4" style="max-width:1400px;">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+        <div>
+            <h2 style="color:#D4AF37; margin-bottom:5px;">
+                @Model.Nombre
+            </h2>
+
+            <p style="color:#aaa; margin:0;">
+                @(string.IsNullOrWhiteSpace(Model.Descripcion) ? "Sin descripción." : Model.Descripcion)
+            </p>
+        </div>
+
+        <a href="@Url.Action("Index", "Biblioteca")"
+           class="btn btn-outline-light">
+            Volver
+        </a>
+    </div>
+
+    @if (Model.ListaContenidoes == null || !Model.ListaContenidoes.Any())
+    {
+        <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:30px;">
+            <h4 style="color:white;">
+                Esta lista todavía no tiene contenido
+            </h4>
+
+            <p style="color:#aaa;">
+                Agregá películas o series a esta lista desde favoritos o desde el detalle del contenido.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+
+            @foreach (var item in Model.ListaContenidoes)
+            {
+                string titulo = item.Pelicula != null ? item.Pelicula.Titulo : item.Series.Titulo;
+                string tipo = item.Pelicula != null ? "Película" : "Serie";
+                int idTmdb = item.Pelicula != null ? item.Pelicula.IdTmdb : item.Series.IdTmdb;
+
+                var imagenes = ViewBag.ImagenesContenido as Dictionary<string, string>;
+
+                string clave = tipo + "-" + idTmdb;
+
+                string imagen = imagenes != null && imagenes.ContainsKey(clave)
+                    ? imagenes[clave]
+                    : "https://placehold.co/500x750/151515/D4AF37?text=Sin+imagen";
+
+                <div class="col-md-3 mb-4">
+                    <div style="background:#151515; border:1px solid #333; border-radius:14px; overflow:hidden; height:100%;">
+
+                        <img src="@imagen"
+                             onerror="this.onerror=null; this.src='https://placehold.co/500x750/151515/D4AF37?text=Sin+imagen';"
+                             style="width:100%; height:330px; object-fit:cover;" />
+
+                        <div style="padding:20px;">
+
+                            <h5 style="color:white; min-height:55px;">
+                                @titulo
+                            </h5>
+
+                            <p style="color:#D4AF37;">
+                                @tipo
+                            </p>
+
+                            <p style="color:#aaa; font-size:13px;">
+                                Agregado: @item.FechaAgregado.ToString("dd/MM/yyyy")
+                            </p>
+
+                            @if (tipo == "Película")
+                            {
+                                <a href="@Url.Action("Detalle", "Pelicula", new { id = idTmdb })"
+                                   class="btn btn-gold">
+                                    Ver película
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("DetalleSerie", "Pelicula", new { id = idTmdb })"
+                                   class="btn btn-gold">
+                                    Ver serie
+                                </a>
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
