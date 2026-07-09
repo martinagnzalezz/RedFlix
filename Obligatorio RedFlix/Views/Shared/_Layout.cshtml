@@ -8,14 +8,16 @@
     <title>@ViewBag.Title - RedFlix</title>
 
     @Styles.Render("~/Content/css")
-<link href="@Url.Content("~/Content/site.css")?v=splash2" rel="stylesheet" />
+<link href="@Url.Content("~/Content/site.css")?v=splash4" rel="stylesheet" />
+
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("styles", required: false)
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+
     @if (ViewContext.RouteData.Values["controller"].ToString() == "Home" &&
-         ViewContext.RouteData.Values["action"].ToString() == "Index")
+      ViewContext.RouteData.Values["action"].ToString() == "Index")
     {
         <div id="splash-logo">
             <div class="splash-content">
@@ -25,6 +27,7 @@
             </div>
         </div>
     }
+
     <nav class="navbar navbar-expand-lg navbar-dark redflix-navbar">
 
         <div class="container-fluid">
@@ -76,6 +79,7 @@
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                     Administración
                                 </a>
+
                                 <ul class="dropdown-menu dropdown-menu-dark">
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "Usuarios")">Usuarios</a></li>
                                     <li><a class="dropdown-item" href="@Url.Action("Index", "Roles")">Roles</a></li>
@@ -85,7 +89,6 @@
                             </li>
                         }
                     }
-
 
                 </ul>
 
