@@ -15,8 +15,6 @@ namespace Obligatorio_RedFlix.Models
     
     public partial class RedFlixDBEntities : DbContext
     {
-        internal object PrecioContenido;
-
         public RedFlixDBEntities()
             : base("name=RedFlixDBEntities")
         {
