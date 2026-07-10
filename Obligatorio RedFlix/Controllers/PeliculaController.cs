@@ -240,6 +240,7 @@ namespace Obligatorio_RedFlix.Controllers
                 trailer = videos.Results
                     .FirstOrDefault(v => v.Site == "YouTube" && v.Tipo == "Trailer");
             }
+
             bool estaEnFavoritos = false;
 
             if (Session["UsuarioId"] != null)
@@ -261,13 +262,25 @@ namespace Obligatorio_RedFlix.Controllers
                 Pelicula = pelicula,
                 Trailer = trailer,
                 PrecioContenido = ArmarPrecioContenido(
-                Convert.ToInt32(id.Value),
-                pelicula.Title,
-                "pelicula"),
+                    Convert.ToInt32(id.Value),
+                    pelicula.Title,
+                    "pelicula"),
                 Actores = actores != null && actores.Cast != null
                     ? actores.Cast.Take(8).ToList()
                     : new List<ActorTmdb>()
             };
+
+            if (Session["UsuarioId"] != null)
+            {
+                int idUsuario = Convert.ToInt32(Session["UsuarioId"]);
+
+                ViewBag.ListasUsuario = db.ListasPersonalizadas
+                    .Where(l => l.IdUsuario == idUsuario)
+                    .OrderBy(l => l.Nombre)
+                    .ToList();
+            }
+
+            ViewBag.GuardadoEnLista = false;
 
             return View(modelo);
         }
@@ -310,6 +323,7 @@ namespace Obligatorio_RedFlix.Controllers
                 trailer = videos.Results
                     .FirstOrDefault(v => v.Site == "YouTube" && v.Tipo == "Trailer");
             }
+
             bool estaSerieEnFavoritos = false;
 
             if (Session["UsuarioId"] != null)
@@ -331,13 +345,25 @@ namespace Obligatorio_RedFlix.Controllers
                 Pelicula = serie,
                 Trailer = trailer,
                 PrecioContenido = ArmarPrecioContenido(
-                Convert.ToInt32(id.Value),
-                serie.Name,
-                "serie"),
+                    Convert.ToInt32(id.Value),
+                    serie.Name,
+                    "serie"),
                 Actores = actores != null && actores.Cast != null
                     ? actores.Cast.Take(8).ToList()
                     : new List<ActorTmdb>()
             };
+
+            if (Session["UsuarioId"] != null)
+            {
+                int idUsuario = Convert.ToInt32(Session["UsuarioId"]);
+
+                ViewBag.ListasUsuario = db.ListasPersonalizadas
+                    .Where(l => l.IdUsuario == idUsuario)
+                    .OrderBy(l => l.Nombre)
+                    .ToList();
+            }
+
+            ViewBag.GuardadoEnLista = false;
 
             return View(modelo);
         }

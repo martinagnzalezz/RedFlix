@@ -25,6 +25,7 @@ namespace Obligatorio_RedFlix.Controllers
 
             return client.Execute(request);
         }
+
         public ActionResult Index()
         {
             if (Session["UsuarioId"] == null)
@@ -86,11 +87,16 @@ namespace Obligatorio_RedFlix.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Detalle(int id)
+        public ActionResult Detalle(int? id)
         {
             if (Session["UsuarioId"] == null)
             {
                 return RedirectToAction("Login", "Account");
+            }
+
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Index", "Biblioteca");
             }
 
             int idUsuario = Convert.ToInt32(Session["UsuarioId"]);
@@ -98,12 +104,13 @@ namespace Obligatorio_RedFlix.Controllers
             var lista = db.ListasPersonalizadas
                 .Include("ListaContenidoes.Pelicula")
                 .Include("ListaContenidoes.Series")
-                .FirstOrDefault(l => l.IdLista == id && l.IdUsuario == idUsuario);
+                .FirstOrDefault(l => l.IdLista == id.Value && l.IdUsuario == idUsuario);
 
             if (lista == null)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Biblioteca");
             }
+
             Dictionary<string, string> imagenesContenido = new Dictionary<string, string>();
 
             foreach (var item in lista.ListaContenidoes)
@@ -121,6 +128,7 @@ namespace Obligatorio_RedFlix.Controllers
             }
 
             ViewBag.ImagenesContenido = imagenesContenido;
+
             return View(lista);
         }
 
@@ -149,6 +157,110 @@ namespace Obligatorio_RedFlix.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AgregarContenido(int idLista, int idTmdb, string titulo, string tipoContenido)
+        {
+            if (Session["UsuarioId"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int idUsuario = Convert.ToInt32(Session["UsuarioId"]);
+
+            ListasPersonalizada lista = db.ListasPersonalizadas
+                .FirstOrDefault(l => l.IdLista == idLista && l.IdUsuario == idUsuario);
+
+            if (lista == null)
+            {
+                TempData["MensajeBiblioteca"] = "No se encontró la lista seleccionada.";
+                return VolverAtras();
+            }
+
+            int? idPelicula = null;
+            int? idSerie = null;
+
+            if (tipoContenido == "Serie")
+            {
+                Series serie = db.Set<Series>()
+                    .FirstOrDefault(s => s.IdTmdb == idTmdb);
+
+                if (serie == null)
+                {
+                    serie = new Series
+                    {
+                        IdTmdb = idTmdb,
+                        Titulo = titulo,
+                        Precio = 0
+                    };
+
+                    db.Set<Series>().Add(serie);
+                    db.SaveChanges();
+                }
+
+                idSerie = serie.IdSerie;
+            }
+            else
+            {
+                Pelicula pelicula = db.Set<Pelicula>()
+                    .FirstOrDefault(p => p.IdTmdb == idTmdb);
+
+                if (pelicula == null)
+                {
+                    pelicula = new Pelicula
+                    {
+                        IdTmdb = idTmdb,
+                        Titulo = titulo,
+                        Precio = 0
+                    };
+
+                    db.Set<Pelicula>().Add(pelicula);
+                    db.SaveChanges();
+                }
+
+                idPelicula = pelicula.IdPelicula;
+            }
+
+            bool yaExiste = db.ListaContenidoes.Any(lc =>
+                lc.IdLista == idLista &&
+                (
+                    (idPelicula != null && lc.IdPelicula == idPelicula) ||
+                    (idSerie != null && lc.IdSerie == idSerie)
+                )
+            );
+
+            if (yaExiste)
+            {
+                TempData["MensajeBiblioteca"] = "Este contenido ya está en la lista seleccionada.";
+                return VolverAtras();
+            }
+
+            ListaContenido contenido = new ListaContenido
+            {
+                IdLista = idLista,
+                IdPelicula = idPelicula,
+                IdSerie = idSerie,
+                FechaAgregado = DateTime.Now
+            };
+
+            db.ListaContenidoes.Add(contenido);
+            db.SaveChanges();
+
+            TempData["MensajeBiblioteca"] = "El contenido fue agregado a la lista correctamente.";
+
+            return VolverAtras();
+        }
+
+        private ActionResult VolverAtras()
+        {
+            if (Request.UrlReferrer != null)
+            {
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+
+            return RedirectToAction("Index", "Biblioteca");
+        }
+
         private string ObtenerImagenTmdb(int idTmdb, string tipoContenido)
         {
             string endpoint = tipoContenido == "Serie"
@@ -175,6 +287,7 @@ namespace Obligatorio_RedFlix.Controllers
 
             return "https://image.tmdb.org/t/p/w500" + posterPath;
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
