@@ -1,5 +1,6 @@
 ﻿@model Obligatorio_RedFlix.Models.ListasPersonalizada
 @using System.Collections.Generic
+@using System.Linq
 
 @{
     ViewBag.Title = Model.Nombre;
@@ -23,6 +24,13 @@
             Volver
         </a>
     </div>
+
+    @if (TempData["MensajeBiblioteca"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["MensajeBiblioteca"]
+        </div>
+    }
 
     @if (Model.ListaContenidoes == null || !Model.ListaContenidoes.Any())
     {
@@ -78,16 +86,33 @@
                             @if (tipo == "Película")
                             {
                                 <a href="@Url.Action("Detalle", "Pelicula", new { id = idTmdb })"
-                                   class="btn btn-gold">
+                                   class="btn btn-gold"
+                                   style="width:100%; margin-bottom:10px;">
                                     Ver película
                                 </a>
                             }
                             else
                             {
                                 <a href="@Url.Action("DetalleSerie", "Pelicula", new { id = idTmdb })"
-                                   class="btn btn-gold">
+                                   class="btn btn-gold"
+                                   style="width:100%; margin-bottom:10px;">
                                     Ver serie
                                 </a>
+                            }
+
+                            @using (Html.BeginForm("EliminarContenido", "Biblioteca", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden" name="idListaContenido" value="@item.IdListaContenido" />
+                                <input type="hidden" name="idLista" value="@Model.IdLista" />
+
+                                <button type="submit"
+                                        onclick="return confirm('¿Seguro que querés sacar este contenido de la lista?');"
+                                        class="btn btn-danger"
+                                        style="width:100%;">
+                                    Eliminar de la lista
+                                </button>
                             }
 
                         </div>

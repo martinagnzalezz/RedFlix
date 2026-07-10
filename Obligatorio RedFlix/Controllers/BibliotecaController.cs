@@ -250,7 +250,41 @@ namespace Obligatorio_RedFlix.Controllers
 
             return VolverAtras();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EliminarContenido(int idListaContenido, int idLista)
+        {
+            if (Session["UsuarioId"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
+            int idUsuario = Convert.ToInt32(Session["UsuarioId"]);
+
+            var lista = db.ListasPersonalizadas
+                .FirstOrDefault(l => l.IdLista == idLista && l.IdUsuario == idUsuario);
+
+            if (lista == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var contenido = db.ListaContenidoes
+                .FirstOrDefault(c => c.IdListaContenido == idListaContenido && c.IdLista == idLista);
+
+            if (contenido == null)
+            {
+                TempData["MensajeBiblioteca"] = "No se encontró el contenido en la lista.";
+                return RedirectToAction("Detalle", new { id = idLista });
+            }
+
+            db.ListaContenidoes.Remove(contenido);
+            db.SaveChanges();
+
+            TempData["MensajeBiblioteca"] = "El contenido fue eliminado de la lista.";
+
+            return RedirectToAction("Detalle", new { id = idLista });
+        }
         private ActionResult VolverAtras()
         {
             if (Request.UrlReferrer != null)
