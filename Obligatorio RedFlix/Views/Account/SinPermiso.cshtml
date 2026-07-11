@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Sin permiso";
+}
+
+<div class="container py-5" style="max-width:900px;">
+
+    <div style="background:#151515; border:1px solid #333; border-radius:16px; padding:40px; text-align:center;">
+
+        <h2 style="color:#D4AF37; margin-bottom:15px;">
+            Acceso denegado
+        </h2>
+
+        <p style="color:#ccc; font-size:18px;">
+            No tenés permisos para acceder a esta sección.
+        </p>
+
+        <a href="@Url.Action("Index", "Home")"
+           class="btn btn-gold"
+           style="margin-top:20px;">
+            Volver al inicio
+        </a>
+
+    </div>
+
+</div>

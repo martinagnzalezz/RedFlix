@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace Obligatorio_RedFlix.Controllers
 {
-    [AutorizarRol("Administrador")]
+    [AutorizarPermiso("Usuarios.Gestionar")]
     public class UsuariosController : Controller
     {
         private RedFlixDBEntities db = new RedFlixDBEntities();
@@ -86,7 +86,10 @@ namespace Obligatorio_RedFlix.Controllers
                 return HttpNotFound();
             }
 
-            bool emailExiste = db.Usuarios.Any(u => u.Email == usuario.Email && u.IdUsuario != usuario.IdUsuario);
+            bool emailExiste = db.Usuarios.Any(u =>
+                u.Email == usuario.Email &&
+                u.IdUsuario != usuario.IdUsuario
+            );
 
             if (emailExiste)
             {
@@ -113,6 +116,7 @@ namespace Obligatorio_RedFlix.Controllers
             return View(usuario);
         }
 
+        // DETALLE DE USUARIO
         public ActionResult Details(int id)
         {
             Usuario usuario = db.Usuarios.Find(id);
@@ -167,7 +171,5 @@ namespace Obligatorio_RedFlix.Controllers
                 return resultado.ToString();
             }
         }
-
-
     }
 }

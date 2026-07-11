@@ -1,14 +1,12 @@
 ﻿using Obligatorio_RedFlix.Filters;
 using Obligatorio_RedFlix.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Obligatorio_RedFlix.Controllers
 {
-    [AutorizarRol("Administrador")]
+    [AutorizarPermiso("Promociones.Gestionar")]
     public class PromocionesController : Controller
     {
         private RedFlixDBEntities db = new RedFlixDBEntities();
@@ -18,6 +16,7 @@ namespace Obligatorio_RedFlix.Controllers
             var promos = db.PromocionesClimas
                 .OrderByDescending(p => p.Activa)
                 .ToList();
+
             return View(promos);
         }
 
@@ -34,6 +33,7 @@ namespace Obligatorio_RedFlix.Controllers
             if (ModelState.IsValid)
             {
                 promo.Activa = true;
+
                 db.PromocionesClimas.Add(promo);
                 db.SaveChanges();
 
@@ -50,7 +50,9 @@ namespace Obligatorio_RedFlix.Controllers
             PromocionesClima promo = db.PromocionesClimas.Find(id);
 
             if (promo == null)
+            {
                 return HttpNotFound();
+            }
 
             CargarGeneros(promo.IdGenero);
             return View(promo);
@@ -63,7 +65,9 @@ namespace Obligatorio_RedFlix.Controllers
             PromocionesClima promoBD = db.PromocionesClimas.Find(promo.IdPromocion);
 
             if (promoBD == null)
+            {
                 return HttpNotFound();
+            }
 
             if (ModelState.IsValid)
             {
@@ -85,11 +89,54 @@ namespace Obligatorio_RedFlix.Controllers
             return View(promo);
         }
 
+        public ActionResult CambiarEstado(int id)
+        {
+            PromocionesClima promo = db.PromocionesClimas.Find(id);
+
+            if (promo != null)
+            {
+                promo.Activa = !promo.Activa;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            PromocionesClima promo = db.PromocionesClimas.Find(id);
+
+            if (promo == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(promo);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            PromocionesClima promo = db.PromocionesClimas.Find(id);
+
+            if (promo != null)
+            {
+                db.PromocionesClimas.Remove(promo);
+                db.SaveChanges();
+
+                TempData["Success"] = "Promoción eliminada.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
         private void CargarGeneros(int? idSeleccionado = null)
         {
             if (!db.Generos.Any())
             {
-                string[] nombres = {
+                string[] nombres =
+                {
                     "Acción",
                     "Aventura",
                     "Animación",
@@ -113,52 +160,21 @@ namespace Obligatorio_RedFlix.Controllers
                 db.SaveChanges();
             }
 
-            ViewBag.IdGenero = new SelectList(db.Generos.OrderBy(g => g.Nombre), "IdGenero", "Nombre", idSeleccionado);
-        }
-
-        // Activar/Desactivar rápido desde el listado
-        public ActionResult CambiarEstado(int id)
-        {
-            PromocionesClima promo = db.PromocionesClimas.Find(id);
-
-            if (promo != null)
-            {
-                promo.Activa = !promo.Activa;
-                db.SaveChanges();
-            }
-
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult Delete(int id)
-        {
-            PromocionesClima promo = db.PromocionesClimas.Find(id);
-
-            if (promo == null)
-                return HttpNotFound();
-
-            return View(promo);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            PromocionesClima promo = db.PromocionesClimas.Find(id);
-
-            if (promo != null)
-            {
-                db.PromocionesClimas.Remove(promo);
-                db.SaveChanges();
-                TempData["Success"] = "Promoción eliminada.";
-            }
-
-            return RedirectToAction("Index");
+            ViewBag.IdGenero = new SelectList(
+                db.Generos.OrderBy(g => g.Nombre),
+                "IdGenero",
+                "Nombre",
+                idSeleccionado
+            );
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing) db.Dispose();
+            if (disposing)
+            {
+                db.Dispose();
+            }
+
             base.Dispose(disposing);
         }
     }

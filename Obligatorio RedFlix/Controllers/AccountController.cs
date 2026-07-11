@@ -1,5 +1,6 @@
 ﻿using Obligatorio_RedFlix.Models;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -48,16 +49,36 @@ namespace Obligatorio_RedFlix.Controllers
             Session["UsuarioId"] = usuario.IdUsuario;
             Session["UsuarioNombre"] = usuario.Nombre;
             Session["UsuarioEmail"] = usuario.Email;
+
             Session["RolId"] = usuario.IdRol;
             Session["RolNombre"] = usuario.Role.Nombre;
+
+            // También guardamos esto con nombre más simple por si lo usamos en otras vistas
+            Session["Rol"] = usuario.Role.Nombre;
+
+            // Cargamos los permisos del rol del usuario
+            var permisos = db.Database.SqlQuery<string>(
+                @"SELECT p.NombrePermiso
+          FROM RolesPermisos rp
+          INNER JOIN Permisos p ON rp.IdPermiso = p.IdPermiso
+          WHERE rp.IdRol = @p0",
+                usuario.IdRol
+            ).ToList();
+
+            Session["Permisos"] = permisos;
+
             Session.Remove("PerfilNombre");
             Session.Remove("PerfilColor");
             Session.Remove("PerfilInicial");
 
             TempData["Success"] = "¡Bienvenido, " + usuario.Nombre + "!";
+
             return RedirectToAction("Seleccionar", "Perfiles");
         }
-
+        public ActionResult SinPermiso()
+        {
+            return View();
+        }
         public ActionResult Registrar()
         {
             if (Session["UsuarioId"] != null)
@@ -96,6 +117,14 @@ namespace Obligatorio_RedFlix.Controllers
                 return View();
             }
 
+            var rolUsuario = db.Roles.FirstOrDefault(r => r.Nombre == "Usuario");
+
+            if (rolUsuario == null)
+            {
+                ViewBag.Error = "No existe el rol Usuario en la base de datos.";
+                return View();
+            }
+
             var nuevoUsuario = new Usuario
             {
                 Nombre = nombre,
@@ -104,7 +133,7 @@ namespace Obligatorio_RedFlix.Controllers
                 PasswordHash = GenerarHash(password),
                 Estado = "Activo",
                 FechaRegistro = DateTime.Now,
-                IdRol = 2
+                IdRol = rolUsuario.IdRol
             };
 
             db.Usuarios.Add(nuevoUsuario);
@@ -113,7 +142,6 @@ namespace Obligatorio_RedFlix.Controllers
             TempData["Success"] = "¡Cuenta creada con éxito! Ya podés iniciar sesión.";
             return RedirectToAction("Login");
         }
-
         public ActionResult Logout()
         {
             Session.Clear();
