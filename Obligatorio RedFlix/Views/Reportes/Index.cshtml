@@ -1,0 +1,123 @@
+﻿@model List<Obligatorio_RedFlix.Models.ReporteUsuarioViewModel>
+
+@{
+    ViewBag.Title = "Reportes de usuarios";
+}
+
+<div class="container-fluid px-5 py-4" style="max-width:1400px;">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+        <div>
+            <h2 style="color:#D4AF37; margin-bottom:5px;">
+                Reportes de usuarios
+            </h2>
+
+            <p style="color:#aaa; margin:0;">
+                En esta sección se muestran los problemas reportados por los usuarios.
+            </p>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div style="background:#151515; border:1px solid #333; border-radius:14px; padding:30px;">
+            <h4 style="color:white;">
+                No hay reportes cargados
+            </h4>
+
+            <p style="color:#aaa;">
+                Todavía ningún usuario reportó un problema.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-dark table-bordered align-middle">
+                <thead>
+                    <tr style="color:#D4AF37;">
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Tipo</th>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var reporte in Model)
+                    {
+                        <tr>
+                            <td>@reporte.NombreUsuario</td>
+                            <td>@reporte.EmailUsuario</td>
+                            <td>@reporte.TipoReporte</td>
+                            <td>@reporte.Titulo</td>
+                            <td>@reporte.Descripcion</td>
+
+                            <td>
+                                @if (reporte.Estado == "Resuelto")
+                                {
+                                    <span class="badge bg-success">
+                                        Resuelto
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Pendiente
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                @reporte.FechaReporte.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+
+                            <td>
+                                @if (reporte.Estado != "Resuelto")
+                                {
+                                    using (Html.BeginForm("Resolver", "Reportes", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden" name="id" value="@reporte.IdReporte" />
+
+                                        <button type="submit"
+                                                class="btn btn-gold btn-sm"
+                                                onclick="return confirm('¿Marcar este reporte como resuelto?');">
+                                            Resolver
+                                        </button>
+                                    }
+                                }
+                                else
+                                {
+                                    <span style="color:#aaa;">
+                                        Finalizado
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>

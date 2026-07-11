@@ -1,120 +1,310 @@
 ﻿using Obligatorio_RedFlix.Models;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
-using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
+using System.Data.Entity.Core.EntityClient;
 using System.Linq;
-using System.Web;
+using System.Collections.Generic;
 
 namespace Obligatorio_RedFlix.Data
 {
     public class AdoNetService
     {
-        private readonly string _connectionString;
+        private readonly string connectionString;
 
         public AdoNetService()
         {
-            string entityConnection = ConfigurationManager.ConnectionStrings["RedFlixDBEntities"].ConnectionString;
-            _connectionString = new EntityConnectionStringBuilder(entityConnection).ProviderConnectionString;
+            connectionString = ObtenerConnectionString();
         }
 
-        // guardar el clima actual de una ciudad en la base de datos
-        public void GuardarClima(string ciudad, decimal temperatura, string estado, int humedad)
+        private string ObtenerConnectionString()
         {
-            const string sql = @"INSERT INTO Clima
-                (Ciudad, Temperatura, EstadoClima, Humedad, FechaConsulta)
-                VALUES (@Ciudad, @Temperatura, @EstadoClima, @Humedad, @FechaConsulta);";
+            string cs = ConfigurationManager.ConnectionStrings["RedFlixDBEntities"].ConnectionString;
 
-            using (var conexion = new SqlConnection(_connectionString))
-            using (var comando = new SqlCommand(sql, conexion))
+            if (cs.Contains("metadata="))
             {
-                comando.Parameters.Add("@Ciudad", SqlDbType.VarChar, 100).Value = ciudad;
-                var temperaturaParam = comando.Parameters.Add("@Temperatura", SqlDbType.Decimal);
-                temperaturaParam.Precision = 5;
-                temperaturaParam.Scale = 2;
-                temperaturaParam.Value = temperatura;
-                comando.Parameters.Add("@EstadoClima", SqlDbType.VarChar, 100).Value = estado;
-                comando.Parameters.Add("@Humedad", SqlDbType.Int).Value = humedad;
-                comando.Parameters.Add("@FechaConsulta", SqlDbType.DateTime).Value = DateTime.Now;
-                conexion.Open();
-                comando.ExecuteNonQuery();
+                EntityConnectionStringBuilder builder = new EntityConnectionStringBuilder(cs);
+                return builder.ProviderConnectionString;
             }
+
+            return cs;
         }
 
-        // inserta o actualiza la cotización de una moneda en la base de datos
-        public void GuardarOActualizarCotizacion(string origen, string destino, decimal valor)
+        public SqlConnection ObtenerConexion()
         {
-            const string sql = @"UPDATE Cotizaciones
-                SET Valor = @Valor, FechaActualizacion = @FechaActualizacion
-                WHERE MonedaOrigen = @Origen AND MonedaDestino = @Destino;
-                IF @@ROWCOUNT = 0
-                    INSERT INTO Cotizaciones (MonedaOrigen, MonedaDestino, Valor, FechaActualizacion)
-                    VALUES (@Origen, @Destino, @Valor, @FechaActualizacion);";
-
-            using (var conexion = new SqlConnection(_connectionString))
-            using (var comando = new SqlCommand(sql, conexion))
-            {
-                comando.Parameters.Add("@Origen", SqlDbType.VarChar, 10).Value = origen;
-                comando.Parameters.Add("@Destino", SqlDbType.VarChar, 10).Value = destino;
-                var valorParam = comando.Parameters.Add("@Valor", SqlDbType.Decimal);
-                valorParam.Precision = 18;
-                valorParam.Scale = 4;
-                valorParam.Value = valor;
-                comando.Parameters.Add("@FechaActualizacion", SqlDbType.DateTime).Value = DateTime.Now;
-                conexion.Open();
-                comando.ExecuteNonQuery();
-            }
+            return new SqlConnection(connectionString);
         }
 
-        // consulta la mejor promoción activa para el clima actual 
-        public PromocionesClima ObtenerPromocionClimatica(string categoria, string descripcion, decimal temperatura)
+        public void GuardarClima(string ciudad, decimal temperatura, string descripcion, int humedad)
         {
-            const string sql = @"SELECT TOP 1 IdPromocion, Nombre, Descripcion, CondicionClima,
-                    TemperaturaMax, PorcentajeDesc, IdGenero, Activa
-                FROM PromocionesClima
-                WHERE Activa = 1
-                  AND (TemperaturaMax IS NULL OR @Temperatura <= TemperaturaMax)
-                  AND (LTRIM(RTRIM(CondicionClima)) = ''
-                       OR LOWER(CondicionClima) = @Categoria
-                       OR @Descripcion LIKE '%' + LOWER(CondicionClima) + '%')
-                ORDER BY PorcentajeDesc DESC;";
-
-            using (var conexion = new SqlConnection(_connectionString))
-            using (var comando = new SqlCommand(sql, conexion))
+            try
             {
-                var temperaturaParam = comando.Parameters.Add("@Temperatura", SqlDbType.Decimal);
-                temperaturaParam.Precision = 5;
-                temperaturaParam.Scale = 2;
-                temperaturaParam.Value = temperatura;
-                comando.Parameters.Add("@Categoria", SqlDbType.VarChar, 100).Value = Normalizar(categoria);
-                comando.Parameters.Add("@Descripcion", SqlDbType.VarChar, 300).Value = Normalizar(descripcion);
-                conexion.Open();
-
-                using (var lector = comando.ExecuteReader(CommandBehavior.SingleRow))
+                using (SqlConnection conexion = ObtenerConexion())
                 {
-                    if (!lector.Read()) return null;
-                    return new PromocionesClima
+                    conexion.Open();
+
+                    if (!ExisteTabla(conexion, "ClimaHistorial"))
                     {
-                        IdPromocion = lector.GetInt32(0),
-                        Nombre = lector.GetString(1),
-                        Descripcion = lector.IsDBNull(2) ? null : lector.GetString(2),
-                        CondicionClima = lector.GetString(3),
-                        TemperaturaMax = lector.IsDBNull(4) ? (decimal?)null : lector.GetDecimal(4),
-                        PorcentajeDesc = lector.GetDecimal(5),
-                        IdGenero = lector.IsDBNull(6) ? (int?)null : lector.GetInt32(6),
-                        Activa = lector.GetBoolean(7)
-                    };
+                        return;
+                    }
+
+                    string sql = @"
+                        INSERT INTO ClimaHistorial
+                        (Ciudad, Temperatura, Descripcion, Humedad, FechaConsulta)
+                        VALUES
+                        (@Ciudad, @Temperatura, @Descripcion, @Humedad, GETDATE())";
+
+                    using (SqlCommand comando = new SqlCommand(sql, conexion))
+                    {
+                        comando.Parameters.AddWithValue("@Ciudad", ciudad ?? "");
+                        comando.Parameters.AddWithValue("@Temperatura", temperatura);
+                        comando.Parameters.AddWithValue("@Descripcion", descripcion ?? "");
+                        comando.Parameters.AddWithValue("@Humedad", humedad);
+
+                        comando.ExecuteNonQuery();
+                    }
                 }
             }
+            catch
+            {
+                // Si la tabla no existe o hay algún problema, no rompe la aplicación.
+            }
         }
 
-        private static string Normalizar(string texto)
+        public void GuardarOActualizarCotizacion(string monedaBase, string monedaDestino, decimal valor)
         {
-            return string.IsNullOrWhiteSpace(texto) ? "" : texto.Trim().ToLower()
-                .Replace("í", "i").Replace("á", "a").Replace("é", "e")
-                .Replace("ó", "o").Replace("ú", "u");
+            try
+            {
+                using (SqlConnection conexion = ObtenerConexion())
+                {
+                    conexion.Open();
+
+                    if (!ExisteTabla(conexion, "Cotizaciones"))
+                    {
+                        return;
+                    }
+
+                    string sql = @"
+                        MERGE Cotizaciones AS destino
+                        USING (
+                            SELECT 
+                                @MonedaBase AS MonedaBase,
+                                @MonedaDestino AS MonedaDestino
+                        ) AS origen
+                        ON destino.MonedaBase = origen.MonedaBase
+                        AND destino.MonedaDestino = origen.MonedaDestino
+
+                        WHEN MATCHED THEN
+                            UPDATE SET 
+                                Valor = @Valor,
+                                FechaActualizacion = GETDATE()
+
+                        WHEN NOT MATCHED THEN
+                            INSERT (MonedaBase, MonedaDestino, Valor, FechaActualizacion)
+                            VALUES (@MonedaBase, @MonedaDestino, @Valor, GETDATE());";
+
+                    using (SqlCommand comando = new SqlCommand(sql, conexion))
+                    {
+                        comando.Parameters.AddWithValue("@MonedaBase", monedaBase);
+                        comando.Parameters.AddWithValue("@MonedaDestino", monedaDestino);
+                        comando.Parameters.AddWithValue("@Valor", valor);
+
+                        comando.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch
+            {
+                // Si la tabla no existe o hay algún problema, no rompe la aplicación.
+            }
+        }
+
+        public PromocionesClima ObtenerPromocionClimatica(string categoria, string descripcion, decimal temperatura)
+        {
+            try
+            {
+                string categoriaNormalizada = NormalizarTexto(categoria);
+                string descripcionNormalizada = NormalizarTexto(descripcion);
+
+                using (RedFlixDBEntities db = new RedFlixDBEntities())
+                {
+                    var promociones = db.PromocionesClimas
+                        .Where(p => p.Activa)
+                        .ToList();
+
+                    foreach (var promo in promociones)
+                    {
+                        string condicion = NormalizarTexto(promo.CondicionClima);
+
+                        if (condicion == categoriaNormalizada ||
+                            descripcionNormalizada.Contains(condicion) ||
+                            categoriaNormalizada.Contains(condicion))
+                        {
+                            return promo;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Si falla, simplemente no aplica promoción.
+            }
+
+            return null;
+        }
+
+        private bool ExisteTabla(SqlConnection conexion, string nombreTabla)
+        {
+            string sql = @"
+                SELECT COUNT(*)
+                FROM INFORMATION_SCHEMA.TABLES
+                WHERE TABLE_NAME = @NombreTabla";
+
+            using (SqlCommand comando = new SqlCommand(sql, conexion))
+            {
+                comando.Parameters.AddWithValue("@NombreTabla", nombreTabla);
+
+                int cantidad = Convert.ToInt32(comando.ExecuteScalar());
+
+                return cantidad > 0;
+            }
+        }
+
+        private string NormalizarTexto(string texto)
+        {
+            return string.IsNullOrWhiteSpace(texto)
+                ? ""
+                : texto.Trim().ToLower()
+                    .Replace("í", "i")
+                    .Replace("á", "a")
+                    .Replace("é", "e")
+                    .Replace("ó", "o")
+                    .Replace("ú", "u");
+        }
+
+        public bool GuardarReporteUsuario(int idUsuario, string tipoReporte, string titulo, string descripcion)
+        {
+            try
+            {
+                using (SqlConnection conexion = ObtenerConexion())
+                {
+                    conexion.Open();
+
+                    string sql = @"
+                INSERT INTO ReportesUsuarios
+                (IdUsuario, TipoReporte, Titulo, Descripcion, Estado, FechaReporte)
+                VALUES
+                (@IdUsuario, @TipoReporte, @Titulo, @Descripcion, 'Pendiente', GETDATE())";
+
+                    using (SqlCommand comando = new SqlCommand(sql, conexion))
+                    {
+                        comando.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                        comando.Parameters.AddWithValue("@TipoReporte", tipoReporte);
+                        comando.Parameters.AddWithValue("@Titulo", titulo);
+                        comando.Parameters.AddWithValue("@Descripcion", descripcion);
+
+                        int filas = comando.ExecuteNonQuery();
+
+                        return filas > 0;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public List<ReporteUsuarioViewModel> ListarReportesUsuarios()
+        {
+            List<ReporteUsuarioViewModel> reportes = new List<ReporteUsuarioViewModel>();
+
+            try
+            {
+                using (SqlConnection conexion = ObtenerConexion())
+                {
+                    conexion.Open();
+
+                    string sql = @"
+                SELECT 
+                    r.IdReporte,
+                    r.IdUsuario,
+                    u.Nombre,
+                    u.Email,
+                    r.TipoReporte,
+                    r.Titulo,
+                    r.Descripcion,
+                    r.Estado,
+                    r.FechaReporte,
+                    r.FechaResolucion
+                FROM ReportesUsuarios r
+                INNER JOIN Usuarios u ON r.IdUsuario = u.IdUsuario
+                ORDER BY r.FechaReporte DESC";
+
+                    using (SqlCommand comando = new SqlCommand(sql, conexion))
+                    {
+                        using (SqlDataReader reader = comando.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ReporteUsuarioViewModel reporte = new ReporteUsuarioViewModel
+                                {
+                                    IdReporte = Convert.ToInt32(reader["IdReporte"]),
+                                    IdUsuario = Convert.ToInt32(reader["IdUsuario"]),
+                                    NombreUsuario = reader["Nombre"].ToString(),
+                                    EmailUsuario = reader["Email"].ToString(),
+                                    TipoReporte = reader["TipoReporte"].ToString(),
+                                    Titulo = reader["Titulo"].ToString(),
+                                    Descripcion = reader["Descripcion"].ToString(),
+                                    Estado = reader["Estado"].ToString(),
+                                    FechaReporte = Convert.ToDateTime(reader["FechaReporte"]),
+                                    FechaResolucion = reader["FechaResolucion"] == DBNull.Value
+                                        ? (DateTime?)null
+                                        : Convert.ToDateTime(reader["FechaResolucion"])
+                                };
+
+                                reportes.Add(reporte);
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return new List<ReporteUsuarioViewModel>();
+            }
+
+            return reportes;
+        }
+
+        public bool MarcarReporteComoResuelto(int idReporte)
+        {
+            try
+            {
+                using (SqlConnection conexion = ObtenerConexion())
+                {
+                    conexion.Open();
+
+                    string sql = @"
+                UPDATE ReportesUsuarios
+                SET Estado = 'Resuelto',
+                    FechaResolucion = GETDATE()
+                WHERE IdReporte = @IdReporte";
+
+                    using (SqlCommand comando = new SqlCommand(sql, conexion))
+                    {
+                        comando.Parameters.AddWithValue("@IdReporte", idReporte);
+
+                        int filas = comando.ExecuteNonQuery();
+
+                        return filas > 0;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

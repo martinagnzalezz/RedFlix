@@ -25,6 +25,11 @@ namespace Obligatorio_RedFlix.Controllers
         }
         public ActionResult Index()
         {
+            if (Session["RolNombre"] != null && Session["RolNombre"].ToString() == "Promociones")
+            {
+                return RedirectToAction("Index", "Promociones");
+            }
+
             List<Populares> peliculas = ObtenerPopulares("/3/discover/movie?language=es-ES&page=1&sort_by=popularity.desc", true, 20);
             List<Populares> series = ObtenerPopulares("/3/discover/tv?language=es-ES&page=1&sort_by=popularity.desc", false, 20);
 

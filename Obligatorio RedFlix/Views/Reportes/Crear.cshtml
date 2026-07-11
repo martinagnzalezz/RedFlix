@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Reportar problema";
+}
+
+<div class="container py-5" style="max-width:900px;">
+
+    <div style="background:#151515; border:1px solid #333; border-radius:16px; padding:35px;">
+
+        <h2 style="color:#D4AF37; margin-bottom:10px;">
+            Reportar un problema
+        </h2>
+
+        <p style="color:#ccc; margin-bottom:25px;">
+            Desde acá podés reportar un problema relacionado con películas, series, precios, compras o funcionamiento del sistema.
+        </p>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.Error
+            </div>
+        }
+
+        @using (Html.BeginForm("Crear", "Reportes", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label style="color:white;">Tipo de reporte</label>
+
+                <select name="tipoReporte"
+                        class="form-control"
+                        style="background:#111; color:white; border:1px solid #333;">
+                    <option value="">Seleccionar tipo</option>
+                    <option value="Problema con película">Problema con película</option>
+                    <option value="Problema con serie">Problema con serie</option>
+                    <option value="Error de precio">Error de precio</option>
+                    <option value="Problema con compra o alquiler">Problema con compra o alquiler</option>
+                    <option value="Error del sistema">Error del sistema</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label style="color:white;">Título</label>
+
+                <input type="text"
+                       name="titulo"
+                       class="form-control"
+                       placeholder="Ej: No carga el tráiler"
+                       style="background:#111; color:white; border:1px solid #333;" />
+            </div>
+
+            <div class="mb-3">
+                <label style="color:white;">Descripción</label>
+
+                <textarea name="descripcion"
+                          class="form-control"
+                          rows="5"
+                          placeholder="Explicá brevemente el problema..."
+                          style="background:#111; color:white; border:1px solid #333;"></textarea>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:25px;">
+
+                <button type="submit" class="btn btn-gold">
+                    Enviar reporte
+                </button>
+
+                <a href="@Url.Action("Index", "Home")"
+                   class="btn btn-outline-light">
+                    Cancelar
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -160,6 +160,8 @@
     <Compile Include="Controllers\PerfilesController.cs" />
     <Compile Include="Controllers\PreciosController.cs" />
     <Compile Include="Controllers\PromocionesController.cs" />
+    <Compile Include="Controllers\ReportesController.cs" />
+    <Compile Include="Data\AdoNetService.cs" />
     <Compile Include="Filters\AutorizarPermisoAttribute.cs" />
     <Compile Include="Filters\AutorizarRol.cs" />
     <Compile Include="Helpers\SeguridadHelper.cs" />
@@ -258,6 +260,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>RedFlixModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ReporteUsuarioViewModel.cs" />
     <Compile Include="Models\Role.cs">
       <DependentUpon>RedFlixModel.tt</DependentUpon>
     </Compile>
@@ -375,6 +378,8 @@
     <Content Include="Views\Biblioteca\Crear.cshtml" />
     <Content Include="Views\Biblioteca\Detalle.cshtml" />
     <Content Include="Views\Account\SinPermiso.cshtml" />
+    <Content Include="Views\Reportes\Index.cshtml" />
+    <Content Include="Views\Reportes\Crear.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

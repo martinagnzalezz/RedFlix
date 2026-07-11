@@ -1,24 +1,23 @@
 ﻿using Obligatorio_RedFlix.Filters;
 using Obligatorio_RedFlix.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Obligatorio_RedFlix.Controllers
 {
-    [AutorizarRol("Administrador")]
+    [AutorizarPermiso("Contenido.Gestionar")]
     public class PreciosController : Controller
     {
         private RedFlixDBEntities db = new RedFlixDBEntities();
 
         public ActionResult Index()
         {
-            var precios = db.PrecioContenidoes.OrderBy(p => p.Titulo).ToList();
+            var precios = db.PrecioContenidoes
+                .OrderBy(p => p.Titulo)
+                .ToList();
+
             return View(precios);
         }
-
 
         [HttpGet]
         public ActionResult Create(int? tmdbId, string titulo, string tipoContenido)
@@ -39,7 +38,8 @@ namespace Obligatorio_RedFlix.Controllers
         public ActionResult Create(PrecioContenido precio)
         {
             bool yaExiste = db.PrecioContenidoes.Any(p =>
-                p.TmdbId == precio.TmdbId && p.TipoContenido == precio.TipoContenido);
+                p.TmdbId == precio.TmdbId &&
+                p.TipoContenido == precio.TipoContenido);
 
             if (yaExiste)
             {
@@ -49,11 +49,12 @@ namespace Obligatorio_RedFlix.Controllers
             if (ModelState.IsValid)
             {
                 precio.Activo = true;
-                db.PrecioContenidoes.Add(precio); 
+                db.PrecioContenidoes.Add(precio);
 
                 try
                 {
                     db.SaveChanges();
+
                     TempData["Success"] = "Precio creado correctamente.";
                     return RedirectToAction("Index");
                 }
@@ -63,12 +64,10 @@ namespace Obligatorio_RedFlix.Controllers
                     {
                         foreach (var subError in error.ValidationErrors)
                         {
-                            ModelState.AddModelError("", $"Campo '{subError.PropertyName}': {subError.ErrorMessage}");
+                            ModelState.AddModelError("", "Campo '" + subError.PropertyName + "': " + subError.ErrorMessage);
                         }
                     }
-                   
                 }
-
             }
 
             return View(precio);
@@ -79,7 +78,9 @@ namespace Obligatorio_RedFlix.Controllers
             PrecioContenido precio = db.PrecioContenidoes.Find(id);
 
             if (precio == null)
+            {
                 return HttpNotFound();
+            }
 
             return View(precio);
         }
@@ -91,7 +92,9 @@ namespace Obligatorio_RedFlix.Controllers
             PrecioContenido precioBD = db.PrecioContenidoes.Find(precio.IdPrecio);
 
             if (precioBD == null)
+            {
                 return HttpNotFound();
+            }
 
             if (ModelState.IsValid)
             {
@@ -99,9 +102,6 @@ namespace Obligatorio_RedFlix.Controllers
                 precioBD.PrecioCompra = precio.PrecioCompra;
                 precioBD.PrecioAlquier = precio.PrecioAlquier;
                 precioBD.DiasAlquiler = precio.DiasAlquiler;
-
-                // IMPORTANTE:
-                // Al editar, lo dejamos activo para que se siga usando en la película
                 precioBD.Activo = true;
 
                 db.SaveChanges();
@@ -118,7 +118,9 @@ namespace Obligatorio_RedFlix.Controllers
             PrecioContenido precio = db.PrecioContenidoes.Find(id);
 
             if (precio == null)
+            {
                 return HttpNotFound();
+            }
 
             return View(precio);
         }
@@ -133,6 +135,7 @@ namespace Obligatorio_RedFlix.Controllers
             {
                 db.PrecioContenidoes.Remove(precio);
                 db.SaveChanges();
+
                 TempData["Success"] = "Precio eliminado.";
             }
 
@@ -141,7 +144,11 @@ namespace Obligatorio_RedFlix.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing) db.Dispose();
+            if (disposing)
+            {
+                db.Dispose();
+            }
+
             base.Dispose(disposing);
         }
     }

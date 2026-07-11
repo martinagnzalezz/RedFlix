@@ -25,6 +25,7 @@
         bool puedeContenido = estaLogueado && Obligatorio_RedFlix.Helpers.SeguridadHelper.TienePermiso("Contenido.Gestionar");
         bool puedeReportes = estaLogueado && Obligatorio_RedFlix.Helpers.SeguridadHelper.TienePermiso("Reportes.Ver");
         bool puedeCatalogo = estaLogueado && Obligatorio_RedFlix.Helpers.SeguridadHelper.TienePermiso("Catalogo.Usar");
+        bool puedeVerPeliculasSeries = puedeCatalogo || puedeContenido || puedeReportes;
 
         bool puedeAdministracion = puedeUsuarios || puedeRoles || puedePromociones || puedeContenido || puedeReportes;
     }
@@ -68,7 +69,7 @@
                             </a>
                         </li>
 
-                        if (puedeCatalogo || puedeContenido)
+                        if (puedeVerPeliculasSeries)
                         {
                             <li class="nav-item">
                                 <a class="nav-link" href="@Url.Action("Index", "Pelicula")">
@@ -169,7 +170,7 @@
                     }
                     else
                     {
-                        if (puedeCatalogo || puedeContenido)
+                        if (puedeVerPeliculasSeries)
                         {
                             using (Html.BeginForm("Buscar", "Pelicula", FormMethod.Get, new { @class = "d-flex me-3" }))
                             {
@@ -183,6 +184,11 @@
 
                         if (puedeCatalogo)
                         {
+                            <a href="@Url.Action("Crear", "Reportes")"
+                               class="btn btn-outline-warning me-3">
+                                Reportar problema
+                            </a>
+
                             <a href="@Url.Action("Index", "Favoritos")"
                                class="text-light me-3"
                                style="font-size: 26px; text-decoration: none; line-height: 1;"
@@ -202,12 +208,15 @@
                             Hola @(Session["PerfilNombre"] ?? Session["UsuarioNombre"])
                         </span>
 
-                        <a href="@Url.Action("Seleccionar", "Perfiles")"
-                           class="profile-mini me-3"
-                           title="Cambiar perfil"
-                           style="background:@(Session["PerfilColor"] ?? "#D4AF37");">
-                            @(Session["PerfilInicial"] ?? Session["UsuarioNombre"].ToString().Substring(0, 1).ToUpper())
-                        </a>
+                        if (puedeCatalogo)
+                        {
+                            <a href="@Url.Action("Seleccionar", "Perfiles")"
+                               class="profile-mini me-3"
+                               title="Cambiar perfil"
+                               style="background:@(Session["PerfilColor"] ?? "#D4AF37");">
+                                @(Session["PerfilInicial"] ?? Session["UsuarioNombre"].ToString().Substring(0, 1).ToUpper())
+                            </a>
+                        }
 
                         <a href="@Url.Action("Logout","Account")"
                            class="btn btn-outline-danger">

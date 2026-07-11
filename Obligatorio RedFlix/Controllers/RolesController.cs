@@ -5,11 +5,12 @@ using System.Web.Mvc;
 
 namespace Obligatorio_RedFlix.Controllers
 {
-    [AutorizarRol("Administrador")]
+    [AutorizarPermiso("Roles.Gestionar")]
     public class RolesController : Controller
     {
         private RedFlixDBEntities db = new RedFlixDBEntities();
 
+        // LISTAR ROLES
         public ActionResult Index()
         {
             var roles = db.Roles.ToList();
@@ -85,7 +86,10 @@ namespace Obligatorio_RedFlix.Controllers
                 return HttpNotFound();
             }
 
-            bool nombreExiste = db.Roles.Any(r => r.Nombre == role.Nombre && r.IdRol != role.IdRol);
+            bool nombreExiste = db.Roles.Any(r =>
+                r.Nombre == role.Nombre &&
+                r.IdRol != role.IdRol
+            );
 
             if (nombreExiste)
             {
@@ -104,7 +108,7 @@ namespace Obligatorio_RedFlix.Controllers
             return View(role);
         }
 
-        // ELIMINAR - GET (confirmación)
+        // ELIMINAR - GET
         public ActionResult Delete(int id)
         {
             Role role = db.Roles.Find(id);
@@ -147,7 +151,9 @@ namespace Obligatorio_RedFlix.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
+            {
                 db.Dispose();
+            }
 
             base.Dispose(disposing);
         }

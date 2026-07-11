@@ -53,10 +53,8 @@ namespace Obligatorio_RedFlix.Controllers
             Session["RolId"] = usuario.IdRol;
             Session["RolNombre"] = usuario.Role.Nombre;
 
-            // También guardamos esto con nombre más simple por si lo usamos en otras vistas
             Session["Rol"] = usuario.Role.Nombre;
 
-            // Cargamos los permisos del rol del usuario
             var permisos = db.Database.SqlQuery<string>(
                 @"SELECT p.NombrePermiso
           FROM RolesPermisos rp
@@ -72,6 +70,26 @@ namespace Obligatorio_RedFlix.Controllers
             Session.Remove("PerfilInicial");
 
             TempData["Success"] = "¡Bienvenido, " + usuario.Nombre + "!";
+
+            if (usuario.Role.Nombre == "Administrador")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (usuario.Role.Nombre == "Promociones")
+            {
+                return RedirectToAction("Index", "Promociones");
+            }
+
+            if (usuario.Role.Nombre == "Gestor de contenido")
+            {
+                return RedirectToAction("Index", "Precios");
+            }
+
+            if (usuario.Role.Nombre == "Reportes")
+            {
+                return RedirectToAction("Index", "Reportes");
+            }
 
             return RedirectToAction("Seleccionar", "Perfiles");
         }
