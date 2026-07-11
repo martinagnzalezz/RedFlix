@@ -65,6 +65,8 @@ namespace Obligatorio_RedFlix.Models
         [JsonProperty("media_type", NullValueHandling = NullValueHandling.Ignore)]
         public string MediaType { get; set; }
 
+     
+
         public string TituloMostrar
         {
             get

@@ -380,6 +380,7 @@
     <Content Include="Views\Account\SinPermiso.cshtml" />
     <Content Include="Views\Reportes\Index.cshtml" />
     <Content Include="Views\Reportes\Crear.cshtml" />
+    <Content Include="Views\Account\Perfil.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

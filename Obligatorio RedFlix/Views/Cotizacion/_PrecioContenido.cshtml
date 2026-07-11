@@ -23,238 +23,240 @@
 }
 else
 {
-<div style="background:#151515; border:1px solid #D4AF37; border-radius:14px; padding:22px; margin-top:25px;">
+    <div style="background:#151515; border:1px solid #D4AF37; border-radius:14px; padding:22px; margin-top:25px;">
 
-    <h4 style="color:#D4AF37; margin-bottom:18px;">
-        Precios de @Model.TipoContenido
-    </h4>
-    @if (Session["RolNombre"] != null && Session["RolNombre"].ToString() == "Administrador")
-    {
-        <div style="margin-top:16px; padding-top:16px; border-top:1px solid #333;">
+        <h4 style="color:#D4AF37; margin-bottom:18px;">
+            Precios de @Model.TipoContenido
+        </h4>
+        @if (Session["RolNombre"] != null &&
+            (Session["RolNombre"].ToString() == "Administrador" ||
+             Session["RolNombre"].ToString() == "Gestor de contenido"))
+        {
+            <div style="margin-top:16px; padding-top:16px; border-top:1px solid #333;">
 
-            @if (Model.TienePrecioCargado)
-            {
-                <a href="@Url.Action("Edit", "Precios", new { id = Model.IdPrecio })"
-                   style="display:inline-block; background:transparent; color:#D4AF37; border:1px solid #D4AF37; border-radius:8px; padding:8px 16px; text-decoration:none; font-size:13px; font-weight:600;">
-                    Editar precio
-                </a>
-            }
-            else
-            {
-                <a href="@Url.Action("Create", "Precios", new
+                @if (Model.TienePrecioCargado)
+                {
+                    <a href="@Url.Action("Edit", "Precios", new { id = Model.IdPrecio })"
+                       style="display:inline-block; background:transparent; color:#D4AF37; border:1px solid #D4AF37; border-radius:8px; padding:8px 16px; text-decoration:none; font-size:13px; font-weight:600;">
+                        Editar precio
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Create", "Precios", new
                     {
                         tmdbId = Model.IdTmdb,
                         titulo = Model.Titulo,
                         tipoContenido = Model.TipoContenido == "Serie" ? "serie" : "pelicula"
                     })"
-                   style="display:inline-block; background:transparent; color:#D4AF37; border:1px solid #D4AF37; border-radius:8px; padding:8px 16px; text-decoration:none; font-size:13px; font-weight:600;">
-                    + Cargar precio para este contenido
-                </a>
-                <span style="color:#888; font-size:12px; margin-left:8px;">
-                    (mostrando precio por defecto)
-                </span>
-            }
-
-        </div>}
-
-    <br />
-    @if (Model.TienePromocion)
-    {
-        <div style="background:#201a05; border:1px solid #D4AF37; border-radius:10px; padding:12px; margin-bottom:18px;">
-            <strong style="color:#D4AF37;">
-                Promoción activa: @Model.NombrePromocion
-            </strong>
-
-            <p style="color:#ccc; margin:5px 0 0 0;">
-                Descuento aplicado: @Model.PorcentajeDescuento.ToString("0.##")%
-                por clima: @Model.CondicionPromocion
-            </p>
-        </div>
-    }
-    <br />
-
-    <div class="row">
-
-        <div class="col-md-6 mb-3">
-            <div style="background:#202020; border:1px solid #333; border-radius:12px; padding:18px; height:100%;">
-
-                <h5 style="color:white; margin-bottom:12px;">
-                    Comprar
-                </h5>
-
-                @if (Model.TienePromocion)
-                {
-                    <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
-                        USD @Model.PrecioCompraUsd.ToString("0.00")
-                    </p>
-
-                    <p style="color:#D4AF37; font-weight:bold; margin-bottom:6px;">
-                        USD @Model.PrecioCompraUsdFinal.ToString("0.00")
-                    </p>
-
-                    <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
-                        UYU $@Model.PrecioCompraUyu.ToString("0")
-                    </p>
-
-                    <p style="color:#D4AF37; font-weight:bold; margin-bottom:6px;">
-                        UYU $@Model.PrecioCompraUyuFinal.ToString("0")
-                    </p>
-
-                    <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
-                        EUR €@Model.PrecioCompraEur.ToString("0.00")
-                    </p>
-
-                    <p style="color:#D4AF37; font-weight:bold; margin-bottom:14px;">
-                        EUR €@Model.PrecioCompraEurFinal.ToString("0.00")
-                    </p>
-                }
-                else
-                {
-                    <p style="color:#ccc; margin-bottom:6px;">
-                        USD @Model.PrecioCompraUsd.ToString("0.00")
-                    </p>
-
-                    <p style="color:#ccc; margin-bottom:6px;">
-                        UYU $@Model.PrecioCompraUyu.ToString("0")
-                    </p>
-
-                    <p style="color:#ccc; margin-bottom:14px;">
-                        EUR €@Model.PrecioCompraEur.ToString("0.00")
-                    </p>
+                       style="display:inline-block; background:transparent; color:#D4AF37; border:1px solid #D4AF37; border-radius:8px; padding:8px 16px; text-decoration:none; font-size:13px; font-weight:600;">
+                        + Cargar precio para este contenido
+                    </a>
+                    <span style="color:#888; font-size:12px; margin-left:8px;">
+                        (mostrando precio por defecto)
+                    </span>
                 }
 
+            </div>}
 
-                @if (Session["UsuarioId"] != null)
-                {
-                    using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
+        <br />
+        @if (Model.TienePromocion)
+        {
+            <div style="background:#201a05; border:1px solid #D4AF37; border-radius:10px; padding:12px; margin-bottom:18px;">
+                <strong style="color:#D4AF37;">
+                    Promoción activa: @Model.NombrePromocion
+                </strong>
 
-                        <input type="hidden" name="idTmdb" value="@Model.IdTmdb" />
-                        <input type="hidden" name="titulo" value="@Model.Titulo" />
-                        <input type="hidden" name="tipoContenido" value="@Model.TipoContenido" />
-                        <input type="hidden" name="tipoOperacion" value="Compra" />
-
-                        <label style="color:#ccc; display:block; margin-bottom:6px;">
-                            Moneda
-                        </label>
-
-                        <select name="moneda"
-                                style="width:100%; background:#111; color:white; border:1px solid #444; border-radius:8px; padding:8px; margin-bottom:12px;">
-                            <option value="USD">Dólares USD</option>
-                            <option value="UYU">Pesos UYU</option>
-                            <option value="EUR">Euros EUR</option>
-                        </select>
-
-                        <button type="submit"
-                                style="width:100%; background:#D4AF37; color:#111; border:none; border-radius:8px; padding:10px; font-weight:bold;">
-                            Agregar compra al carrito
-                        </button>
-                    }
-                }
-                else
-                {
-                    <p style="color:#aaa; margin:0;">
-                        Iniciá sesión para comprar.
-                    </p>
-                }
-
+                <p style="color:#ccc; margin:5px 0 0 0;">
+                    Descuento aplicado: @Model.PorcentajeDescuento.ToString("0.##")%
+                    por clima: @Model.CondicionPromocion
+                </p>
             </div>
-        </div>
+        }
+        <br />
 
-        <div class="col-md-6 mb-3">
-            <div style="background:#202020; border:1px solid #333; border-radius:12px; padding:18px; height:100%;">
+        <div class="row">
 
-                <h5 style="color:white; margin-bottom:12px;">
-                    Alquilar
-                </h5>
+            <div class="col-md-6 mb-3">
+                <div style="background:#202020; border:1px solid #333; border-radius:12px; padding:18px; height:100%;">
 
-                @if (Model.TienePromocion)
-                {
-                    <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
-                        USD @Model.PrecioAlquilerUsd.ToString("0.00")
-                    </p>
+                    <h5 style="color:white; margin-bottom:12px;">
+                        Comprar
+                    </h5>
 
-                    <p style="color:#D4AF37; font-weight:bold; margin-bottom:6px;">
-                        USD @Model.PrecioAlquilerUsdFinal.ToString("0.00")
-                    </p>
-
-                    <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
-                        UYU $@Model.PrecioAlquilerUyu.ToString("0")
-                    </p>
-
-                    <p style="color:#D4AF37; font-weight:bold; margin-bottom:6px;">
-                        UYU $@Model.PrecioAlquilerUyuFinal.ToString("0")
-                    </p>
-
-                    <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
-                        EUR €@Model.PrecioAlquilerEur.ToString("0.00")
-                    </p>
-
-                    <p style="color:#D4AF37; font-weight:bold; margin-bottom:14px;">
-                        EUR €@Model.PrecioAlquilerEurFinal.ToString("0.00")
-                    </p>
-                }
-                else
-                {
-                    <p style="color:#ccc; margin-bottom:6px;">
-                        USD @Model.PrecioAlquilerUsd.ToString("0.00")
-                    </p>
-
-                    <p style="color:#ccc; margin-bottom:6px;">
-                        UYU $@Model.PrecioAlquilerUyu.ToString("0")
-                    </p>
-
-                    <p style="color:#ccc; margin-bottom:14px;">
-                        EUR €@Model.PrecioAlquilerEur.ToString("0.00")
-                    </p>
-                }
-
-                @if (Session["UsuarioId"] != null)
-                {
-                    using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post))
+                    @if (Model.TienePromocion)
                     {
-                        @Html.AntiForgeryToken()
+                        <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
+                            USD @Model.PrecioCompraUsd.ToString("0.00")
+                        </p>
 
-                        <input type="hidden" name="idTmdb" value="@Model.IdTmdb" />
-                        <input type="hidden" name="titulo" value="@Model.Titulo" />
-                        <input type="hidden" name="tipoContenido" value="@Model.TipoContenido" />
-                        <input type="hidden" name="tipoOperacion" value="Alquiler" />
+                        <p style="color:#D4AF37; font-weight:bold; margin-bottom:6px;">
+                            USD @Model.PrecioCompraUsdFinal.ToString("0.00")
+                        </p>
 
-                        <label style="color:#ccc; display:block; margin-bottom:6px;">
-                            Moneda
-                        </label>
+                        <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
+                            UYU $@Model.PrecioCompraUyu.ToString("0")
+                        </p>
 
-                        <select name="moneda"
-                                style="width:100%; background:#111; color:white; border:1px solid #444; border-radius:8px; padding:8px; margin-bottom:12px;">
-                            <option value="USD">Dólares USD</option>
-                            <option value="UYU">Pesos UYU</option>
-                            <option value="EUR">Euros EUR</option>
-                        </select>
+                        <p style="color:#D4AF37; font-weight:bold; margin-bottom:6px;">
+                            UYU $@Model.PrecioCompraUyuFinal.ToString("0")
+                        </p>
 
-                        <button type="submit"
-                                style="width:100%; background:#D4AF37; color:#111; border:none; border-radius:8px; padding:10px; font-weight:bold;">
-                            Agregar alquiler al carrito
-                        </button>
+                        <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
+                            EUR €@Model.PrecioCompraEur.ToString("0.00")
+                        </p>
+
+                        <p style="color:#D4AF37; font-weight:bold; margin-bottom:14px;">
+                            EUR €@Model.PrecioCompraEurFinal.ToString("0.00")
+                        </p>
                     }
-                }
-                else
-                {
-                    <p style="color:#aaa; margin:0;">
-                        Iniciá sesión para alquilar.
-                    </p>
-                }
+                    else
+                    {
+                        <p style="color:#ccc; margin-bottom:6px;">
+                            USD @Model.PrecioCompraUsd.ToString("0.00")
+                        </p>
 
+                        <p style="color:#ccc; margin-bottom:6px;">
+                            UYU $@Model.PrecioCompraUyu.ToString("0")
+                        </p>
+
+                        <p style="color:#ccc; margin-bottom:14px;">
+                            EUR €@Model.PrecioCompraEur.ToString("0.00")
+                        </p>
+                    }
+
+
+                    @if (Session["UsuarioId"] != null)
+                    {
+                        using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="idTmdb" value="@Model.IdTmdb" />
+                            <input type="hidden" name="titulo" value="@Model.Titulo" />
+                            <input type="hidden" name="tipoContenido" value="@Model.TipoContenido" />
+                            <input type="hidden" name="tipoOperacion" value="Compra" />
+
+                            <label style="color:#ccc; display:block; margin-bottom:6px;">
+                                Moneda
+                            </label>
+
+                            <select name="moneda"
+                                    style="width:100%; background:#111; color:white; border:1px solid #444; border-radius:8px; padding:8px; margin-bottom:12px;">
+                                <option value="USD">Dólares USD</option>
+                                <option value="UYU">Pesos UYU</option>
+                                <option value="EUR">Euros EUR</option>
+                            </select>
+
+                            <button type="submit"
+                                    style="width:100%; background:#D4AF37; color:#111; border:none; border-radius:8px; padding:10px; font-weight:bold;">
+                                Agregar compra al carrito
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <p style="color:#aaa; margin:0;">
+                            Iniciá sesión para comprar.
+                        </p>
+                    }
+
+                </div>
             </div>
+
+            <div class="col-md-6 mb-3">
+                <div style="background:#202020; border:1px solid #333; border-radius:12px; padding:18px; height:100%;">
+
+                    <h5 style="color:white; margin-bottom:12px;">
+                        Alquilar
+                    </h5>
+
+                    @if (Model.TienePromocion)
+                    {
+                        <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
+                            USD @Model.PrecioAlquilerUsd.ToString("0.00")
+                        </p>
+
+                        <p style="color:#D4AF37; font-weight:bold; margin-bottom:6px;">
+                            USD @Model.PrecioAlquilerUsdFinal.ToString("0.00")
+                        </p>
+
+                        <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
+                            UYU $@Model.PrecioAlquilerUyu.ToString("0")
+                        </p>
+
+                        <p style="color:#D4AF37; font-weight:bold; margin-bottom:6px;">
+                            UYU $@Model.PrecioAlquilerUyuFinal.ToString("0")
+                        </p>
+
+                        <p style="color:#888; text-decoration:line-through; margin-bottom:4px;">
+                            EUR €@Model.PrecioAlquilerEur.ToString("0.00")
+                        </p>
+
+                        <p style="color:#D4AF37; font-weight:bold; margin-bottom:14px;">
+                            EUR €@Model.PrecioAlquilerEurFinal.ToString("0.00")
+                        </p>
+                    }
+                    else
+                    {
+                        <p style="color:#ccc; margin-bottom:6px;">
+                            USD @Model.PrecioAlquilerUsd.ToString("0.00")
+                        </p>
+
+                        <p style="color:#ccc; margin-bottom:6px;">
+                            UYU $@Model.PrecioAlquilerUyu.ToString("0")
+                        </p>
+
+                        <p style="color:#ccc; margin-bottom:14px;">
+                            EUR €@Model.PrecioAlquilerEur.ToString("0.00")
+                        </p>
+                    }
+
+                    @if (Session["UsuarioId"] != null)
+                    {
+                        using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="idTmdb" value="@Model.IdTmdb" />
+                            <input type="hidden" name="titulo" value="@Model.Titulo" />
+                            <input type="hidden" name="tipoContenido" value="@Model.TipoContenido" />
+                            <input type="hidden" name="tipoOperacion" value="Alquiler" />
+
+                            <label style="color:#ccc; display:block; margin-bottom:6px;">
+                                Moneda
+                            </label>
+
+                            <select name="moneda"
+                                    style="width:100%; background:#111; color:white; border:1px solid #444; border-radius:8px; padding:8px; margin-bottom:12px;">
+                                <option value="USD">Dólares USD</option>
+                                <option value="UYU">Pesos UYU</option>
+                                <option value="EUR">Euros EUR</option>
+                            </select>
+
+                            <button type="submit"
+                                    style="width:100%; background:#D4AF37; color:#111; border:none; border-radius:8px; padding:10px; font-weight:bold;">
+                                Agregar alquiler al carrito
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <p style="color:#aaa; margin:0;">
+                            Iniciá sesión para alquilar.
+                        </p>
+                    }
+
+                </div>
+            </div>
+
         </div>
+
+        <p style="color:#aaa; font-size:13px; margin-top:8px; margin-bottom:0;">
+            Conversión automática usando cotización actual:
+            1 USD = $@Model.CotizacionUyu.ToString("0.00") UYU /
+            €@Model.CotizacionEur.ToString("0.00") EUR
+        </p>
 
     </div>
-
-    <p style="color:#aaa; font-size:13px; margin-top:8px; margin-bottom:0;">
-        Conversión automática usando cotización actual:
-        1 USD = $@Model.CotizacionUyu.ToString("0.00") UYU /
-        €@Model.CotizacionEur.ToString("0.00") EUR
-    </p>
-
-</div>
 }

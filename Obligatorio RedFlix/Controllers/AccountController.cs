@@ -195,8 +195,14 @@ namespace Obligatorio_RedFlix.Controllers
             if (usuario == null)
                 return HttpNotFound();
 
-            usuario.Nombre = nombre;
-            usuario.Apellido = apellido;
+            if (string.IsNullOrWhiteSpace(nombre))
+            {
+                ViewBag.Error = "El nombre es obligatorio.";
+                return View(usuario);
+            }
+
+            usuario.Nombre = nombre.Trim();
+            usuario.Apellido = string.IsNullOrWhiteSpace(apellido) ? null : apellido.Trim();
 
             if (!string.IsNullOrWhiteSpace(passwordNuevo))
             {
@@ -215,6 +221,12 @@ namespace Obligatorio_RedFlix.Controllers
                 if (passwordNuevo != confirmarNuevo)
                 {
                     ViewBag.Error = "Las contraseñas nuevas no coinciden.";
+                    return View(usuario);
+                }
+
+                if (passwordNuevo.Length < 6)
+                {
+                    ViewBag.Error = "La contraseña nueva debe tener al menos 6 caracteres.";
                     return View(usuario);
                 }
 

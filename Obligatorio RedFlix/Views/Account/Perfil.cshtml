@@ -1,0 +1,84 @@
+﻿
+@model Obligatorio_RedFlix.Models.Usuario
+
+@{
+    ViewBag.Title = "Mi perfil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5" style="max-width: 720px;">
+    <div class="card bg-dark text-light border-secondary shadow">
+        <div class="card-body p-4 p-md-5">
+            <h2 class="mb-2">Mi perfil</h2>
+            <p class="text-secondary mb-4">Actualizá tus datos personales o cambiá tu contraseña.</p>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">@TempData["Success"]</div>
+            }
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            @using (Html.BeginForm("Perfil", "Account", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="nombre">Nombre *</label>
+                        <input class="form-control bg-black text-light border-secondary"
+                               id="nombre" name="nombre" value="@Model.Nombre" required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="apellido">Apellido</label>
+                        <input class="form-control bg-black text-light border-secondary"
+                               id="apellido" name="apellido" value="@Model.Apellido" />
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Email</label>
+                        <input class="form-control bg-black text-secondary border-secondary"
+                               value="@Model.Email" disabled />
+                        <div class="form-text text-secondary">El email de la cuenta no se modifica.</div>
+                    </div>
+                </div>
+
+                <hr class="border-secondary my-4" />
+
+                <h5>Cambiar contraseña</h5>
+                <p class="text-secondary small">Dejá estos campos vacíos si no querés cambiarla.</p>
+
+                <div class="mb-3">
+                    <label class="form-label" for="passwordActual">Contraseña actual</label>
+                    <input type="password" class="form-control bg-black text-light border-secondary"
+                           id="passwordActual" name="passwordActual" autocomplete="current-password" />
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="passwordNuevo">Nueva contraseña</label>
+                        <input type="password" class="form-control bg-black text-light border-secondary"
+                               id="passwordNuevo" name="passwordNuevo" minlength="6"
+                               autocomplete="new-password" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="confirmarNuevo">Confirmar contraseña</label>
+                        <input type="password" class="form-control bg-black text-light border-secondary"
+                               id="confirmarNuevo" name="confirmarNuevo" minlength="6"
+                               autocomplete="new-password" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-warning fw-bold mt-4">
+                    Guardar cambios
+                </button>
+            }
+        </div>
+    </div>
+</div>
+

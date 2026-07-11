@@ -8,7 +8,7 @@
     <title>@ViewBag.Title - RedFlix</title>
 
     @Styles.Render("~/Content/css")
-    <link href="@Url.Content("~/Content/site.css")?v=splash4" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Site.css")?v=navbar3" rel="stylesheet" />
 
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("styles", required: false)
@@ -42,195 +42,211 @@
         </div>
     }
 
-    <nav class="navbar navbar-expand-lg navbar-dark redflix-navbar">
+    <nav class="navbar navbar-expand-xl navbar-dark redflix-navbar">
 
-        <div class="container-fluid">
+    <div class="container-fluid">
 
-            <a class="navbar-brand logo-redflix" href="@Url.Action("Index", "Home")">
-                RED<span>FLIX</span>
-            </a>
+        <a class="navbar-brand logo-redflix" href="@Url.Action("Index", "Home")">
+            RED<span>FLIX</span>
+        </a>
 
-            <button class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarRedflix">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarRedflix">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="collapse navbar-collapse" id="navbarRedflix">
+        <div class="collapse navbar-collapse" id="navbarRedflix">
 
-                <ul class="navbar-nav me-auto">
+            <ul class="navbar-nav me-auto">
 
-                    @if (estaLogueado)
+                @if (estaLogueado)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "Home")">
+                            Inicio
+                        </a>
+                    </li>
+
+                    if (puedeVerPeliculasSeries)
                     {
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Home")">
-                                Inicio
+                            <a class="nav-link" href="@Url.Action("Index", "Pelicula")">
+                                Películas
                             </a>
                         </li>
 
-                        if (puedeVerPeliculasSeries)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("Index", "Pelicula")">
-                                    Películas
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("Series", "Pelicula")">
-                                    Series
-                                </a>
-                            </li>
-                        }
-
-                        if (puedeCatalogo)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("Index", "Biblioteca")">
-                                    Biblioteca
-                                </a>
-                            </li>
-                        }
-
-                        if (puedeAdministracion)
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                    Administración
-                                </a>
-
-                                <ul class="dropdown-menu dropdown-menu-dark">
-
-                                    @if (puedeUsuarios)
-                                    {
-                                        <li>
-                                            <a class="dropdown-item" href="@Url.Action("Index", "Usuarios")">
-                                                Usuarios
-                                            </a>
-                                        </li>
-                                    }
-
-                                    @if (puedeRoles)
-                                    {
-                                        <li>
-                                            <a class="dropdown-item" href="@Url.Action("Index", "Roles")">
-                                                Roles
-                                            </a>
-                                        </li>
-                                    }
-
-                                    @if (puedePromociones)
-                                    {
-                                        <li>
-                                            <a class="dropdown-item" href="@Url.Action("Index", "Promociones")">
-                                                Promociones
-                                            </a>
-                                        </li>
-                                    }
-
-                                    @if (puedeContenido)
-                                    {
-                                        <li>
-                                            <a class="dropdown-item" href="@Url.Action("Index", "Precios")">
-                                                Precios / Contenido
-                                            </a>
-                                        </li>
-                                    }
-
-                                    @if (puedeReportes)
-                                    {
-                                        <li>
-                                            <a class="dropdown-item" href="@Url.Action("Index", "Reportes")">
-                                                Reportes
-                                            </a>
-                                        </li>
-                                    }
-
-                                </ul>
-                            </li>
-                        }
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Series", "Pelicula")">
+                                Series
+                            </a>
+                        </li>
                     }
 
-                </ul>
+                    if (puedeCatalogo)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Biblioteca")">
+                                Biblioteca
+                            </a>
+                        </li>
+                    }
 
-                <div class="d-flex align-items-center">
+                    if (puedeAdministracion)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                Administración
+                            </a>
 
-                    @if (!estaLogueado)
+                            <ul class="dropdown-menu dropdown-menu-dark">
+
+                                @if (puedeUsuarios)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Usuarios")">
+                                            Usuarios
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (puedeRoles)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Roles")">
+                                            Roles
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (puedePromociones)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Promociones")">
+                                            Promociones
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (puedeContenido)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Precios")">
+                                            Precios / Contenido
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (puedeReportes)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Reportes")">
+                                            Reportes
+                                        </a>
+                                    </li>
+                                }
+
+                            </ul>
+                        </li>
+                    }
+                }
+
+            </ul>
+
+            <div class="d-flex align-items-center gap-2 navbar-actions">
+
+                @if (!estaLogueado)
+                {
+                    string accionActual = ViewContext.RouteData.Values["action"] as string;
+
+                    if (!string.Equals(accionActual, "Login", StringComparison.OrdinalIgnoreCase))
                     {
                         <a href="@Url.Action("Login", "Account")"
                            class="btn btn-outline-light me-2">
                             Iniciar sesión
                         </a>
+                    }
 
+                    if (!string.Equals(accionActual, "Registrar", StringComparison.OrdinalIgnoreCase))
+                    {
                         <a href="@Url.Action("Registrar", "Account")"
                            class="btn btn-gold">
                             Registrarse
                         </a>
                     }
-                    else
+                }
+                else
+                {
+                    if (puedeVerPeliculasSeries)
                     {
-                        if (puedeVerPeliculasSeries)
+                        using (Html.BeginForm("Buscar", "Pelicula", FormMethod.Get, new { @class = "d-flex me-3" }))
                         {
-                            using (Html.BeginForm("Buscar", "Pelicula", FormMethod.Get, new { @class = "d-flex me-3" }))
-                            {
-                                <input class="form-control"
-                                       style="width:250px"
-                                       name="q"
-                                       placeholder="Buscar..."
-                                       value="@Request.QueryString["q"]" />
-                            }
+                            <input class="form-control navbar-search"
+                                   name="q"
+                                   placeholder="Buscar..."
+                                   value="@Request.QueryString["q"]" />
                         }
+                    }
 
-                        if (puedeCatalogo)
-                        {
-                            <a href="@Url.Action("Crear", "Reportes")"
-                               class="btn btn-outline-warning me-3">
-                                Reportar problema
-                            </a>
+                    if (puedeCatalogo)
+                    {
+                        <a href="@Url.Action("Index", "Favoritos")"
+                           class="navbar-icon-link"
+                           style="font-size: 26px; text-decoration: none; line-height: 1; color: #fff !important;"
+                           title="Favoritos">
+                            ♡
+                        </a>
 
-                            <a href="@Url.Action("Index", "Favoritos")"
-                               class="text-light me-3"
-                               style="font-size: 26px; text-decoration: none; line-height: 1;"
-                               title="Favoritos">
-                                ♡
-                            </a>
-
-                            <a href="@Url.Action("Index", "Carrito")"
-                               class="text-light me-3"
-                               style="font-size: 24px; text-decoration: none; line-height: 1;"
-                               title="Carrito">
-                                🛒
-                            </a>
-                        }
-
-                        <span class="text-light me-3">
-                            Hola @(Session["PerfilNombre"] ?? Session["UsuarioNombre"])
-                        </span>
-
-                        if (puedeCatalogo)
-                        {
-                            <a href="@Url.Action("Seleccionar", "Perfiles")"
-                               class="profile-mini me-3"
-                               title="Cambiar perfil"
-                               style="background:@(Session["PerfilColor"] ?? "#D4AF37");">
-                                @(Session["PerfilInicial"] ?? Session["UsuarioNombre"].ToString().Substring(0, 1).ToUpper())
-                            </a>
-                        }
-
-                        <a href="@Url.Action("Logout","Account")"
-                           class="btn btn-outline-danger">
-                            Salir
+                        <a href="@Url.Action("Index", "Carrito")"
+                           class="navbar-icon-link"
+                           style="font-size: 24px; text-decoration: none; line-height: 1;"
+                           title="Carrito">
+                            🛒
                         </a>
                     }
 
-                </div>
+                    <div class="dropdown">
+                        <button class="btn user-menu-toggle dropdown-toggle text-white"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                style="color: #fff !important; direction: ltr;">
+                            <span class="user-avatar">
+                                @Session["UsuarioNombre"].ToString().Substring(0, 1).ToUpper()
+                            </span>
+                            <span class="user-name">@Session["UsuarioNombre"]</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end user-dropdown">
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("Perfil", "Account")">
+                                    Mi perfil
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("Crear", "Reportes")">
+                                    Reportar problema
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="@Url.Action("Logout", "Account")">
+                                    Cerrar sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                }
 
             </div>
 
         </div>
 
-    </nav>
+    </div>
+
+</nav>
 
     <main class="container-fluid px-5 body-content flex-grow-1">
         @RenderBody()

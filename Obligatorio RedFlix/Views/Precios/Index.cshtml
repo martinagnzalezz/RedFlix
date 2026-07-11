@@ -116,6 +116,82 @@
             .action-link.warn {
                 color: #e50914;
             }
+
+        .tmdb-search {
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 24px;
+        }
+
+        .tmdb-search-form {
+            display: flex;
+            gap: 10px;
+        }
+
+            .tmdb-search-form input {
+                flex: 1;
+                min-width: 0;
+                background: #1a1a1a;
+                border: 1px solid #333;
+                color: #fff;
+                border-radius: 7px;
+                padding: 11px 14px;
+            }
+
+        .tmdb-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
+            gap: 16px;
+            margin: 18px 0 26px;
+        }
+
+        .tmdb-card {
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .tmdb-card img {
+                width: 100%;
+                aspect-ratio: 2/3;
+                object-fit: cover;
+                background: #1a1a1a;
+            }
+
+        .tmdb-card-body {
+            padding: 13px;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tmdb-card h3 {
+            font-size: 15px;
+            margin: 0;
+            color: #fff;
+        }
+
+        .tmdb-meta {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .tmdb-card .btn-gold-sm {
+            margin-top: auto;
+            text-align: center;
+        }
+
+        @@media (max-width:600px) {
+            .tmdb-search-form {
+                flex-direction: column;
+            }
+        }
     </style>
 }
 
@@ -124,6 +200,61 @@
         <h2><i class="fa fa-tags"></i> Gestión de Precios</h2>
         @Html.ActionLink("+ Nuevo precio", "Create", null, new { @class = "btn-gold-sm" })
     </div>
+
+    <div class="tmdb-search">
+        <h3 style="margin-top:0;">Buscar contenido</h3>
+        <p style="color:#888;">Elegí una película o serie y los datos se completarán automáticamente.</p>
+        @using (Html.BeginForm("Index", "Precios", FormMethod.Get, new { @class = "tmdb-search-form" }))
+        {
+            <input type="search" name="q" value="@ViewBag.Busqueda" placeholder="Ej.: Batman, Stranger Things..." required />
+            <button type="submit" class="btn-gold-sm">Buscar</button>
+        }
+        @if (ViewBag.ErrorTmdb != null)
+        {
+            <p class="text-danger" style="margin:14px 0 0;">@ViewBag.ErrorTmdb</p>
+        }
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Busqueda as string))
+    {
+        var resultados = ViewBag.ResultadosTmdb as List<Obligatorio_RedFlix.Models.Populares>;
+        var preciosPorContenido = ViewBag.PreciosPorContenido as Dictionary<string, int>;
+
+        if (resultados != null && resultados.Any())
+        {
+            <div class="tmdb-results">
+                @foreach (var resultado in resultados)
+                {
+                    string tipo = resultado.MediaType == "tv" ? "serie" : "pelicula";
+                    string clave = tipo + ":" + resultado.Id.Value;
+                    int idPrecio = 0;
+                    bool tienePrecio = preciosPorContenido != null && preciosPorContenido.TryGetValue(clave, out idPrecio);
+                    string fecha = resultado.ReleaseDate.HasValue ? resultado.ReleaseDate.Value.Year.ToString()
+                        : resultado.FirstAirDate.HasValue ? resultado.FirstAirDate.Value.Year.ToString() : "Sin fecha";
+
+                    <article class="tmdb-card">
+                        <img src="@resultado.ImagenUrl" alt="Portada de @resultado.TituloMostrar" />
+                        <div class="tmdb-card-body">
+                            <h3>@resultado.TituloMostrar</h3>
+                            <div class="tmdb-meta">@(tipo == "serie" ? "Serie" : "Película") · @fecha · TMDB #@resultado.Id</div>
+                            @if (tienePrecio)
+                            {
+                                @Html.ActionLink("Editar precio", "Edit", new { id = idPrecio }, new { @class = "btn-gold-sm" })
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Asignar precio", "Create", new { tmdbId = resultado.Id.Value, titulo = resultado.TituloMostrar, tipoContenido = tipo }, new { @class = "btn-gold-sm" })
+                            }
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+        else if (ViewBag.ErrorTmdb == null)
+        {
+            <p style="color:#888;">No se encontraron películas o series para esa búsqueda.</p>
+        }
+    }
 
     <div class="admin-card">
         <table class="table table-redflix mb-0">
@@ -164,4 +295,3 @@
         </table>
     </div>
 </div>
-

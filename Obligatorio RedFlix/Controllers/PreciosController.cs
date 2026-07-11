@@ -1,23 +1,64 @@
 ﻿using Obligatorio_RedFlix.Filters;
 using Obligatorio_RedFlix.Models;
+using Newtonsoft.Json;
+using RestSharp;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Obligatorio_RedFlix.Controllers
 {
-    [AutorizarPermiso("Contenido.Gestionar")]
+    [AutorizarRol("Administrador", "Gestor de contenido")]
     public class PreciosController : Controller
     {
         private RedFlixDBEntities db = new RedFlixDBEntities();
 
-        public ActionResult Index()
+        private const string TmdbToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMTFhMDAwMjVlNjZkYmIxZjQ0ZmZjYzVhZWY5Nzk0OCIsIm5iZiI6MTc3OTQ5OTI4NS40MTY5OTk4LCJzdWIiOiI2YTExMDExNTE3YzM2ZjNjMTBhZWI5NjUiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.zTH2CzrPgTnbjCUv2cgxEcrTKySFdp9-ts0EWwX_ICc";
+
+        public ActionResult Index(string q)
         {
-            var precios = db.PrecioContenidoes
-                .OrderBy(p => p.Titulo)
-                .ToList();
+            var precios = db.PrecioContenidoes.OrderBy(p => p.Titulo).ToList();
+
+            ViewBag.Busqueda = q;
+            ViewBag.ResultadosTmdb = new List<Populares>();
+            ViewBag.PreciosPorContenido = precios
+                .GroupBy(p => p.TipoContenido.ToLower() + ":" + p.TmdbId)
+                .ToDictionary(g => g.Key, g => g.First().IdPrecio);
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                try
+                {
+                    var client = new RestClient(new RestClientOptions("https://api.themoviedb.org"));
+                    var request = new RestRequest("/3/search/multi", Method.Get);
+                    request.AddHeader("Authorization", "Bearer " + TmdbToken);
+                    request.AddQueryParameter("query", q.Trim());
+                    request.AddQueryParameter("language", "es-ES");
+                    request.AddQueryParameter("include_adult", "false");
+
+                    RestResponse response = client.Execute(request);
+                    ListaPopulares resultado = JsonConvert.DeserializeObject<ListaPopulares>(response.Content);
+
+                    ViewBag.ResultadosTmdb = resultado != null && resultado.Results != null
+                        ? resultado.Results
+                            .Where(r => r.Id.HasValue &&
+                                (r.MediaType == "movie" || r.MediaType == "tv") &&
+                                !string.IsNullOrWhiteSpace(r.TituloMostrar))
+                            .Take(12)
+                            .ToList()
+                        : new List<Populares>();
+                }
+                catch (Exception)
+                {
+                    ViewBag.ErrorTmdb = "No se pudo consultar TMDB. Intentá nuevamente.";
+                }
+            }
 
             return View(precios);
         }
+
 
         [HttpGet]
         public ActionResult Create(int? tmdbId, string titulo, string tipoContenido)
@@ -38,8 +79,7 @@ namespace Obligatorio_RedFlix.Controllers
         public ActionResult Create(PrecioContenido precio)
         {
             bool yaExiste = db.PrecioContenidoes.Any(p =>
-                p.TmdbId == precio.TmdbId &&
-                p.TipoContenido == precio.TipoContenido);
+                p.TmdbId == precio.TmdbId && p.TipoContenido == precio.TipoContenido);
 
             if (yaExiste)
             {
@@ -54,7 +94,6 @@ namespace Obligatorio_RedFlix.Controllers
                 try
                 {
                     db.SaveChanges();
-
                     TempData["Success"] = "Precio creado correctamente.";
                     return RedirectToAction("Index");
                 }
@@ -64,10 +103,12 @@ namespace Obligatorio_RedFlix.Controllers
                     {
                         foreach (var subError in error.ValidationErrors)
                         {
-                            ModelState.AddModelError("", "Campo '" + subError.PropertyName + "': " + subError.ErrorMessage);
+                            ModelState.AddModelError("", $"Campo '{subError.PropertyName}': {subError.ErrorMessage}");
                         }
                     }
+
                 }
+
             }
 
             return View(precio);
@@ -78,9 +119,7 @@ namespace Obligatorio_RedFlix.Controllers
             PrecioContenido precio = db.PrecioContenidoes.Find(id);
 
             if (precio == null)
-            {
                 return HttpNotFound();
-            }
 
             return View(precio);
         }
@@ -92,9 +131,7 @@ namespace Obligatorio_RedFlix.Controllers
             PrecioContenido precioBD = db.PrecioContenidoes.Find(precio.IdPrecio);
 
             if (precioBD == null)
-            {
                 return HttpNotFound();
-            }
 
             if (ModelState.IsValid)
             {
@@ -102,7 +139,7 @@ namespace Obligatorio_RedFlix.Controllers
                 precioBD.PrecioCompra = precio.PrecioCompra;
                 precioBD.PrecioAlquier = precio.PrecioAlquier;
                 precioBD.DiasAlquiler = precio.DiasAlquiler;
-                precioBD.Activo = true;
+                precioBD.Activo = precio.Activo;
 
                 db.SaveChanges();
 
@@ -118,9 +155,7 @@ namespace Obligatorio_RedFlix.Controllers
             PrecioContenido precio = db.PrecioContenidoes.Find(id);
 
             if (precio == null)
-            {
                 return HttpNotFound();
-            }
 
             return View(precio);
         }
@@ -135,7 +170,6 @@ namespace Obligatorio_RedFlix.Controllers
             {
                 db.PrecioContenidoes.Remove(precio);
                 db.SaveChanges();
-
                 TempData["Success"] = "Precio eliminado.";
             }
 
@@ -144,11 +178,7 @@ namespace Obligatorio_RedFlix.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-
+            if (disposing) db.Dispose();
             base.Dispose(disposing);
         }
     }
