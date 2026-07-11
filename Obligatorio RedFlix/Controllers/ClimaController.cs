@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Obligatorio_RedFlix.Models;
+using Obligatorio_RedFlix.Data;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,8 @@ namespace Obligatorio_RedFlix.Controllers
 {
     public class ClimaController : Controller
     {
-        private RedFlixDBEntities db = new RedFlixDBEntities();
+        
+        private readonly AdoNetService adoNet = new AdoNetService();
 
         private RestResponse HacerRequestClima(string endpoint)
         {
@@ -80,6 +82,9 @@ namespace Obligatorio_RedFlix.Controllers
 
             string estado = clima.Weather[0].Main.ToLower();
             string descripcion = clima.Weather[0].Description;
+
+            adoNet.GuardarClima(clima.Name, Convert.ToDecimal(clima.Main.Temp),
+                descripcion, clima.Main.Humidity);
 
             string recomendacion;
             string categoria;
@@ -150,18 +155,7 @@ namespace Obligatorio_RedFlix.Controllers
 
         private PromocionesClima ObtenerPromocionClimaAplicable(string categoria, string descripcion, decimal temperatura)
         {
-            string categoriaNormalizada = NormalizarTexto(categoria);
-            string descripcionNormalizada = NormalizarTexto(descripcion);
-
-            return db.PromocionesClimas
-                .Where(p => p.Activa)
-                .Where(p => p.TemperaturaMax == null || temperatura <= p.TemperaturaMax.Value)
-                .ToList()
-                .Where(p => string.IsNullOrWhiteSpace(p.CondicionClima) ||
-                    NormalizarTexto(p.CondicionClima) == categoriaNormalizada ||
-                    descripcionNormalizada.Contains(NormalizarTexto(p.CondicionClima)))
-                .OrderByDescending(p => p.PorcentajeDesc)
-                .FirstOrDefault();
+            return adoNet.ObtenerPromocionClimatica(categoria, descripcion, temperatura);
         }
 
         private string NormalizarTexto(string texto)

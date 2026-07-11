@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Obligatorio_RedFlix.Models;
+using Obligatorio_RedFlix.Data;
 using RestSharp;
 using System;
 using System.Configuration;
@@ -11,6 +12,7 @@ namespace Obligatorio_RedFlix.Controllers
     public class CotizacionController : Controller
     {
         private RedFlixDBEntities db = new RedFlixDBEntities();
+        private readonly AdoNetService adoNet = new AdoNetService();
 
         private RestResponse HacerRequestCotizacion(string endpoint)
         {
@@ -72,11 +74,16 @@ namespace Obligatorio_RedFlix.Controllers
                 };
             }
 
+            double uyu = resultado.ConversionRates["UYU"];
+            double eur = resultado.ConversionRates["EUR"];
+            adoNet.GuardarOActualizarCotizacion("USD", "UYU", Convert.ToDecimal(uyu));
+            adoNet.GuardarOActualizarCotizacion("USD", "EUR", Convert.ToDecimal(eur));
+
             return new CotizacionViewModel
             {
                 Usd = 1,
-                Uyu = resultado.ConversionRates["UYU"],
-                Eur = resultado.ConversionRates["EUR"],
+                Uyu = uyu,
+                Eur = eur,
                 FechaActualizacion = resultado.TimeLastUpdateUtc,
                 Correcto = true
             };
@@ -164,15 +171,7 @@ namespace Obligatorio_RedFlix.Controllers
                 return null;
             }
 
-            return db.PromocionesClimas
-                .Where(p => p.Activa)
-                .Where(p => p.TemperaturaMax == null || clima.Temperatura <= p.TemperaturaMax.Value)
-                .ToList()
-                .Where(p => string.IsNullOrWhiteSpace(p.CondicionClima) ||
-                    NormalizarTexto(p.CondicionClima) == clima.Categoria ||
-                    clima.Descripcion.Contains(NormalizarTexto(p.CondicionClima)))
-                .OrderByDescending(p => p.PorcentajeDesc)
-                .FirstOrDefault();
+            return adoNet.ObtenerPromocionClimatica(clima.Categoria, clima.Descripcion, clima.Temperatura);
         }
 
         private ClimaActualSimple ObtenerClimaActual()
