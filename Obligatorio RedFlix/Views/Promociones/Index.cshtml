@@ -118,6 +118,86 @@
             font-size: 13px;
             font-weight: 700;
         }
+
+        @@media (max-width: 767.98px) {
+            .admin-page {
+                padding-top: 0;
+            }
+
+            .admin-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+                .admin-header h2 {
+                    font-size: clamp(1.65rem, 8vw, 2rem);
+                }
+
+            .admin-card {
+                border: 0;
+                background: transparent;
+                overflow: visible;
+            }
+
+            .table-redflix, .table-redflix tbody, .table-redflix tr, .table-redflix td {
+                display: block;
+                width: 100%;
+            }
+
+                .table-redflix thead {
+                    display: none;
+                }
+
+                .table-redflix tbody {
+                    display: grid;
+                    gap: 14px;
+                }
+
+                    .table-redflix tbody tr {
+                        padding: 14px;
+                        background: #111;
+                        border: 1px solid #2a2a2a;
+                        border-radius: 12px;
+                    }
+
+                    .table-redflix tbody td {
+                        display: grid;
+                        grid-template-columns: minmax(92px, 36%) 1fr;
+                        gap: 10px;
+                        padding: 9px 0;
+                        border-bottom: 1px solid #242424;
+                        overflow-wrap: anywhere;
+                    }
+
+                        .table-redflix tbody td::before {
+                            content: attr(data-label);
+                            color: #888;
+                            font-size: 11px;
+                            font-weight: 700;
+                            letter-spacing: .5px;
+                            text-transform: uppercase;
+                        }
+
+                        .table-redflix tbody td:last-child {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 10px;
+                            padding-top: 14px;
+                            border-bottom: 0;
+                        }
+
+                            .table-redflix tbody td:last-child::before {
+                                flex-basis: 100%;
+                            }
+
+            .action-link {
+                margin-right: 0;
+                padding: 7px 10px;
+                border: 1px solid #4a3b12;
+                border-radius: 6px;
+            }
+        }
     </style>
 }
 
@@ -144,12 +224,12 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.Nombre</td>
-                        <td>@item.CondicionClima</td>
-                        <td>@(item.TemperaturaMax.HasValue ? item.TemperaturaMax + "°C" : "—")</td>
-                        <td>@(item.Genero != null ? item.Genero.Nombre : "Todos")</td>
-                        <td><span class="desc-badge">-@item.PorcentajeDesc%</span></td>
-                        <td>
+                        <td data-label="Nombre">@item.Nombre</td>
+                        <td data-label="Condición">@item.CondicionClima</td>
+                        <td data-label="Temp. máx">@(item.TemperaturaMax.HasValue ? item.TemperaturaMax + "°C" : "—")</td>
+                        <td data-label="Género">@(item.Genero != null ? item.Genero.Nombre : "Todos")</td>
+                        <td data-label="Descuento"><span class="desc-badge">-@item.PorcentajeDesc%</span></td>
+                        <td data-label="Estado">
                             @using (Html.BeginForm("CambiarEstado", "Promociones", new { id = item.IdPromocion }, FormMethod.Get))
                             {
                                 <button type="submit" class="estado-badge @(item.Activa ? "activo" : "inactivo")">
@@ -157,7 +237,7 @@
                                 </button>
                             }
                         </td>
-                        <td>
+                        <td data-label="Acciones">
                             @Html.ActionLink("Editar", "Edit", new { id = item.IdPromocion }, new { @class = "action-link" })
                             @Html.ActionLink("Eliminar", "Delete", new { id = item.IdPromocion }, new { @class = "action-link warn" })
                         </td>

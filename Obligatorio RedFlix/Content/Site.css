@@ -902,3 +902,270 @@ body {
         visibility: hidden;
     }
 }
+
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+img,
+video,
+svg {
+    max-width: 100%;
+}
+
+iframe {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto !important;
+}
+
+.body-content,
+.site-footer {
+    width: 100%;
+    padding-left: clamp(1rem, 4vw, 3rem);
+    padding-right: clamp(1rem, 4vw, 3rem);
+}
+
+.row > *,
+.d-flex > *,
+.dashboard-hero > *,
+.clima-content > * {
+    min-width: 0;
+}
+
+/* Las tablas conservan toda la información y se desplazan sólo ellas. */
+.table-responsive,
+.table-container,
+.reporte-panel {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+}
+
+.table-container table,
+.reporte-panel table {
+    min-width: 640px;
+}
+
+@media (max-width: 1199.98px) {
+    .redflix-navbar .container-fluid {
+        padding-left: clamp(1rem, 3vw, 2rem);
+        padding-right: clamp(1rem, 3vw, 2rem);
+    }
+
+    .navbar-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+        .navbar-actions .dropdown:last-child {
+            margin-left: auto;
+        }
+
+    .dashboard-redflix {
+        padding: 2rem clamp(1rem, 4vw, 3rem);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .body-content,
+    .site-footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+        /* Neutraliza espaciados de escritorio puestos en vistas con Bootstrap. */
+        .body-content .container-fluid.px-5 {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+    .logo-redflix {
+        font-size: 1.35rem;
+        letter-spacing: 2px;
+    }
+
+    .navbar-actions {
+        gap: .5rem !important;
+    }
+
+    .navbar-search {
+        order: -1;
+        width: 100%;
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    .user-menu-toggle {
+        padding-right: 4px;
+    }
+
+    .hero-redflix {
+        min-height: calc(100svh - 62px);
+        padding: 3rem 1rem;
+    }
+
+    .hero-content h1,
+    .hero-info h1 {
+        font-size: clamp(2rem, 10vw, 3rem);
+        overflow-wrap: anywhere;
+    }
+
+    .hero-subtitle {
+        margin: 1.25rem 0 1.75rem;
+        font-size: 1.15rem;
+    }
+
+    .comenzar-form {
+        flex-direction: column;
+        gap: .75rem;
+    }
+
+        .comenzar-form input.input-comenzar,
+        .comenzar-form button.btn-comenzar {
+            width: 100%;
+            border: 2px solid #D4AF37 !important;
+            border-radius: 6px;
+        }
+
+    .dashboard-redflix {
+        padding: 1.25rem 0;
+    }
+
+    .dashboard-hero {
+        min-height: 0;
+        padding: 1.5rem;
+        gap: 1.5rem;
+        border-radius: 16px;
+    }
+
+        .dashboard-hero::before {
+            width: 240px;
+            height: 240px;
+        }
+
+    .hero-poster {
+        align-self: center;
+        width: min(100%, 260px);
+    }
+
+        .hero-poster img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 2 / 3;
+        }
+
+    .hero-buttons > a,
+    .hero-buttons > button {
+        flex: 1 1 100%;
+        text-align: center;
+    }
+
+    .movie-row-horizontal,
+    .poster-grid-redflix {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .75rem;
+    }
+
+    .movie-card-wide img,
+    .poster-card-redflix img,
+    .card-redflix img,
+    .card-redflix .card-img-top {
+        height: auto !important;
+        aspect-ratio: 2 / 3;
+        object-fit: cover;
+    }
+
+    .movie-card-info,
+    .poster-info,
+    .card-redflix .card-body {
+        padding: .75rem;
+    }
+
+    .section-header,
+    .clima-content {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: .75rem;
+    }
+
+    .clima-section,
+    .reporte-panel,
+    .reporte-card {
+        padding: 1rem;
+        border-radius: 14px;
+    }
+
+    .clima-icono {
+        align-self: center;
+    }
+
+    /* Formularios y cabeceras definidos localmente como grid/flex. */
+    form .form-row,
+    form .form-grid,
+    .form-card .row,
+    [class*="form-grid"],
+    [class*="fields-grid"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    .page-header,
+    .admin-header,
+    .form-actions,
+    .action-buttons,
+    .detail-actions {
+        flex-wrap: wrap;
+        gap: .75rem;
+    }
+
+        .form-actions > *,
+        .action-buttons > * {
+            flex: 1 1 auto;
+        }
+
+    h1 {
+        font-size: clamp(1.75rem, 8vw, 2.4rem);
+    }
+
+    h2 {
+        font-size: clamp(1.45rem, 7vw, 2rem);
+    }
+}
+
+@media (max-width: 399.98px) {
+    .movie-row-horizontal,
+    .poster-grid-redflix {
+        grid-template-columns: 1fr;
+    }
+
+    .navbar-actions .dropdown:last-child {
+        margin-left: 0;
+    }
+
+    .navbar-actions {
+        justify-content: space-between;
+    }
+}
+
+@media (hover: none) {
+    .card-redflix:hover,
+    .poster-card-redflix:hover,
+    .movie-card-wide:hover,
+    .widget-card:hover {
+        transform: none;
+    }
+}
